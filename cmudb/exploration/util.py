@@ -1,13 +1,17 @@
+import signal
 import subprocess
-from typing import List
+import sys
+from enum import Enum
+from typing import List, Tuple, AnyStr
 from typing import Union
 
-import sys
-
 # TODO make cmd line args maybe
-PROJECT_ROOT = "../../"
-ENV_FOLDER = "../env/"
-CONTAINER_BIN_DIR = "/home/terrier/repo/build/bin/"
+PROJECT_ROOT = "../.."
+ENV_FOLDER = "../env"
+CONTAINER_BIN_DIR = "/home/terrier/repo/build/bin"
+PGDATA_LOC = "/pgdata"
+PGDATA2_LOC = "/pgdata2"
+PRIMARY_PORT = 15721
 EXPLORATION_PORT = 42666
 # This takes a couple of minutes to create. Just add more 0s to increase time
 SERIES_LENGTH = 1000000000
@@ -15,14 +19,35 @@ SERIES_LENGTH = 1000000000
 PRIMARY = "primary"
 REPLICA = "replica"
 
+UTF_8 = "utf-8"
 
-def execute_sys_command(cmd: Union[str, List[str]], block: bool = True,
-                        forward_output: bool = True, cwd: str = None, env=None) -> subprocess.Popen:
+
+class OutputStrategy(Enum):
+    Capture = (subprocess.PIPE, subprocess.PIPE)
+    Print = (sys.stdout, sys.stderr)
+    Hide = (subprocess.DEVNULL, subprocess.DEVNULL)
+
+
+def execute_sys_command(cmd: Union[str, List[str]],
+                        block: bool = True,
+                        output_strategy: OutputStrategy = OutputStrategy.Print,
+                        cwd: str = None,
+                        env=None) -> Tuple[subprocess.Popen, AnyStr, AnyStr]:
     if isinstance(cmd, str):
         cmd = cmd.split(" ")
-    res = subprocess.Popen(cmd, stdout=sys.stdout if forward_output else subprocess.DEVNULL,
-                           stderr=sys.stderr if forward_output else subprocess.DEVNULL, cwd=cwd, env=env)
-    if block:
-        res.communicate()
 
-    return res
+    res = subprocess.Popen(cmd, stdout=output_strategy.value[0], stderr=output_strategy.value[1], cwd=cwd, env=env)
+    out = ""
+    err = ""
+    if block:
+        out, err = res.communicate()
+        out = out.decode(UTF_8) if out is not None else ""
+        err = err.decode(UTF_8) if err is not None else ""
+
+    return res, out, err
+
+
+def stop_process(proc: subprocess.Popen, block: bool = True):
+    proc.send_signal(signal.SIGINT)
+    if block:
+        proc.communicate()

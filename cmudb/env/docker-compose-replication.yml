@@ -20,6 +20,7 @@ services:
       - np-primary
     ports:
       - "15722:15721"
+      - "42666:42666"
     environment:
       - PGPORT=15721
       - POSTGRES_DB=noisepage
