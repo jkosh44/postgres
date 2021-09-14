@@ -18,7 +18,7 @@ def setup_benchbase():
 # TODO when benchbase abort output is fixed stop hiding output
 def run_benchbase(create: bool, load: bool, execute: bool, block: bool = True) -> subprocess.Popen:
     benchbase_proc, _, _ = execute_sys_command(
-        f"java -jar benchbase.jar -b tpcc -c ../postgres_tpcc_config.xml --create={create} --load={load}"
+        f"java -jar benchbase.jar -b ycsb -c ../postgres_ycsb_update_only_config.xml --create={create} --load={load}"
         f" --execute={execute}", cwd=BENCHBASE_DIR, block=block, output_strategy=OutputStrategy.Hide)
     return benchbase_proc
 

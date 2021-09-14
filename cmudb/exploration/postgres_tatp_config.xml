@@ -4,13 +4,13 @@
     <!-- Connection details -->
     <type>POSTGRES</type>
     <driver>org.postgresql.Driver</driver>
-    <url>jdbc:postgresql://localhost:15721/noisepage?sslmode=disable&amp;ApplicationName=tpcc&amp;reWriteBatchedInserts=true</url>
+    <url>jdbc:postgresql://localhost:5432/noisepage?sslmode=disable&amp;ApplicationName=tatp&amp;reWriteBatchedInserts=true</url>
     <username>noisepage</username>
     <password>terrier</password>
     <isolation>READ_COMMITTED</isolation>
     <batchsize>128</batchsize>
 
-    <!-- Scale factor is the number of warehouses in TPCC -->
+    <!-- Scalefactor increases the number of subscribers -->
     <scalefactor>1</scalefactor>
 
     <!-- The workload -->
@@ -19,26 +19,32 @@
         <work>
             <time>60</time>
             <rate>10000</rate>
-            <weights>45,43,4,4,4</weights>
+            <weights>2, 35, 10, 35, 2, 14, 2</weights>
         </work>
     </works>
 
-    <!-- TPCC specific -->
+    <!-- Twitter Procedures declaration -->
     <transactiontypes>
         <transactiontype>
-            <name>NewOrder</name>
+            <name>DeleteCallForwarding</name>
         </transactiontype>
         <transactiontype>
-            <name>Payment</name>
+            <name>GetAccessData</name>
         </transactiontype>
         <transactiontype>
-            <name>OrderStatus</name>
+            <name>GetNewDestination</name>
         </transactiontype>
         <transactiontype>
-            <name>Delivery</name>
+            <name>GetSubscriberData</name>
         </transactiontype>
         <transactiontype>
-            <name>StockLevel</name>
+            <name>InsertCallForwarding</name>
+        </transactiontype>
+        <transactiontype>
+            <name>UpdateLocation</name>
+        </transactiontype>
+        <transactiontype>
+            <name>UpdateSubscriberData</name>
         </transactiontype>
     </transactiontypes>
 </parameters>
