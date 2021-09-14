@@ -15,6 +15,7 @@ ENV POSTGRES_HOST_AUTH_METHOD ""
 
 # PostgreSQL env vars that we customize.
 ENV PGDATA "/pgdata"
+ENV PGDATA2 "/pgdata2"
 ENV PGPORT "15721"
 # NoisePage env vars.
 # BIN_DIR       :   Destination for PostgreSQL binaries.
@@ -39,7 +40,10 @@ WORKDIR /home/terrier
 # Create the directories that PostgreSQL expects.
 RUN sudo mkdir -p "$PGDATA" \
     && sudo chown --recursive terrier:terrier "$PGDATA" \
-    && sudo chmod 700 "$PGDATA"
+    && sudo chmod 700 "$PGDATA" \
+    && sudo mkdir -p "$PGDATA2" \
+    && sudo chown --recursive terrier:terrier "$PGDATA2" \
+    && sudo chmod 700 "$PGDATA2"
 
 # Copy the contents of the build context (working directory).
 COPY --chown=terrier:terrier . /home/terrier/repo

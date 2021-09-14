@@ -83,15 +83,12 @@ def start_exploration_postgres() -> Tuple[subprocess.Popen, bool]:
     exploration_proc, _, _ = execute_in_container(REPLICA,
                                                   f"{CONTAINER_BIN_DIR}/postgres -D {PGDATA2_LOC} -p {EXPLORATION_PORT}",
                                                   block=False)
-    # 10 seconds
-    timeout = 10
-    start = time.time()
-    while not is_pg_ready(REPLICA, EXPLORATION_PORT):
+
+    while not is_pg_ready(REPLICA, EXPLORATION_PORT) and exploration_proc.poll() is None:
         time.sleep(1)
-        if time.time() - start > timeout:
-            exploration_proc.communicate(timeout=1)
-            return exploration_proc, exploration_proc.returncode == 0
-    return exploration_proc, True
+
+    # Return code is only set when process exits and exploration proc is daemon (shouldn't exit)
+    return exploration_proc, exploration_proc.returncode is not None
 
 
 def stop_exploration_postgres(exploration_process: subprocess.Popen):

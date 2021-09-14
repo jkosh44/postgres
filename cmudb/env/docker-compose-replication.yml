@@ -30,3 +30,6 @@ services:
       - NP_REPLICATION_TYPE=replica
       - NP_REPLICATION_USER=replicator
       - NP_REPLICATION_PASSWORD=passyMcPassword
+    volumes:
+      - /tmp/pgdata:/pgdata
+      - /tmp/pgdata2:/pgdata2
