@@ -165,3 +165,5 @@ MAKE SURE you do the following before testing:
 1. Create pgdata and pgdata2 directories before testing
 2. Link those directories in `docker-compose-replication.yml` under `volumes`
 3. `chmod 700` the directories on the host.
+4. enable docker `sudo systemctl start docker`
+5. Configure docker to use a proxy: https://stackoverflow.com/questions/23111631/cannot-download-docker-images-behind-a-proxy

@@ -23,6 +23,7 @@ ENV BIN_DIR "/home/terrier/repo/build/bin"
 
 # Install packages.
 COPY ./cmudb/env/packages.sh /packages.sh
+COPY ./cmudb/env/.docker    /home/terrier/.docker
 RUN \
     apt-get -y update \
     && apt-get -y install sudo \
