@@ -105,6 +105,23 @@ _pg_setup_replication() {
   sudo echo "max_replication_slots = 10" >> ${AUTO_CONF}
   # hot_standby_feedback: True if standby should tell primary about what queries are currently executing.
   sudo echo "hot_standby_feedback = on" >> ${AUTO_CONF}
+  # PGTune configs
+  sudo echo "max_connections = 50" >> ${AUTO_CONF}
+  sudo echo "shared_buffers = 38400MB" >> ${AUTO_CONF}
+  sudo echo "effective_cache_size = 115200MB" >> ${AUTO_CONF}
+  sudo echo "maintenance_work_mem = 2GB" >> ${AUTO_CONF}
+  sudo echo "checkpoint_completion_target = 0.9" >> ${AUTO_CONF}
+  sudo echo "wal_buffers = 16MB" >> ${AUTO_CONF}
+  sudo echo "default_statistics_target = 100" >> ${AUTO_CONF}
+  sudo echo "random_page_cost = 1.1" >> ${AUTO_CONF}
+  sudo echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
+  sudo echo "work_mem = 192MB" >> ${AUTO_CONF}
+  sudo echo "min_wal_size = 2GB" >> ${AUTO_CONF}
+  sudo echo "max_wal_size = 8GB" >> ${AUTO_CONF}
+  sudo echo "max_worker_processes = 80" >> ${AUTO_CONF}
+  sudo echo "max_parallel_workers_per_gather = 4" >> ${AUTO_CONF}
+  sudo echo "max_parallel_workers = 80" >> ${AUTO_CONF}
+  sudo echo "max_parallel_maintenance_workers = 4" >> ${AUTO_CONF}
 
   if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
     # ===============================
