@@ -51,7 +51,7 @@ fi
 # =====================================================================
 
 _pgctl_start() {
-  {BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w start
+  ${BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w start
 }
 
 _pg_stop() {

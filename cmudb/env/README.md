@@ -13,6 +13,8 @@ The `env` folder is for all files that relate to setting up a development or CI 
 - You can check and modify the docker-compose yml files for passwords, ports, etc.
 - You must rebuild the Docker image every time there are changes in your source tree.
 
+- docker rm $(docker ps -aq)
+
 # Docker gotchas.
 
 Anything that takes you over 1 day to figure out should be documented here.
