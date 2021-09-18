@@ -72,4 +72,4 @@ EXPOSE 15721
 
 # Copy and set the Docker entrypoint script into the image.
 COPY ./cmudb/env/docker-entrypoint.sh /
-ENTRYPOINT ["sudo /docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
