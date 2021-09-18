@@ -51,15 +51,15 @@ fi
 # =====================================================================
 
 _pgctl_start() {
-  sudo ${BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w start
+  {BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w start
 }
 
 _pg_stop() {
-  sudo ${BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w stop
+  ${BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w stop
 }
 
 _pg_start() {
-  sudo ${BIN_DIR}/postgres "-D" "${PGDATA}" -p 15721
+  ${BIN_DIR}/postgres "-D" "${PGDATA}" -p 15721
 }
 
 _pg_initdb() {
@@ -67,7 +67,7 @@ _pg_initdb() {
   if [ -z ${POSTGRES_INITDB_WALDIR} ]; then
     WALDIR=""
   fi
-  sudo ${BIN_DIR}/initdb --pgdata=${PGDATA} $WALDIR ${POSTGRES_INITDB_ARGS}
+  ${BIN_DIR}/initdb --pgdata=${PGDATA} $WALDIR ${POSTGRES_INITDB_ARGS}
 }
 
 _pg_config() {
@@ -83,10 +83,10 @@ _pg_config() {
 }
 
 _pg_create_user_and_db() {
-  sudo ${BIN_DIR}/psql -c "create user ${POSTGRES_USER} with login password '${POSTGRES_PASSWORD}'" postgres
-  sudo ${BIN_DIR}/psql -c "create database ${POSTGRES_DB} with owner = '${POSTGRES_USER}'" postgres
+  ${BIN_DIR}/psql -c "create user ${POSTGRES_USER} with login password '${POSTGRES_PASSWORD}'" postgres
+  ${BIN_DIR}/psql -c "create database ${POSTGRES_DB} with owner = '${POSTGRES_USER}'" postgres
   # Enable monitoring for the created user.
-  sudo ${BIN_DIR}/psql -c "grant pg_monitor to ${POSTGRES_USER}" postgres
+  ${BIN_DIR}/psql -c "grant pg_monitor to ${POSTGRES_USER}" postgres
 }
 
 _pg_setup_replication() {
@@ -112,13 +112,13 @@ _pg_setup_replication() {
     # ===============================
 
     # Create replication user.
-    sudo ${BIN_DIR}/psql -c "create user ${NP_REPLICATION_USER} with replication encrypted password '${NP_REPLICATION_PASSWORD}'" postgres
+    ${BIN_DIR}/psql -c "create user ${NP_REPLICATION_USER} with replication encrypted password '${NP_REPLICATION_PASSWORD}'" postgres
     # Allow replication user to connect..
     sudo echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
     # Reload configuration.
-    sudo ${BIN_DIR}/psql -c "select pg_reload_conf()" postgres
+    ${BIN_DIR}/psql -c "select pg_reload_conf()" postgres
     # Create replication slot for replica.
-    sudo ${BIN_DIR}/psql -c "select pg_create_physical_replication_slot('replication_slot_replica1')" postgres
+    ${BIN_DIR}/psql -c "select pg_create_physical_replication_slot('replication_slot_replica1')" postgres
   fi
 }
 
@@ -150,21 +150,18 @@ main() {
     while true ; do
       # TODO(WAN): Issue #6 Note that there is a potential race here where the primary restarts and healthcheck succeeds.
       sleep 10
-      sudo ${BIN_DIR}/pg_isready --host primary --port 15721 --username noisepage
+      ${BIN_DIR}/pg_isready --host primary --port 15721 --username noisepage
       READY_CHECK=$?
       if [ "$READY_CHECK" = "0" ]; then
         break
       fi
     done
 
-    echo "TEST PLEASE WORK"
     sudo rm -rf ${PGDATA}/*
-    echo "TEST PLEASE WORK 2"
     # Initialize replica backup from primary.
-    echo passyMcPassword | sudo ${BIN_DIR}/pg_basebackup --host primary --username replicator --port 15721 --pgdata=${PGDATA} --format=p --wal-method=stream --progress --write-recovery-conf --slot replication_slot_replica1
+    echo passyMcPassword | ${BIN_DIR}/pg_basebackup --host primary --username replicator --port 15721 --pgdata=${PGDATA} --format=p --wal-method=stream --progress --write-recovery-conf --slot replication_slot_replica1
     _pg_start
   fi
 }
 
-echo
 main

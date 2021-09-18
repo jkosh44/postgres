@@ -42,6 +42,7 @@ USER terrier
 WORKDIR /home/terrier
 
 # Create the directories that PostgreSQL expects.
+# TODO: Try removing the CHOWN, maybe it's messing with the volume???
 RUN sudo mkdir -p "$PGDATA" \
     && sudo chown --recursive terrier:terrier "$PGDATA" \
     && sudo chmod 700 "$PGDATA" \

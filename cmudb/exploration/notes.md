@@ -162,8 +162,14 @@ Using YCSB Update only to load data before the copy, and update data during the 
 
 ## Executing
 MAKE SURE you do the following before testing:
-1. Create pgdata and pgdata2 directories before testing
-2. Link those directories in `docker-compose-replication.yml` under `volumes`
-3. `chmod 700` the directories on the host.
-4. enable docker `sudo systemctl start docker`
-5. Configure docker to use a proxy: https://stackoverflow.com/questions/23111631/cannot-download-docker-images-behind-a-proxy
+1. sudo docker volume create pgdata
+2. sudo docker volume create pgdata2
+3. sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata
+4. sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata2
+5. Link those directories in `docker-compose-replication.yml` under `volumes`
+6. enable docker `sudo systemctl start docker`
+7. Configure docker to use a proxy: https://stackoverflow.com/questions/23111631/cannot-download-docker-images-behind-a-proxy
+8. sudo docker-compose -f ./cmudb/env/docker-compose-replication.yml down --volumes
+9. sudo docker volume rm pgdata
+10. sudo docker volume rm pgdata2
+

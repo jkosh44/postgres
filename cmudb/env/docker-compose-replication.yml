@@ -35,5 +35,9 @@ services:
       - pgdata2:/pgdata2
 volumes:
   pgdata:
+    external: true
+    driver: local
   pgdata2:
+    external: true
+    driver: local
 
