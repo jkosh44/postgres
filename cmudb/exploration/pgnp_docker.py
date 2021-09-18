@@ -9,9 +9,9 @@ from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BI
 # TODO use docker library (https://github.com/docker/docker-py)
 
 def start_docker() -> subprocess.Popen:
-    execute_sys_command(f"docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
+    execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
     # Hide output because TPCC aborts clog stdout
-    compose, _, _ = execute_sys_command(f"docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
+    compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
                                         block=False, output_strategy=OutputStrategy.Print)
     wait_for_pg_ready(PRIMARY)
     wait_for_pg_ready(REPLICA)

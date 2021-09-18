@@ -18,3 +18,12 @@ The `env` folder is for all files that relate to setting up a development or CI 
 Anything that takes you over 1 day to figure out should be documented here.
 
 - You will not be able to `psql` from the host to the Docker container unless `listen_addresses = '*'` (or similar) is in `postgresql.conf`.
+
+
+# Volumes 
+```
+sudo docker volume create pgdata
+sudo docker volume create pgdata2
+sudo docker volume ls
+```
+Everything gets stored in /var/lib/docker/volumes

@@ -75,11 +75,11 @@ _pg_config() {
   HBA_CONF=${PGDATA}/pg_hba.conf
 
   # pg_hba.conf
-  echo "host all all 0.0.0.0/0 ${POSTGRES_HOST_AUTH_METHOD}" >> ${HBA_CONF}
+  sudo echo "host all all 0.0.0.0/0 ${POSTGRES_HOST_AUTH_METHOD}" >> ${HBA_CONF}
 
   # postgresql.auto.conf
   # Allow Docker host to connect to container.
-  echo "listen_addresses = '*'" >> ${AUTO_CONF}
+  sudo echo "listen_addresses = '*'" >> ${AUTO_CONF}
 }
 
 _pg_create_user_and_db() {
@@ -96,15 +96,15 @@ _pg_setup_replication() {
   # See PostgreSQL docs for complete description of parameters.
 
   # wal_level: How much information to ship over.
-  echo "wal_level = replica" >> ${AUTO_CONF}
+  sudo echo "wal_level = replica" >> ${AUTO_CONF}
   # hot_standby: True to enable connecting and running queries during recovery.
-  echo "hot_standby = on" >> ${AUTO_CONF}
+  sudo echo "hot_standby = on" >> ${AUTO_CONF}
   # max_wal_senders: Maximum number of concurrent connections to standby/backup clients.
-  echo "max_wal_senders = 10" >> ${AUTO_CONF}
+  sudo echo "max_wal_senders = 10" >> ${AUTO_CONF}
   # max_replication_slots: Maximum number of replication slots.
-  echo "max_replication_slots = 10" >> ${AUTO_CONF}
+  sudo echo "max_replication_slots = 10" >> ${AUTO_CONF}
   # hot_standby_feedback: True if standby should tell primary about what queries are currently executing.
-  echo "hot_standby_feedback = on" >> ${AUTO_CONF}
+  sudo echo "hot_standby_feedback = on" >> ${AUTO_CONF}
 
   if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
     # ===============================
@@ -114,7 +114,7 @@ _pg_setup_replication() {
     # Create replication user.
     ${BIN_DIR}/psql -c "create user ${NP_REPLICATION_USER} with replication encrypted password '${NP_REPLICATION_PASSWORD}'" postgres
     # Allow replication user to connect..
-    echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
+    sudo echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
     # Reload configuration.
     ${BIN_DIR}/psql -c "select pg_reload_conf()" postgres
     # Create replication slot for replica.
@@ -157,9 +157,9 @@ main() {
       fi
     done
 
-    rm -rf ${PGDATA}/*
+    sudo rm -rf ${PGDATA}/*
     # Initialize replica backup from primary.
-    echo passyMcPassword | ${BIN_DIR}/pg_basebackup --host primary --username replicator --port 15721 --pgdata=${PGDATA} --format=p --wal-method=stream --progress --write-recovery-conf --slot replication_slot_replica1
+    echo passyMcPassword | sudo ${BIN_DIR}/pg_basebackup --host primary --username replicator --port 15721 --pgdata=${PGDATA} --format=p --wal-method=stream --progress --write-recovery-conf --slot replication_slot_replica1
     _pg_start
   fi
 }

@@ -21,9 +21,12 @@ ENV PGPORT "15721"
 # BIN_DIR       :   Destination for PostgreSQL binaries.
 ENV BIN_DIR "/home/terrier/repo/build/bin"
 
+ENV http_proxy "http://proxy.pdl.cmu.edu:3128/"
+ENV https_proxy "http://proxy.pdl.cmu.edu:3128/"
+
 # Install packages.
 COPY ./cmudb/env/packages.sh /packages.sh
-COPY ./cmudb/env/.docker    /home/terrier/.docker
+COPY ./cmudb/env/.docker /home/terrier/.docker
 RUN \
     apt-get -y update \
     && apt-get -y install sudo \
