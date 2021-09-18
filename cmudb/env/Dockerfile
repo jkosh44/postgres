@@ -42,12 +42,18 @@ USER terrier
 WORKDIR /home/terrier
 
 # Create the directories that PostgreSQL expects.
-RUN sudo mkdir -p "$PGDATA" \
-    && sudo chown --recursive terrier:terrier "$PGDATA" \
+#RUN sudo mkdir -p "$PGDATA" \
+#    && sudo chown --recursive terrier:terrier "$PGDATA" \
+#    && sudo chmod 700 "$PGDATA" \
+#    && sudo mkdir -p "$PGDATA2" \
+#    && sudo chown --recursive terrier:terrier "$PGDATA2" \
+#    && sudo chmod 700 "$PGDATA2"
+
+RUN sudo chown --recursive terrier:terrier "$PGDATA" \
     && sudo chmod 700 "$PGDATA" \
-    && sudo mkdir -p "$PGDATA2" \
     && sudo chown --recursive terrier:terrier "$PGDATA2" \
     && sudo chmod 700 "$PGDATA2"
+
 
 # Copy the contents of the build context (working directory).
 COPY --chown=terrier:terrier . /home/terrier/repo

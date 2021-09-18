@@ -157,7 +157,9 @@ main() {
       fi
     done
 
+    echo "TEST PLEASE WORK"
     sudo rm -rf ${PGDATA}/*
+    echo "TEST PLEASE WORK 2"
     # Initialize replica backup from primary.
     echo passyMcPassword | sudo ${BIN_DIR}/pg_basebackup --host primary --username replicator --port 15721 --pgdata=${PGDATA} --format=p --wal-method=stream --progress --write-recovery-conf --slot replication_slot_replica1
     _pg_start
