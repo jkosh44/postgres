@@ -33,3 +33,7 @@ services:
     volumes:
       - pgdata:/pgdata
       - pgdata2:/pgdata2
+volumes:
+  pgdata:
+  pgdata2:
+
