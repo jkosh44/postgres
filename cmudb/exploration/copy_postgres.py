@@ -71,7 +71,7 @@ def validate_table_has_values(table: str, port: int) -> bool:
 
 def copy_pgdata() -> int:
     start = time.time_ns()
-    execute_in_container(REPLICA, f"sudo cp -r {PGDATA_LOC} {PGDATA2_LOC}")
+    execute_in_container(REPLICA, f"sudo cp -a {PGDATA_LOC}/* {PGDATA2_LOC}")
     end = time.time_ns()
     execute_in_container(REPLICA, f"sudo chown terrier:terrier -R {PGDATA2_LOC}")
     execute_in_container(REPLICA, f"rm {PGDATA2_LOC}/postmaster.pid")
@@ -113,6 +113,7 @@ def test_copy():
     print("Killing exploration postgres process")
     stop_exploration_postgres(exploration_process)
     print("Exploration postgres killed successfully")
+    execute_in_container(REPLICA, f"sudo rm -rf {PGDATA2_LOC}/*")
     return copy_time_ns, valid
 
 
