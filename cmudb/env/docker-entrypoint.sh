@@ -106,7 +106,7 @@ _pg_setup_replication() {
   # hot_standby_feedback: True if standby should tell primary about what queries are currently executing.
   sudo echo "hot_standby_feedback = on" >> ${AUTO_CONF}
   # suppress logs
-  sudo echo "log_min_error_statement = ERROR" >> ${AUTO_CONF}
+  sudo echo "log_min_error_statement = FATAL" >> ${AUTO_CONF}
 
   # PGTune configs
   sudo echo "max_connections = 100" >> ${AUTO_CONF}
