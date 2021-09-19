@@ -105,6 +105,9 @@ _pg_setup_replication() {
   sudo echo "max_replication_slots = 10" >> ${AUTO_CONF}
   # hot_standby_feedback: True if standby should tell primary about what queries are currently executing.
   sudo echo "hot_standby_feedback = on" >> ${AUTO_CONF}
+  # suppress logs
+  sudo echo "log_min_error_statement = ERROR" >> ${AUTO_CONF}
+
   # PGTune configs
   sudo echo "max_connections = 100" >> ${AUTO_CONF}
   sudo echo "shared_buffers = 9600MB" >> ${AUTO_CONF}
