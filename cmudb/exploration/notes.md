@@ -172,4 +172,4 @@ MAKE SURE you do the following before testing:
 8. sudo docker-compose -f ./cmudb/env/docker-compose-replication.yml down --volumes
 9. sudo docker volume rm pgdata
 10. sudo docker volume rm pgdata2
-
+    docker rm $(docker ps -aq)
