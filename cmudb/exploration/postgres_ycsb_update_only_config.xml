@@ -17,8 +17,7 @@
     <terminals>50</terminals>
     <works>
         <work>
-<!--            <time>32400</time>-->
-            <time>30</time>
+            <time>32400</time>
             <rate>10000</rate>
             <weights>100</weights>
         </work>
