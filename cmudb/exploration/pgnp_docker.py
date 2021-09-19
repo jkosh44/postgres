@@ -16,14 +16,14 @@ def start_docker() -> subprocess.Popen:
     execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
     # Hide output because TPCC aborts clog stdout
     compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
-                                        block=False, output_strategy=OutputStrategy.Hide)
+                                        block=False, output_strategy=OutputStrategy.Print)
     wait_for_pg_ready(PRIMARY)
     wait_for_pg_ready(REPLICA)
     return compose
 
 
 def execute_in_container(container_name: str, cmd: str, block: bool = True,
-                         output_strategy: OutputStrategy = OutputStrategy.Print, ) -> Tuple[
+                         output_strategy: OutputStrategy = OutputStrategy.Print) -> Tuple[
     subprocess.Popen, AnyStr, AnyStr]:
     docker_cmd = f'docker exec {container_name} /bin/bash -c'.split(" ")
     docker_cmd.append(f'{cmd}')
