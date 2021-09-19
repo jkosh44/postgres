@@ -1,8 +1,9 @@
 import os
 import subprocess
-import time
 from functools import reduce
 from typing import List, Tuple
+
+import time
 
 from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
 from pgnp_docker import start_docker, shutdown_docker, execute_in_container, is_pg_ready
@@ -161,7 +162,8 @@ def main():
 
     result_file = RESULT_FILE.format(time.time())
 
-    benchbase_proc = run_benchbase(create=False, load=False, execute=True, block=False, output_strategy=OutputStrategy.Hide)
+    benchbase_proc = run_benchbase(create=False, load=False, execute=True, block=False,
+                                   output_strategy=OutputStrategy.Hide)
 
     collect_results(result_file, benchbase_proc)
 

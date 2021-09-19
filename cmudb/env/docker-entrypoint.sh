@@ -107,20 +107,20 @@ _pg_setup_replication() {
   sudo echo "hot_standby_feedback = on" >> ${AUTO_CONF}
   # PGTune configs
   sudo echo "max_connections = 100" >> ${AUTO_CONF}
-  sudo echo "shared_buffers = 19200" >> ${AUTO_CONF}
-  sudo echo "effective_cache_size = 57600" >> ${AUTO_CONF}
-  sudo echo "maintenance_work_mem = 1GB" >> ${AUTO_CONF}
+  sudo echo "shared_buffers = 9600MB" >> ${AUTO_CONF}
+  sudo echo "effective_cache_size = 28800MB" >> ${AUTO_CONF}
+  sudo echo "maintenance_work_mem = 2GB" >> ${AUTO_CONF}
   sudo echo "checkpoint_completion_target = 0.9" >> ${AUTO_CONF}
-  sudo echo "wal_buffers = 8MB" >> ${AUTO_CONF}
+  sudo echo "wal_buffers = 16MB" >> ${AUTO_CONF}
   sudo echo "default_statistics_target = 100" >> ${AUTO_CONF}
   sudo echo "random_page_cost = 1.1" >> ${AUTO_CONF}
   sudo echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
-  sudo echo "work_mem = 96MB" >> ${AUTO_CONF}
+  sudo echo "work_mem = 48MB" >> ${AUTO_CONF}
   sudo echo "min_wal_size = 2GB" >> ${AUTO_CONF}
-  sudo echo "max_wal_size = 4GB" >> ${AUTO_CONF}
-  sudo echo "max_worker_processes = 40" >> ${AUTO_CONF}
+  sudo echo "max_wal_size = 8GB" >> ${AUTO_CONF}
+  sudo echo "max_worker_processes = 30" >> ${AUTO_CONF}
   sudo echo "max_parallel_workers_per_gather = 2" >> ${AUTO_CONF}
-  sudo echo "max_parallel_workers = 40" >> ${AUTO_CONF}
+  sudo echo "max_parallel_workers = 30" >> ${AUTO_CONF}
   sudo echo "max_parallel_maintenance_workers = 2" >> ${AUTO_CONF}
 
   if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
