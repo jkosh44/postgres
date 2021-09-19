@@ -16,10 +16,11 @@ def setup_benchbase():
 # TODO consider pulling and building benchbase and being a little smarter
 # TODO figure out how to do this without cwd (requires benchbase changes)
 # TODO when benchbase abort output is fixed stop hiding output
-def run_benchbase(create: bool, load: bool, execute: bool, block: bool = True) -> subprocess.Popen:
+def run_benchbase(create: bool, load: bool, execute: bool, block: bool = True,
+                  output_strategy: OutputStrategy = OutputStrategy.Print) -> subprocess.Popen:
     benchbase_proc, _, _ = execute_sys_command(
         f"java -jar benchbase.jar -b ycsb -c ../postgres_ycsb_update_only_config.xml --create={create} --load={load}"
-        f" --execute={execute}", cwd=BENCHBASE_DIR, block=block, output_strategy=OutputStrategy.Hide)
+        f" --execute={execute}", cwd=BENCHBASE_DIR, block=block, output_strategy=output_strategy)
     return benchbase_proc
 
 

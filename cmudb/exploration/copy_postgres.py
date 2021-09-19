@@ -107,8 +107,10 @@ def validate_exploration_process() -> bool:
 
 
 def test_copy():
-    print("Starting exploration postgres instance")
+    print("Copying replica data")
     copy_time_ns = copy_pgdata()
+    print("Exploration data copied")
+    print("Starting exploration postgres instance")
     exploration_process, valid = start_exploration_postgres()
     if not valid:
         stop_exploration_postgres(exploration_process)
@@ -159,7 +161,7 @@ def main():
 
     result_file = RESULT_FILE.format(time.time())
 
-    benchbase_proc = run_benchbase(create=False, load=False, execute=True, block=False)
+    benchbase_proc = run_benchbase(create=False, load=False, execute=True, block=False, output_strategy=OutputStrategy.Hide)
 
     collect_results(result_file, benchbase_proc)
 
