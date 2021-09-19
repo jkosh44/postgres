@@ -51,6 +51,6 @@ def stop_process(proc: subprocess.Popen, block: bool = True):
     proc.send_signal(signal.SIGINT)
     if block:
         try:
-            proc.communicate(timeout=180)
+            proc.communicate(timeout=60)
         except subprocess.TimeoutExpired:
             proc.terminate()

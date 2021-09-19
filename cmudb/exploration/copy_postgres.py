@@ -88,7 +88,11 @@ def start_exploration_postgres() -> Tuple[subprocess.Popen, bool]:
         time.sleep(1)
 
     # Return code is only set when process exits and exploration proc is daemon (shouldn't exit)
-    return exploration_proc, exploration_proc.returncode is not None
+    if exploration_proc.returncode is not None:
+        print(f"Exploration instance failed to start up with error code: {exploration_proc.returncode}")
+        return exploration_proc, False
+
+    return exploration_proc, True
 
 
 def stop_exploration_postgres(exploration_process: subprocess.Popen):
@@ -107,6 +111,7 @@ def test_copy():
     copy_time_ns = copy_pgdata()
     exploration_process, valid = start_exploration_postgres()
     if not valid:
+        stop_exploration_postgres(exploration_process)
         return copy_time_ns, valid
     print("Exploration postgres instance started")
     valid = validate_exploration_process()
