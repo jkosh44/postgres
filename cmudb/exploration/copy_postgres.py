@@ -152,6 +152,9 @@ def main():
     docker_process = start_docker()
     print("Docker containers started successfully")
 
+    execute_sql("ALTER SYSTEM SET log_min_error_statement TO 'FATAL';", 15721)
+    execute_sql("ALTER SYSTEM SET log_min_error_statement TO 'FATAL';", 15722)
+
     # Load some data into primary for validation
     load_validation_data()
 
