@@ -50,4 +50,7 @@ def execute_sys_command(cmd: Union[str, List[str]],
 def stop_process(proc: subprocess.Popen, block: bool = True):
     proc.send_signal(signal.SIGINT)
     if block:
-        proc.communicate(timeout=180)
+        try:
+            proc.communicate(timeout=180)
+        except subprocess.TimeoutExpired:
+            proc.terminate()
