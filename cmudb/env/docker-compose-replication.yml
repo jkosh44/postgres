@@ -13,6 +13,7 @@ services:
       - NP_REPLICATION_TYPE=primary
       - NP_REPLICATION_USER=replicator
       - NP_REPLICATION_PASSWORD=passyMcPassword
+      - NP_REPLICATION_PHYSICAL_SLOTS=slot1
     volumes:
       - pgdata-primary:/pgdata
   np-replica:
