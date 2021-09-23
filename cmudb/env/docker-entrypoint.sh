@@ -106,13 +106,11 @@ _pg_config() {
   HBA_CONF=${PGDATA}/pg_hba.conf
 
   # pg_hba.conf
-#  sudo echo "host all all 0.0.0.0/0 ${POSTGRES_HOST_AUTH_METHOD}" >> ${HBA_CONF}
-   echo "host all all 0.0.0.0/0 ${POSTGRES_HOST_AUTH_METHOD}" >> ${HBA_CONF}
+  sudo echo "host all all 0.0.0.0/0 ${POSTGRES_HOST_AUTH_METHOD}" >> ${HBA_CONF}
 
   # postgresql.auto.conf
   # Allow Docker host to connect to container.
-#  sudo echo "listen_addresses = '*'" >> ${AUTO_CONF}
-   echo "listen_addresses = '*'" >> ${AUTO_CONF}
+  sudo echo "listen_addresses = '*'" >> ${AUTO_CONF}
 }
 
 _pg_create_user_and_db() {
@@ -131,24 +129,17 @@ _pg_setup_replication() {
   # See PostgreSQL docs for complete description of parameters.
 
   # wal_level: How much information to ship over.
-#  sudo echo "wal_level = ${NP_WAL_LEVEL}" >> ${AUTO_CONF}
-   echo "wal_level = ${NP_WAL_LEVEL}" >> ${AUTO_CONF}
+  sudo echo "wal_level = ${NP_WAL_LEVEL}" >> ${AUTO_CONF}
   # hot_standby: True to enable connecting and running queries during recovery.
-#  sudo echo "hot_standby = on" >> ${AUTO_CONF}
-   echo "hot_standby = on" >> ${AUTO_CONF}
+  sudo echo "hot_standby = on" >> ${AUTO_CONF}
   # max_wal_senders: Maximum number of concurrent connections to standby/backup clients.
-##  sudo echo "max_wal_senders = 10" >> ${AUTO_CONF}
-   echo "max_wal_senders = 10" >> ${AUTO_CONF}
-   echo "max_wal_senders = 10" >> ${AUTO_CONF}
+  sudo echo "max_wal_senders = 10" >> ${AUTO_CONF}
   # max_replication_slots: Maximum number of replication slots.
-#  sudo echo "max_replication_slots = 10" >> ${AUTO_CONF}
-   echo "max_replication_slots = 10" >> ${AUTO_CONF}
+  sudo echo "max_replication_slots = 10" >> ${AUTO_CONF}
   # hot_standby_feedback: True if standby should tell primary about what queries are currently executing.
-#  sudo echo "hot_standby_feedback = on" >> ${AUTO_CONF}
-   echo "hot_standby_feedback = on" >> ${AUTO_CONF}
+  sudo echo "hot_standby_feedback = on" >> ${AUTO_CONF}
   # suppress logs
-#  sudo echo "log_min_error_statement = FATAL" >> ${AUTO_CONF}
-   echo "log_min_error_statement = FATAL" >> ${AUTO_CONF}
+  sudo echo "log_min_error_statement = FATAL" >> ${AUTO_CONF}
 
   # PGTune configs
   # DB Version: 13
@@ -183,8 +174,7 @@ _pg_setup_replication() {
     # Create replication user.
     ${BIN_DIR}/psql -c "create user ${NP_REPLICATION_USER} with replication encrypted password '${NP_REPLICATION_PASSWORD}'" postgres
     # Allow replication user to connect..
-#    sudo echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
-     echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
+    sudo echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
     # Reload configuration.
     ${BIN_DIR}/psql -c "select pg_reload_conf()" postgres
     echo ${NP_REPLICATION_PHYSICAL_SLOTS}
