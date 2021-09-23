@@ -2,7 +2,7 @@ version: '3'
 services:
   np-exploration:
     image: pgnp:latest
-    container_name: single
+    container_name: exploration
     ports:
       - "42666:42666"
     environment:
@@ -10,6 +10,7 @@ services:
       - POSTGRES_DB=noisepage
       - POSTGRES_USER=noisepage
       - POSTGRES_PASSWORD=terrier
+      - NP_REPLICATION_TYPE=exploratory
     volumes:
       - pgdata-replica:/replica-pgdata
       - pgdata-exploration:/pgdata

@@ -10,6 +10,7 @@ PROJECT_ROOT = "../.."
 ENV_FOLDER = "../env"
 CONTAINER_BIN_DIR = "/home/terrier/repo/build/bin"
 PGDATA_LOC = "/pgdata"
+PGDATA_REPLICA_LOC = "/replica-pgdata"
 PGDATA2_LOC = "/pgdata2"
 PRIMARY_PORT = 15721
 EXPLORATION_PORT = 42666
@@ -18,6 +19,7 @@ SERIES_LENGTH = 1000000000
 
 PRIMARY = "primary"
 REPLICA = "replica"
+EXPLORATION = "exploration"
 
 UTF_8 = "utf-8"
 

@@ -12,7 +12,7 @@
 
     <!-- Scalefactor in YCSB is *1000 the number of rows in the USERTABLE-->
 <!--    <scalefactor>10000</scalefactor>-->
-    <scalefactor>10</scalefactor>
+    <scalefactor>1</scalefactor>
 
     <!-- The workload -->
     <terminals>50</terminals>

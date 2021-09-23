@@ -1,9 +1,10 @@
 import subprocess
-import time
 from typing import AnyStr, Tuple
 
+import time
+
 from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BIN_DIR, stop_process, OutputStrategy, \
-    PROJECT_ROOT
+    PROJECT_ROOT, EXPLORATION
 
 
 # TODO use docker library (https://github.com/docker/docker-py)
@@ -19,6 +20,15 @@ def start_docker() -> subprocess.Popen:
                                         block=False, output_strategy=OutputStrategy.Print)
     wait_for_pg_ready(PRIMARY)
     wait_for_pg_ready(REPLICA)
+    return compose
+
+
+def start_exploration_docker() -> subprocess.Popen:
+    execute_sys_command("sudo docker volume create pgdata-exploration")
+    execute_sys_command("sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata-exploration")
+    compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-exploration.yml up",
+                                        block=False, output_strategy=OutputStrategy.Print)
+    wait_for_pg_ready(EXPLORATION)
     return compose
 
 
@@ -47,5 +57,10 @@ def wait_for_pg_ready(container_name: str):
 def shutdown_docker(docker_process: subprocess.Popen):
     stop_process(docker_process)
     execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml down --volumes")
-    execute_sys_command("sudo docker volume rm pgdata")
-    execute_sys_command("sudo docker volume rm pgdata2")
+    execute_sys_command("sudo docker volume rm pgdata-primary")
+    execute_sys_command("sudo docker volume rm pgdata-replica")
+
+
+def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
+    stop_process(exploratory_docker_process)
+    execute_sys_command("sudo docker volume rm pgdata-exploration")

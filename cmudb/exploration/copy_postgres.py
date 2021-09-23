@@ -1,26 +1,17 @@
-import os
 import subprocess
 from functools import reduce
-from typing import List, Tuple
+from typing import Tuple
 
 import time
 
 from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
-from pgnp_docker import start_docker, shutdown_docker, execute_in_container, is_pg_ready
-from util import execute_sys_command, REPLICA, CONTAINER_BIN_DIR, PGDATA_LOC, PGDATA2_LOC, EXPLORATION_PORT, \
-    stop_process, OutputStrategy, PRIMARY_PORT
+from pgnp_docker import start_docker, shutdown_docker, execute_in_container, is_pg_ready, start_exploration_docker, \
+    shutdown_exploratory_docker
+from sql import execute_sql, validate_sql_results, validate_table_has_values
+from util import REPLICA, CONTAINER_BIN_DIR, PGDATA_LOC, PGDATA2_LOC, EXPLORATION_PORT, \
+    stop_process, OutputStrategy, PRIMARY_PORT, PGDATA_REPLICA_LOC, EXPLORATION
 
 RESULT_FILE = "./experiment_{}.json"
-
-
-def execute_sql(query: str, port: int) -> List[str]:
-    env = os.environ.copy()
-    env["PGPASSWORD"] = "terrier"
-    cmd = f"psql -h localhost -p {port} -U noisepage -t -P pager=off".split(" ")
-    cmd.append(f'--command={query}')
-    cmd.append("noisepage")
-    sql_command, out, err = execute_sys_command(cmd, env=env, output_strategy=OutputStrategy.Capture)
-    return [row.strip() for row in out.split("\n") if row.strip()]
 
 
 # TODO extract constants
@@ -29,71 +20,33 @@ def load_validation_data():
     execute_sql("INSERT INTO foo VALUES (42), (666);", PRIMARY_PORT)
 
 
-# SQL results are unordered bag so we need to check that each list has the same amount of each item
-def validate_sql_results(results: List[str], expected: List[str]) -> bool:
-    expected_map = {}
-    for row in expected:
-        if row not in expected_map:
-            expected_map[row] = 0
-        expected_map[row] += 1
-
-    for row in results:
-        if row not in expected_map:
-            print(f"SQL query results {results} do not match expected {expected}")
-            return False
-        expected_map[row] -= 1
-
-    for val in expected_map.values():
-        if val != 0:
-            print(f"SQL query results {results} do not match expected {expected}")
-            return False
-
-    return True
-
-
-def count_table_sql(table: str, port: int) -> int:
-    res = execute_sql(f"SELECT COUNT(*) FROM {table}", port)
-    if len(res) != 1:
-        print(f"Invalid res from table count. Table: {table}, Res: {res}")
-        return -1
-    res = res[0]
-    if not res.isnumeric():
-        print(f"Invalid res from table count. Table: {table}, Res: {res}")
-        return -1
-    return int(res)
-
-
-def validate_table_has_values(table: str, port: int) -> bool:
-    res = count_table_sql(table, port) > 0
-    if not res:
-        print(f"Table {table} has no data")
-    return res
-
-
 def copy_pgdata() -> int:
     start = time.time_ns()
-    execute_in_container(REPLICA, f"sudo cp -a {PGDATA_LOC}/* {PGDATA2_LOC}")
+    execute_in_container(EXPLORATION, f"sudo cp -a {PGDATA_REPLICA_LOC}/* {PGDATA_LOC}")
     end = time.time_ns()
-    execute_in_container(REPLICA, f"sudo chown terrier:terrier -R {PGDATA2_LOC}")
-    execute_in_container(REPLICA, f"rm {PGDATA2_LOC}/postmaster.pid")
-    execute_in_container(REPLICA, f"rm {PGDATA2_LOC}/standby.signal")
+    execute_in_container(EXPLORATION, f"sudo chown terrier:terrier -R {PGDATA_LOC}")
+    execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/postmaster.pid")
+    execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/standby.signal")
     return end - start
 
 
-def start_exploration_postgres() -> Tuple[subprocess.Popen, bool]:
-    exploration_proc, _, _ = execute_in_container(REPLICA,
-                                                  f"{CONTAINER_BIN_DIR}/postgres -D {PGDATA2_LOC} -p {EXPLORATION_PORT}",
+def start_exploration_postgres() -> Tuple[subprocess.Popen, int, bool]:
+    start = time.time_ns()
+    exploration_proc, _, _ = execute_in_container(EXPLORATION,
+                                                  f"{CONTAINER_BIN_DIR}/postgres -D {PGDATA_LOC} -p {EXPLORATION_PORT}",
                                                   block=False)
 
-    while not is_pg_ready(REPLICA, EXPLORATION_PORT) and exploration_proc.poll() is None:
+    while not is_pg_ready(EXPLORATION, EXPLORATION_PORT) and exploration_proc.poll() is None:
         time.sleep(1)
 
     # Return code is only set when process exits and exploration proc is daemon (shouldn't exit)
+    end = time.time_ns()
+    total_time = end - start
     if exploration_proc.returncode is not None:
         print(f"Exploration instance failed to start up with error code: {exploration_proc.returncode}")
-        return exploration_proc, False
+        return exploration_proc, total_time, False
 
-    return exploration_proc, True
+    return exploration_proc, total_time, True
 
 
 def stop_exploration_postgres(exploration_process: subprocess.Popen):
@@ -107,22 +60,29 @@ def validate_exploration_process() -> bool:
         and reduce(lambda a, b: a and b, [validate_table_has_values(table, EXPLORATION_PORT) for table in tables])
 
 
-def test_copy():
+def test_copy() -> Tuple[int, int, bool]:
+    print("Starting exploration container")
+    exploratory_container = start_exploration_docker()
+    print("Exploration container started")
     print("Copying replica data")
     copy_time_ns = copy_pgdata()
     print("Exploration data copied")
     print("Starting exploration postgres instance")
-    exploration_process, valid = start_exploration_postgres()
+    exploration_process, startup_time, valid = start_exploration_postgres()
     if not valid:
         stop_exploration_postgres(exploration_process)
-        return copy_time_ns, valid
+        shutdown_exploratory_docker(exploratory_container)
+        return copy_time_ns, startup_time, valid
     print("Exploration postgres instance started")
     valid = validate_exploration_process()
     print("Killing exploration postgres process")
     stop_exploration_postgres(exploration_process)
     print("Exploration postgres killed successfully")
-    execute_in_container(REPLICA, f"sudo rm -rf {PGDATA2_LOC}/*")
-    return copy_time_ns, valid
+    execute_in_container(EXPLORATION, f"sudo rm -rf {PGDATA2_LOC}/*")
+    print("Killing exploration container")
+    shutdown_exploratory_docker(exploratory_container)
+    print("Exploration container killed")
+    return copy_time_ns, startup_time, valid
 
 
 def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
@@ -133,12 +93,13 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
         f.write("[\n")
         first_obj = True
         while benchbase_proc.poll() is None:
-            copy_time_ns, valid = test_copy()
+            copy_time_ns, startup_time, valid = test_copy()
             if not first_obj:
                 f.write(",\n")
             f.write("\t{\n")
             f.write(f'\t\t"iteration": {i},\n')
             f.write(f'\t\t"copy_time_ns": {copy_time_ns},\n')
+            f.write(f'\t\t"startup_time_ns": {startup_time},\n')
             f.write(f'\t\t"valid": {"true" if valid else "false"}\n')
             f.write("\t}")
             i += 1
