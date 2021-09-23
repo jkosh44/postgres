@@ -13,6 +13,8 @@ services:
       - NP_REPLICATION_TYPE=primary
       - NP_REPLICATION_USER=replicator
       - NP_REPLICATION_PASSWORD=passyMcPassword
+    volumes:
+      - pgdata-primary:/pgdata
   np-replica:
     image: pgnp:latest
     container_name: replica
@@ -20,22 +22,23 @@ services:
       - np-primary
     ports:
       - "15722:15721"
-      - "42666:42666"
     environment:
+      - NP_PRIMARY_NAME=primary
+      - NP_PRIMARY_USERNAME=noisepage
+      - NP_PRIMARY_PORT=15721
       - PGPORT=15721
       - POSTGRES_DB=noisepage
       - POSTGRES_USER=noisepage
       - POSTGRES_PASSWORD=terrier
-      - NP_PRIMARY_PORT=15721
       - NP_REPLICATION_TYPE=replica
       - NP_REPLICATION_USER=replicator
       - NP_REPLICATION_PASSWORD=passyMcPassword
+      - NP_REPLICATION_PHYSICAL_SLOT=slot1
     volumes:
-      - pgdata:/pgdata
-      - pgdata2:/pgdata2
+      - pgdata-replica:/pgdata
 volumes:
-  pgdata:
+  pgdata-primary:
     external: true
-  pgdata2:
+  pgdata-replica:
     external: true
 

@@ -25,6 +25,20 @@ PGPORT=${PGPORT}    # The port to listen on.
 NP_REPLICATION_TYPE=${NP_REPLICATION_TYPE}          # Must be "primary" or "replica"
 NP_REPLICATION_USER=${NP_REPLICATION_USER}          # Replication user.
 NP_REPLICATION_PASSWORD=${NP_REPLICATION_PASSWORD}  # Replication password.
+NP_WAL_LEVEL=${NP_WAL_LEVEL}                        # The wal_level setting in PostgreSQL.
+
+# The primary must have these defined.
+NP_REPLICATION_PHYSICAL_SLOTS=${NP_REPLICATION_PHYSICAL_SLOTS}
+
+# These settings need to be defined on ALL replicas.
+NP_PRIMARY_NAME=${NP_PRIMARY_NAME}                  # The name of the primary on the Docker instance.
+NP_PRIMARY_USERNAME=${NP_PRIMARY_USERNAME}          # The username to connect to the primary.
+NP_PRIMARY_PORT=${NP_PRIMARY_PORT}                  # The port on the primary.
+
+# Physical replicas.
+NP_REPLICATION_PHYSICAL_SLOT=${NP_REPLICATION_PHYSICAL_SLOT}    # The physical slot that this replica will use.
+
+
 
 # =====================================================================
 # Default environment variable values.
@@ -46,6 +60,10 @@ if [ -z "$PGPORT" ]; then
   PGPORT=15721
 fi
 
+if [ -z "$NP_WAL_LEVEL" ]; then
+  NP_WAL_LEVEL="replica"
+fi
+
 # =====================================================================
 # Helper functions.
 # =====================================================================
@@ -59,7 +77,20 @@ _pg_stop() {
 }
 
 _pg_start() {
-  ${BIN_DIR}/postgres "-D" "${PGDATA}" -p 15721
+  if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
+      (
+        sleep 5
+        IFS=','
+        for publication in $(echo "${NP_REPLICATION_PUBLICATION_NAMES[@]}"); do
+          echo $publication
+          # Create logical replication publication(s).
+          # Note that for updates/deletes to work, each table may need REPLICA IDENTITY to be manually set.
+          ${BIN_DIR}/psql -c "create publication $publication for all tables" postgres
+        done
+      ) &
+    fi
+
+    ${BIN_DIR}/postgres "-D" "${PGDATA}" -p ${PGPORT}
 }
 
 _pg_initdb() {
@@ -87,6 +118,8 @@ _pg_create_user_and_db() {
   ${BIN_DIR}/psql -c "create database ${POSTGRES_DB} with owner = '${POSTGRES_USER}'" postgres
   # Enable monitoring for the created user.
   ${BIN_DIR}/psql -c "grant pg_monitor to ${POSTGRES_USER}" postgres
+  # Make the created user a superuser.
+  ${BIN_DIR}/psql -c "alter user ${POSTGRES_USER} with superuser" postgres
 }
 
 _pg_setup_replication() {
@@ -96,7 +129,7 @@ _pg_setup_replication() {
   # See PostgreSQL docs for complete description of parameters.
 
   # wal_level: How much information to ship over.
-  sudo echo "wal_level = replica" >> ${AUTO_CONF}
+  sudo echo "wal_level = ${NP_WAL_LEVEL}" >> ${AUTO_CONF}
   # hot_standby: True to enable connecting and running queries during recovery.
   sudo echo "hot_standby = on" >> ${AUTO_CONF}
   # max_wal_senders: Maximum number of concurrent connections to standby/backup clients.
@@ -109,22 +142,29 @@ _pg_setup_replication() {
   sudo echo "log_min_error_statement = FATAL" >> ${AUTO_CONF}
 
   # PGTune configs
-  sudo echo "max_connections = 100" >> ${AUTO_CONF}
-  sudo echo "shared_buffers = 9600MB" >> ${AUTO_CONF}
-  sudo echo "effective_cache_size = 28800MB" >> ${AUTO_CONF}
-  sudo echo "maintenance_work_mem = 2GB" >> ${AUTO_CONF}
-  sudo echo "checkpoint_completion_target = 0.9" >> ${AUTO_CONF}
-  sudo echo "wal_buffers = 16MB" >> ${AUTO_CONF}
-  sudo echo "default_statistics_target = 100" >> ${AUTO_CONF}
-  sudo echo "random_page_cost = 1.1" >> ${AUTO_CONF}
-  sudo echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
-  sudo echo "work_mem = 48MB" >> ${AUTO_CONF}
-  sudo echo "min_wal_size = 2GB" >> ${AUTO_CONF}
-  sudo echo "max_wal_size = 8GB" >> ${AUTO_CONF}
-  sudo echo "max_worker_processes = 30" >> ${AUTO_CONF}
-  sudo echo "max_parallel_workers_per_gather = 2" >> ${AUTO_CONF}
-  sudo echo "max_parallel_workers = 30" >> ${AUTO_CONF}
-  sudo echo "max_parallel_maintenance_workers = 2" >> ${AUTO_CONF}
+  # DB Version: 13
+    # OS Type: linux
+    # DB Type: oltp
+    # Total Memory (RAM): 188 GB
+    # CPUs num: 80
+    # Data Storage: SSD
+
+#    echo "max_connections = 300" >> ${AUTO_CONF}
+#    echo "shared_buffers = 47GB" >> ${AUTO_CONF}
+#    echo "effective_cache_size = 141GB" >> ${AUTO_CONF}
+#    echo "maintenance_work_mem = 2GB" >> ${AUTO_CONF}
+#    echo "checkpoint_completion_target = 0.9" >> ${AUTO_CONF}
+#    echo "wal_buffers = 16MB" >> ${AUTO_CONF}
+#    echo "default_statistics_target = 100" >> ${AUTO_CONF}
+#    echo "random_page_cost = 1.1" >> ${AUTO_CONF}
+#    echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
+#    echo "work_mem = 41069kB" >> ${AUTO_CONF}
+#    echo "min_wal_size = 2GB" >> ${AUTO_CONF}
+#    echo "max_wal_size = 8GB" >> ${AUTO_CONF}
+#    echo "max_worker_processes = 80" >> ${AUTO_CONF}
+#    echo "max_parallel_workers_per_gather = 4" >> ${AUTO_CONF}
+#    echo "max_parallel_workers = 80" >> ${AUTO_CONF}
+#    echo "max_parallel_maintenance_workers = 4" >> ${AUTO_CONF}
 
   if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
     # ===============================
@@ -137,20 +177,31 @@ _pg_setup_replication() {
     sudo echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
     # Reload configuration.
     ${BIN_DIR}/psql -c "select pg_reload_conf()" postgres
-    # Create replication slot for replica.
-    ${BIN_DIR}/psql -c "select pg_create_physical_replication_slot('replication_slot_replica1')" postgres
+    echo ${NP_REPLICATION_PHYSICAL_SLOTS}
+    (
+      IFS=','
+      for slot in $(echo "${NP_REPLICATION_PHYSICAL_SLOTS[@]}"); do
+        echo $slot
+        # Create replication slot(s) for replica.
+        ${BIN_DIR}/psql -c "select pg_create_physical_replication_slot('$slot')" postgres
+      done
+    )
   fi
 }
 
 # All the steps required to start up PostgreSQL.
 _pg_start_all() {
-  _pg_initdb              # Initialize a new PostgreSQL cluster.
-  _pg_config              # Write any configuration options required.
-  _pgctl_start            # Start the PostgreSQL cluster.
-  _pg_create_user_and_db  # Create the specified user and database.
+  if [ -e "${PGDATA}/base" ]; then
+    _pgctl_start
+  else
+    _pg_initdb              # Initialize a new PostgreSQL cluster.
+    _pg_config              # Write any configuration options required.
+    _pgctl_start            # Start the PostgreSQL cluster.
+    _pg_create_user_and_db  # Create the specified user and database.
 
-  if [ ! -z "${NP_REPLICATION_TYPE}" ]; then
-    _pg_setup_replication
+    if [ ! -z "${NP_REPLICATION_TYPE}" ]; then
+      _pg_setup_replication
+    fi
   fi
 }
 
@@ -158,29 +209,46 @@ _pg_start_all() {
 # Main logic.
 # =====================================================================
 
-main() {
-  # Only initdb if this is not a replica. The replica will recover from backup.
-  if [ ! "${NP_REPLICATION_TYPE}" = "replica" ]; then
-    # This is a single-node or the primary.
-    _pg_start_all
-    _pg_stop
-    _pg_start
-  else
-    # This is a replica.
-    while true ; do
-      # TODO(WAN): Issue #6 Note that there is a potential race here where the primary restarts and healthcheck succeeds.
-      sleep 10
-      ${BIN_DIR}/pg_isready --host primary --port 15721 --username noisepage
-      READY_CHECK=$?
-      if [ "$READY_CHECK" = "0" ]; then
-        break
-      fi
-    done
+_wait_for_primary() {
+  while true ; do
+    # TODO(WAN): Issue #6 Note that there is a potential race here where the primary restarts and healthcheck succeeds.
+    sleep 10
+    ${BIN_DIR}/pg_isready --host=${NP_PRIMARY_NAME} --port=${NP_PRIMARY_PORT} --username=${NP_PRIMARY_USERNAME}
+    READY_CHECK=$?
+    if [ "$READY_CHECK" = "0" ]; then
+      break
+    fi
+  done
+}
 
-    sudo rm -rf ${PGDATA}/*
-    # Initialize replica backup from primary.
-    echo passyMcPassword | ${BIN_DIR}/pg_basebackup --host primary --username replicator --port 15721 --pgdata=${PGDATA} --format=p --wal-method=stream --progress --write-recovery-conf --slot replication_slot_replica1
-    _pg_start
+_main_primary() {
+  _pg_start_all
+  _pg_stop
+  _pg_start
+}
+
+_main_replica() {
+  _wait_for_primary
+
+  # Initialize replica backup from primary.
+  rm -rf "${PGDATA:?}/"*
+  echo ${NP_REPLICATION_PASSWORD} | ${BIN_DIR}/pg_basebackup --host ${NP_PRIMARY_NAME} --username ${NP_REPLICATION_USER} --port ${NP_PRIMARY_PORT} --pgdata=${PGDATA} --format=p --wal-method=stream --progress --write-recovery-conf --slot ${NP_REPLICATION_PHYSICAL_SLOT}
+  _pg_start
+}
+
+_cleanup() {
+  _pg_stop
+}
+
+main() {
+  trap 'cleanup' SIGTERM
+  if [ -z "${NP_REPLICATION_TYPE}" ] || [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
+    _main_primary
+  elif [ "${NP_REPLICATION_TYPE}" = "replica" ]; then
+    _main_replica
+  else
+    echo "Unknown replication type: ${NP_REPLICATION_TYPE}"
+    exit 1
   fi
 }
 

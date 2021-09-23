@@ -1,0 +1,20 @@
+version: '3'
+services:
+  np-exploration:
+    image: pgnp:latest
+    container_name: single
+    ports:
+      - "42666:42666"
+    environment:
+      - PGPORT=4266
+      - POSTGRES_DB=noisepage
+      - POSTGRES_USER=noisepage
+      - POSTGRES_PASSWORD=terrier
+    volumes:
+      - pgdata-replica:/replica-pgdata
+      - pgdata-exploration:/pgdata
+volumes:
+  pgdata-replica:
+    external: true
+  pgdata-exploration:
+    external: true

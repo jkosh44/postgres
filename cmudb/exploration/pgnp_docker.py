@@ -9,10 +9,10 @@ from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BI
 # TODO use docker library (https://github.com/docker/docker-py)
 
 def start_docker() -> subprocess.Popen:
-    execute_sys_command("sudo docker volume create pgdata")
-    execute_sys_command("sudo docker volume create pgdata2")
-    execute_sys_command("sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata")
-    execute_sys_command("sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata2")
+    execute_sys_command("sudo docker volume create pgdata-primary")
+    execute_sys_command("sudo docker volume create pgdata-replica")
+    execute_sys_command("sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata-primary")
+    execute_sys_command("sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata-replica")
     execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
     # Hide output because TPCC aborts clog stdout
     compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
