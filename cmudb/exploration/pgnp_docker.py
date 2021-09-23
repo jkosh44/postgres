@@ -10,6 +10,9 @@ from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BI
 # TODO use docker library (https://github.com/docker/docker-py)
 
 def start_docker() -> subprocess.Popen:
+    execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml down --volumes")
+    execute_sys_command("sudo docker volume rm pgdata-primary")
+    execute_sys_command("sudo docker volume rm pgdata-replica")
     execute_sys_command("sudo docker volume create pgdata-primary")
     execute_sys_command("sudo docker volume create pgdata-replica")
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-primary")
@@ -24,6 +27,8 @@ def start_docker() -> subprocess.Popen:
 
 
 def start_exploration_docker() -> subprocess.Popen:
+    execute_sys_command("sudo docker volume rm pgdata-exploration")
+    execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
     execute_sys_command("sudo docker volume create pgdata-exploration")
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-exploration")
     compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-exploration.yml up",
@@ -63,4 +68,5 @@ def shutdown_docker(docker_process: subprocess.Popen):
 
 def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
     stop_process(exploratory_docker_process)
+    execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
     execute_sys_command("sudo docker volume rm pgdata-exploration")
