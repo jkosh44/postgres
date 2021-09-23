@@ -12,8 +12,8 @@ from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BI
 def start_docker() -> subprocess.Popen:
     execute_sys_command("sudo docker volume create pgdata-primary")
     execute_sys_command("sudo docker volume create pgdata-replica")
-    execute_sys_command("sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata-primary")
-    execute_sys_command("sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata-replica")
+    execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-primary")
+    execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-replica")
     execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
     # Hide output because TPCC aborts clog stdout
     compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
@@ -25,7 +25,7 @@ def start_docker() -> subprocess.Popen:
 
 def start_exploration_docker() -> subprocess.Popen:
     execute_sys_command("sudo docker volume create pgdata-exploration")
-    execute_sys_command("sudo chown -R 1000:1000 /var/lib/docker/volumes/pgdata-exploration")
+    execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-exploration")
     compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-exploration.yml up",
                                         block=False, output_strategy=OutputStrategy.Print)
     wait_for_pg_ready(EXPLORATION)
