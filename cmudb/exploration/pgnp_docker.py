@@ -39,6 +39,7 @@ def start_exploration_docker() -> subprocess.Popen:
     # Hack to wait for container to start
     time.sleep(5)
     print("LOOK HERE FOR THE DEVIL")
+    print(f"Would terminate {'Exploring' in compose.stdout}")
     print(compose.stdout)
     return compose
 
