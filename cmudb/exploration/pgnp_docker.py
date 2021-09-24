@@ -37,6 +37,7 @@ def start_exploration_docker() -> subprocess.Popen:
 
     # TODO HACK
     while "Exploring" not in stdout:
+        print(stdout)
         time.sleep(0.5)
     return compose
 
