@@ -46,7 +46,7 @@ def start_exploration_docker() -> subprocess.Popen:
     while cont:
         line = compose.stdout.readline()
         print(line)
-        cont = "Exploring" in line or time.time() - start > 10
+        cont = "Exploring" not in line and time.time() - start < 10
         time.sleep(1)
     # for line in compose.stdout.readlines():
     #     print(line)
