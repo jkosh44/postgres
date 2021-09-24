@@ -46,7 +46,7 @@ def execute_sys_command(cmd: Union[str, List[str]],
         out = out.decode(UTF_8) if out is not None else ""
         err = err.decode(UTF_8) if err is not None else ""
 
-    return res, out, err
+    return res, out., err
 
 
 def stop_process(proc: subprocess.Popen, block: bool = True):
