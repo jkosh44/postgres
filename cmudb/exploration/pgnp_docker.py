@@ -17,7 +17,7 @@ def start_docker() -> subprocess.Popen:
     execute_sys_command("sudo docker volume create pgdata-replica")
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-primary")
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-replica")
-    # TODO uncomment
+    execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone poisoning")
     execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
     # Hide output because TPCC aborts clog stdout
     compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
@@ -35,10 +35,7 @@ def start_exploration_docker() -> subprocess.Popen:
     compose, stdout, _ = execute_sys_command(f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
                                         block=False, output_strategy=OutputStrategy.Capture)
 
-    # TODO HACK
-    while "Exploring" not in stdout:
-        print(stdout)
-        time.sleep(0.5)
+    time.sleep(5)
     return compose
 
 
