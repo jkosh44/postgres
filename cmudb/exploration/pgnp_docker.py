@@ -35,7 +35,9 @@ def start_exploration_docker() -> subprocess.Popen:
     compose, stdout, _ = execute_sys_command(f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
                                         block=False, output_strategy=OutputStrategy.Capture)
 
+    # Hack to wait for container to start
     time.sleep(5)
+    print(stdout)
     return compose
 
 
