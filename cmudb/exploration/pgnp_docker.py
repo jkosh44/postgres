@@ -4,7 +4,7 @@ from typing import AnyStr, Tuple
 import time
 
 from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BIN_DIR, stop_process, OutputStrategy, \
-    UTF_8
+    UTF_8, PROJECT_ROOT
 
 
 # TODO use docker library (https://github.com/docker/docker-py)
@@ -24,8 +24,8 @@ def start_docker() -> subprocess.Popen:
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-primary")
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-replica")
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
-    # Uncoment me
-    # execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
+    # TODO Uncoment me
+    execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
     # Hide output because TPCC aborts clog stdout
     compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
                                         block=False, output_strategy=OutputStrategy.Hide)
