@@ -4,7 +4,7 @@ from typing import AnyStr, Tuple
 import time
 
 from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BIN_DIR, stop_process, OutputStrategy, \
-    PROJECT_ROOT, EXPLORATION
+    PROJECT_ROOT, EXPLORATION, UTF_8
 
 
 # TODO use docker library (https://github.com/docker/docker-py)
@@ -45,6 +45,8 @@ def start_exploration_docker() -> subprocess.Popen:
     start = time.time()
     while cont:
         line = compose.stdout.readline()
+        if line is not None:
+            line = line.decode(UTF_8)
         print(line)
         cont = "Exploring" not in line and time.time() - start < 10
         time.sleep(1)
