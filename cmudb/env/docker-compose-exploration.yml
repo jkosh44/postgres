@@ -11,6 +11,7 @@ services:
       - POSTGRES_USER=noisepage
       - POSTGRES_PASSWORD=terrier
       - NP_REPLICATION_TYPE=exploratory
+      - COMPOSE_PROJECT_NAME=exploration
     volumes:
       - pgdata-replica:/replica-pgdata
       - pgdata-exploration:/pgdata
