@@ -37,12 +37,19 @@ def start_exploration_docker() -> subprocess.Popen:
                                         block=False, output_strategy=OutputStrategy.Capture)
 
     # Hack to wait for container to start
-    time.sleep(5)
+    # time.sleep(5)
+    # compose.stdout.flush()
     print("LOOK HERE FOR THE DEVIL")
     # print(f"Would terminate {'Exploring' in compose.stdout}")
-    compose.stdout.flush()
-    for line in compose.stdout.readlines():
+    cont = True
+    start = time.time()
+    while cont:
+        line = compose.stdout.readline()
         print(line)
+        cont = "Exploring" in line or time.time() - start > 10
+        time.sleep(1)
+    # for line in compose.stdout.readlines():
+    #     print(line)
     # print(compose.stdout.)
     return compose
 
