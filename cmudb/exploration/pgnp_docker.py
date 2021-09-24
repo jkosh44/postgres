@@ -40,7 +40,10 @@ def start_exploration_docker() -> subprocess.Popen:
     time.sleep(5)
     print("LOOK HERE FOR THE DEVIL")
     # print(f"Would terminate {'Exploring' in compose.stdout}")
-    print(compose.stdout)
+    compose.stdout.flush()
+    for line in compose.stdout.readlines():
+        print(line)
+    # print(compose.stdout.)
     return compose
 
 
