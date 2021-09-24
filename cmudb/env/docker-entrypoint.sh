@@ -249,8 +249,7 @@ main() {
   elif [ "${NP_REPLICATION_TYPE}" = "exploratory" ]; then
     # TODO: might consider copying data and starting postgres here...?
     echo "Exploring"
-    touch fake_file.joe
-    tail -f fake_file.joe
+    tail -F anything
   else
     echo "Unknown replication type: ${NP_REPLICATION_TYPE}"
     exit 1
