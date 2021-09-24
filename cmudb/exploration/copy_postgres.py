@@ -6,7 +6,7 @@ import time
 
 from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
 from pgnp_docker import start_docker, shutdown_docker, execute_in_container, is_pg_ready, start_exploration_docker, \
-    shutdown_exploratory_docker
+    shutdown_exploratory_docker, cleanup_docker
 from sql import execute_sql, validate_sql_results, validate_table_has_values
 from util import REPLICA, CONTAINER_BIN_DIR, PGDATA_LOC, PGDATA2_LOC, EXPLORATION_PORT, \
     stop_process, OutputStrategy, PRIMARY_PORT, PGDATA_REPLICA_LOC, EXPLORATION
@@ -63,6 +63,9 @@ def validate_exploration_process() -> bool:
 def test_copy() -> Tuple[int, int, bool]:
     print("Starting exploration container")
     exploratory_container = start_exploration_docker()
+    if exploratory_container.returncode is not None:
+        shutdown_exploratory_docker(exploratory_container)
+        return 0, 0, False
     print("Exploration container started")
     print("Copying replica data")
     copy_time_ns = copy_pgdata()
@@ -109,6 +112,10 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
 
 
 def main():
+    print("Cleaning up any previous docker instances")
+    cleanup_docker()
+    print("Previous docker instances cleaned up")
+
     print("Starting Docker containers")
     docker_process = start_docker()
     print("Docker containers started successfully")

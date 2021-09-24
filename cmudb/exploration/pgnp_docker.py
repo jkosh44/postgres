@@ -4,15 +4,21 @@ from typing import AnyStr, Tuple
 import time
 
 from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BIN_DIR, stop_process, OutputStrategy, \
-    PROJECT_ROOT, EXPLORATION, UTF_8
+    UTF_8
 
 
 # TODO use docker library (https://github.com/docker/docker-py)
 
-def start_docker() -> subprocess.Popen:
+def cleanup_docker():
     execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml down --volumes")
+    execute_sys_command(
+        f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
     execute_sys_command("sudo docker volume rm pgdata-primary")
     execute_sys_command("sudo docker volume rm pgdata-replica")
+    execute_sys_command("sudo docker volume rm pgdata-exploration")
+
+
+def start_docker() -> subprocess.Popen:
     execute_sys_command("sudo docker volume create pgdata-primary")
     execute_sys_command("sudo docker volume create pgdata-replica")
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-primary")
@@ -29,30 +35,21 @@ def start_docker() -> subprocess.Popen:
 
 
 def start_exploration_docker() -> subprocess.Popen:
-    execute_sys_command("sudo docker volume rm pgdata-exploration")
-    execute_sys_command(f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
     execute_sys_command("sudo docker volume create pgdata-exploration")
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-exploration")
-    compose, _, _ = execute_sys_command(f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
-                                        block=False, output_strategy=OutputStrategy.Capture)
+    compose, _, _ = execute_sys_command(
+        f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
+        block=False, output_strategy=OutputStrategy.Capture)
 
     # Hack to wait for container to start
-    # time.sleep(5)
-    # compose.stdout.flush()
-    print("LOOK HERE FOR THE DEVIL")
-    # print(f"Would terminate {'Exploring' in compose.stdout}")
-    cont = True
-    start = time.time()
-    while cont:
+    docker_not_started = True
+    while docker_not_started:
         line = compose.stdout.readline()
         if line is not None:
             line = line.decode(UTF_8)
         print(line)
-        cont = "Exploring" not in line and time.time() - start < 10
+        docker_not_started = "Exploring" not in line and compose.poll() is None
         time.sleep(1)
-    # for line in compose.stdout.readlines():
-    #     print(line)
-    # print(compose.stdout.)
     return compose
 
 
@@ -87,5 +84,6 @@ def shutdown_docker(docker_process: subprocess.Popen):
 
 def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
     stop_process(exploratory_docker_process)
-    execute_sys_command(f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
+    execute_sys_command(
+        f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
     execute_sys_command("sudo docker volume rm pgdata-exploration")
