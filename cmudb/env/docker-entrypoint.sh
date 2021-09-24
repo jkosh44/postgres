@@ -250,6 +250,7 @@ main() {
     # TODO: might consider copying data and starting postgres here...?
     echo "Exploring"
     tail -F anything
+    echo "Why must I cry"
   else
     echo "Unknown replication type: ${NP_REPLICATION_TYPE}"
     exit 1
