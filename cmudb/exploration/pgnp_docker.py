@@ -32,8 +32,12 @@ def start_exploration_docker() -> subprocess.Popen:
     execute_sys_command(f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
     execute_sys_command("sudo docker volume create pgdata-exploration")
     execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-exploration")
-    compose, _, _ = execute_sys_command(f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
-                                        block=False, output_strategy=OutputStrategy.Print)
+    compose, stdout, _ = execute_sys_command(f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
+                                        block=False, output_strategy=OutputStrategy.Capture)
+
+    # TODO HACK
+    while "Exploring" not in stdout:
+        time.sleep(0.5)
     return compose
 
 
