@@ -30,7 +30,7 @@ def start_docker() -> subprocess.Popen:
     execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{REPLICA_VOLUME}")
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
     # TODO Uncoment me
-    execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
+    # execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
     # Hide output because TPCC aborts clog stdout
     compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
                                         block=False, output_strategy=OutputStrategy.Hide)

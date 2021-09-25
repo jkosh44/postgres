@@ -4,7 +4,7 @@ from util import execute_sys_command, OutputStrategy
 
 BENCHBASE_URL = "git@github.com:cmu-db/benchbase.git"
 BENCHBASE_NAME = "benchbase-2021-SNAPSHOT"
-BENCHBASE_TAR = f"./benchbase/{BENCHBASE_NAME}.tgz"
+BENCHBASE_TAR = f"./{BENCHBASE_NAME}.tgz"
 BENCHBASE_DIR = f"./benchbase/{BENCHBASE_NAME}"
 
 
