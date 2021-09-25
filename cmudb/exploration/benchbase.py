@@ -10,7 +10,7 @@ BENCHBASE_DIR = f"./benchbase/{BENCHBASE_NAME}"
 
 def setup_benchbase():
     cleanup_benchbase()
-    execute_sys_command(f"tar xvzf {BENCHBASE_TAR}")
+    execute_sys_command(f"tar xvzf {BENCHBASE_TAR}", cwd="./benchbase/")
 
 
 # TODO consider pulling and building benchbase and being a little smarter
