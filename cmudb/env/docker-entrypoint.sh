@@ -149,22 +149,22 @@ _pg_setup_replication() {
     # CPUs num: 80
     # Data Storage: SSD
 
-#    echo "max_connections = 300" >> ${AUTO_CONF}
-#    echo "shared_buffers = 47GB" >> ${AUTO_CONF}
-#    echo "effective_cache_size = 141GB" >> ${AUTO_CONF}
-#    echo "maintenance_work_mem = 2GB" >> ${AUTO_CONF}
-#    echo "checkpoint_completion_target = 0.9" >> ${AUTO_CONF}
-#    echo "wal_buffers = 16MB" >> ${AUTO_CONF}
-#    echo "default_statistics_target = 100" >> ${AUTO_CONF}
-#    echo "random_page_cost = 1.1" >> ${AUTO_CONF}
-#    echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
-#    echo "work_mem = 41069kB" >> ${AUTO_CONF}
-#    echo "min_wal_size = 2GB" >> ${AUTO_CONF}
-#    echo "max_wal_size = 8GB" >> ${AUTO_CONF}
-#    echo "max_worker_processes = 80" >> ${AUTO_CONF}
-#    echo "max_parallel_workers_per_gather = 4" >> ${AUTO_CONF}
-#    echo "max_parallel_workers = 80" >> ${AUTO_CONF}
-#    echo "max_parallel_maintenance_workers = 4" >> ${AUTO_CONF}
+    echo "max_connections = 100" >> ${AUTO_CONF}
+    echo "shared_buffers = 15GB" >> ${AUTO_CONF}
+    echo "effective_cache_size = 47GB" >> ${AUTO_CONF}
+    echo "maintenance_work_mem = 2GB" >> ${AUTO_CONF}
+    echo "checkpoint_completion_target = 0.9" >> ${AUTO_CONF}
+    echo "wal_buffers = 16MB" >> ${AUTO_CONF}
+    echo "default_statistics_target = 100" >> ${AUTO_CONF}
+    echo "random_page_cost = 1.1" >> ${AUTO_CONF}
+    echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
+    echo "work_mem = 13689kB" >> ${AUTO_CONF}
+    echo "min_wal_size = 2GB" >> ${AUTO_CONF}
+    echo "max_wal_size = 8GB" >> ${AUTO_CONF}
+    echo "max_worker_processes = 80" >> ${AUTO_CONF}
+    echo "max_parallel_workers_per_gather = 4" >> ${AUTO_CONF}
+    echo "max_parallel_workers = 80" >> ${AUTO_CONF}
+    echo "max_parallel_maintenance_workers = 4" >> ${AUTO_CONF}
 
   if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
     # ===============================
