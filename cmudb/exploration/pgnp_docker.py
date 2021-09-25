@@ -6,6 +6,11 @@ import time
 from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BIN_DIR, stop_process, OutputStrategy, \
     UTF_8, PROJECT_ROOT
 
+PRIMARY_VOLUME = "pgdata-primary"
+REPLICA_VOLUME = "pgdata-replica"
+EXPLORATION_VOLUME = "pgdata-exploration"
+DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
+
 
 # TODO use docker library (https://github.com/docker/docker-py)
 
@@ -13,16 +18,16 @@ def cleanup_docker():
     execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml down --volumes")
     execute_sys_command(
         f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
-    execute_sys_command("sudo docker volume rm pgdata-primary")
-    execute_sys_command("sudo docker volume rm pgdata-replica")
-    execute_sys_command("sudo docker volume rm pgdata-exploration")
+    execute_sys_command(f"sudo docker volume rm {PRIMARY_VOLUME}")
+    execute_sys_command(f"sudo docker volume rm {REPLICA_VOLUME}")
+    execute_sys_command(f"sudo docker volume rm {EXPLORATION_VOLUME}")
 
 
 def start_docker() -> subprocess.Popen:
-    execute_sys_command("sudo docker volume create pgdata-primary")
-    execute_sys_command("sudo docker volume create pgdata-replica")
-    execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-primary")
-    execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-replica")
+    execute_sys_command(f"sudo docker volume create {PRIMARY_VOLUME}")
+    execute_sys_command(f"sudo docker volume create {REPLICA_VOLUME}")
+    execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{PRIMARY_VOLUME}")
+    execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{REPLICA_VOLUME}")
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
     # TODO Uncoment me
     execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
@@ -35,8 +40,8 @@ def start_docker() -> subprocess.Popen:
 
 
 def start_exploration_docker() -> subprocess.Popen:
-    execute_sys_command("sudo docker volume create pgdata-exploration")
-    execute_sys_command("sudo chown -R 1000:1000 /mnt/docker/volumes/pgdata-exploration")
+    execute_sys_command("sudo docker volume create {EXPLORATION_VOLUME}")
+    execute_sys_command("sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
     compose, _, _ = execute_sys_command(
         f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
         block=False, output_strategy=OutputStrategy.Capture)
@@ -78,12 +83,12 @@ def wait_for_pg_ready(container_name: str):
 def shutdown_docker(docker_process: subprocess.Popen):
     stop_process(docker_process)
     execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml down --volumes")
-    execute_sys_command("sudo docker volume rm pgdata-primary")
-    execute_sys_command("sudo docker volume rm pgdata-replica")
+    execute_sys_command(f"sudo docker volume rm {PRIMARY_VOLUME}")
+    execute_sys_command(f"sudo docker volume rm {REPLICA_VOLUME}")
 
 
 def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
     stop_process(exploratory_docker_process)
     execute_sys_command(
         f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
-    execute_sys_command("sudo docker volume rm pgdata-exploration")
+    execute_sys_command("sudo docker volume rm {EXPLORATION_VOLUME}")

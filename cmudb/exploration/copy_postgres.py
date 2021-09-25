@@ -9,7 +9,7 @@ from pgnp_docker import start_docker, shutdown_docker, execute_in_container, is_
     shutdown_exploratory_docker, cleanup_docker
 from sql import execute_sql, validate_sql_results, validate_table_has_values
 from util import REPLICA, CONTAINER_BIN_DIR, PGDATA_LOC, PGDATA2_LOC, EXPLORATION_PORT, \
-    stop_process, OutputStrategy, PRIMARY_PORT, PGDATA_REPLICA_LOC, EXPLORATION
+    stop_process, OutputStrategy, PRIMARY_PORT, PGDATA_REPLICA_LOC, EXPLORATION, REPLICA_PORT
 
 RESULT_FILE = "./experiment_{}.json"
 
@@ -67,6 +67,7 @@ def test_copy() -> Tuple[int, int, bool]:
         shutdown_exploratory_docker(exploratory_container)
         return 0, 0, False
     print("Exploration container started")
+    execute_sql("CHECKPOINT", REPLICA_PORT)
     print("Copying replica data")
     copy_time_ns = copy_pgdata()
     print("Exploration data copied")

@@ -13,6 +13,7 @@ PGDATA_LOC = "/pgdata"
 PGDATA_REPLICA_LOC = "/replica-pgdata"
 PGDATA2_LOC = "/pgdata2"
 PRIMARY_PORT = 15721
+REPLICA_PORT = 15722
 EXPLORATION_PORT = 42666
 # This takes a couple of minutes to create. Just add more 0s to increase time
 SERIES_LENGTH = 1000000000
