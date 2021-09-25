@@ -40,8 +40,8 @@ def start_docker() -> subprocess.Popen:
 
 
 def start_exploration_docker() -> subprocess.Popen:
-    execute_sys_command("sudo docker volume create {EXPLORATION_VOLUME}")
-    execute_sys_command("sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
+    execute_sys_command(f"sudo docker volume create {EXPLORATION_VOLUME}")
+    execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
     compose, _, _ = execute_sys_command(
         f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
         block=False, output_strategy=OutputStrategy.Capture)
@@ -91,4 +91,4 @@ def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
     stop_process(exploratory_docker_process)
     execute_sys_command(
         f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
-    execute_sys_command("sudo docker volume rm {EXPLORATION_VOLUME}")
+    execute_sys_command(f"sudo docker volume rm {EXPLORATION_VOLUME}")
