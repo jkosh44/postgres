@@ -76,3 +76,6 @@ volumes:
     - `external`: if set to true it specifies that this volume has been created outside of Compose, so it's not created
     - `labels`: Adds metadata to containers
     - `name`: Sets a custom name for the volume
+
+
+- To change location of docker directory change `--data-root` param in `/lib/systemd/system/docker.service` 

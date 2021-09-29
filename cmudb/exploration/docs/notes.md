@@ -186,3 +186,14 @@ nvme1n1 259:0    0 894.3G  0 disk            SAMSUNG MZQLB960HAJR-00007
 nvme0n1 259:1    0 465.8G  0 disk /mnt       Samsung SSD 970 EVO Plus 500GB
 ```
 the one I added is now called `nvme0n1`
+
+ziffean skew is YCSB
+come up with degenerative case
+    Uniform distribution (see if ycsb has parameter)
+Check restartpoints in logs
+Deliverable: Build deamon that takes commands and can do exploration shit
+Wan is doing machine learning side of things
+Final experiment
+    Given a postgres query trace replay trace in exploratory instance (pg_replay)
+    For the entire experiment have line graph of replica replay with vertical line of exploratory events
+    End to end experiment is what I should sell
