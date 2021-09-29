@@ -72,13 +72,13 @@ def test_copy() -> Tuple[int, int, bool]:
         shutdown_exploratory_docker(exploratory_container)
         return 0, 0, False
     execute_in_container(EXPLORATION, f"sudo chown terrier:terrier -R {PGDATA_LOC}")
+    execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/postmaster.pid")
     execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/standby.signal")
     print("Exploration container started")
     print("Starting exploration postgres instance")
     exploration_process, startup_time, valid = start_exploration_postgres()
     if not valid:
-        stop_exploration_postgres(exploration_process)
         shutdown_exploratory_docker(exploratory_container)
         return copy_time_ns, startup_time, valid
     print("Exploration postgres instance started")
