@@ -70,6 +70,8 @@ def test_copy() -> Tuple[int, int, bool]:
     exploratory_container = start_exploration_docker()
     if exploratory_container.returncode is not None:
         shutdown_exploratory_docker(exploratory_container)
+        execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-exploration")
+        execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-replica@explore")
         return 0, 0, False
     execute_in_container(EXPLORATION, f"sudo chown terrier:terrier -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
@@ -80,6 +82,8 @@ def test_copy() -> Tuple[int, int, bool]:
     exploration_process, startup_time, valid = start_exploration_postgres()
     if not valid:
         shutdown_exploratory_docker(exploratory_container)
+        execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-exploration")
+        execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-replica@explore")
         return copy_time_ns, startup_time, valid
     print("Exploration postgres instance started")
     valid = validate_exploration_process()
