@@ -63,7 +63,7 @@ def validate_exploration_process() -> bool:
 
 def test_copy() -> Tuple[int, int, bool]:
     print("Copying replica data")
-    print(execute_sql("CHECKPOINT", REPLICA_PORT))
+    # print(execute_sql("CHECKPOINT", REPLICA_PORT))
     copy_time_ns = copy_pgdata()
     print("Exploration data copied")
     print("Starting exploration container")
