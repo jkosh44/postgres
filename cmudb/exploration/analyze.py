@@ -11,16 +11,18 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/cow_tuned_12hr.json"
+FILE_NAME = "results/not_cow_tuned_12hr_checkpoint.json"
 
 
 def main():
     df = pd.read_json(FILE_NAME)
     df[COPY_TIME] = df[COPY_TIME_NS] / NS_PER_SEC
     df[STARTUP_TIME] = df[STARTUP_TIME_NS] / NS_PER_SEC
-    valid_measurements = df[df[VALID] == True]
+    valid_measurements = df[df[VALID]]
+    # valid_measurements.plot(x=ITERATION, y=[COPY_TIME, STARTUP_TIME],
+    #                         kind="line", title="COW (seconds)")
     valid_measurements.plot(x=ITERATION, y=[COPY_TIME, STARTUP_TIME],
-                            kind="line", title="COW (seconds)")
+                            kind="bar", stacked=True, title="COW (seconds)")
     plt.show()
     print(df[[STARTUP_TIME, COPY_TIME]].describe())
     print(f"Percent Valid: {len(valid_measurements) / len(df)}")
