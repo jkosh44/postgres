@@ -39,7 +39,7 @@ def create_volume(volume_name: str):
 
 def create_container(compose_yml: str, project_name: str, output_strategy: OutputStrategy) -> subprocess.Popen:
     compose, _, _ = execute_sys_command(
-        f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml}.yml up",
+        f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} up",
         block=False, output_strategy=output_strategy)
     return compose
 
