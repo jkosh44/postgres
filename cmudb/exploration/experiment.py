@@ -9,11 +9,11 @@ from pgnp_docker import start_replication_docker, shutdown_replication_docker, e
     start_exploration_docker, \
     shutdown_exploratory_docker, setup_docker_env
 from sql import execute_sql, validate_sql_results, validate_table_has_values, checkpoint, \
-    start_and_wait_for_postgres_instance, stop_postgres_instance
+    start_and_wait_for_postgres_instance, stop_postgres_instance, wait_for_pg_ready
 from util import PGDATA_LOC, PGDATA2_LOC, \
     EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
-    timed_execution
+    timed_execution, REPLICA, PRIMARY
 
 RESULT_FILE = "./experiment_{}.json"
 
@@ -108,6 +108,8 @@ def main():
 
     print("Starting Docker containers")
     docker_process = start_replication_docker()
+    wait_for_pg_ready(PRIMARY, PRIMARY_PORT, docker_process)
+    wait_for_pg_ready(REPLICA, PRIMARY_PORT, docker_process)
     print("Docker containers started successfully")
 
     execute_sql("ALTER SYSTEM SET log_min_error_statement TO 'FATAL';", 15721)

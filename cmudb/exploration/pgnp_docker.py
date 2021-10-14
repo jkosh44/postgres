@@ -2,9 +2,8 @@ import subprocess
 import time
 from typing import AnyStr, Tuple
 
-from sql import wait_for_pg_ready
-from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, stop_process, OutputStrategy, \
-    UTF_8, PROJECT_ROOT, PRIMARY_PORT
+from util import execute_sys_command, ENV_FOLDER, stop_process, OutputStrategy, \
+    UTF_8, PROJECT_ROOT
 
 PRIMARY_VOLUME = "pgdata-primary"
 REPLICA_VOLUME = "pgdata-replica"
@@ -84,10 +83,7 @@ def start_replication_docker() -> subprocess.Popen:
     # Make sure that container doesn't reuse machine's IP address
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
     # Hide output because TPCC aborts clog stdout
-    compose = create_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, OutputStrategy.Hide)
-    wait_for_pg_ready(PRIMARY, PRIMARY_PORT, compose)
-    wait_for_pg_ready(REPLICA, PRIMARY_PORT, compose)
-    return compose
+    return create_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, OutputStrategy.Hide)
 
 
 def start_exploration_docker() -> subprocess.Popen:
