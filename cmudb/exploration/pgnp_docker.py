@@ -65,7 +65,7 @@ def execute_in_container(container_name: str, cmd: str, block: bool = True,
 
 def setup_docker_env():
     cleanup_docker_env()
-    # build_image(IMAGE_TAG)
+    build_image(IMAGE_TAG)
 
 
 def cleanup_docker_env():
@@ -82,7 +82,7 @@ def start_replication_docker() -> subprocess.Popen:
     # Make sure that container doesn't reuse machine's IP address
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
     # Hide output because TPCC aborts clog stdout
-    return create_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, OutputStrategy.Print)
+    return create_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, OutputStrategy.Hide)
 
 
 def start_exploration_docker() -> subprocess.Popen:
