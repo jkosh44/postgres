@@ -2,7 +2,7 @@ import subprocess
 import time
 from typing import AnyStr, Tuple
 
-from cmudb.exploration.sql import wait_for_pg_ready
+from sql import wait_for_pg_ready
 from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, stop_process, OutputStrategy, \
     UTF_8, PROJECT_ROOT, PRIMARY_PORT
 
