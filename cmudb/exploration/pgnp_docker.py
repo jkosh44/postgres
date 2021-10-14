@@ -26,7 +26,7 @@ IMAGE_TAG = "pgnp"
 
 def build_image(tag: str):
     # TODO Uncoment me
-    execute_sys_command(f"sudo docker build --{tag} pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
+    execute_sys_command(f"sudo docker build --tag {tag} --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
 
 
 def remove_volume(volume_name: str):
