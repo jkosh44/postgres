@@ -70,8 +70,8 @@ def setup_docker_env():
 
 
 def cleanup_docker_env():
-    destroy_container(REPLICATION_COMPOSE)
-    destroy_container(EXPLORATORY_COMPOSE)
+    destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME)
+    destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME)
     remove_volume(PRIMARY_VOLUME)
     remove_volume(REPLICA_VOLUME)
     remove_volume(EXPLORATION_VOLUME)
