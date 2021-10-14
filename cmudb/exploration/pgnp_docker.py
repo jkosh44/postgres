@@ -1,61 +1,57 @@
 import subprocess
+import time
 from typing import AnyStr, Tuple
 
-import time
-
-from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, CONTAINER_BIN_DIR, stop_process, OutputStrategy, \
-    UTF_8, PROJECT_ROOT
+from cmudb.exploration.sql import wait_for_pg_ready
+from util import PRIMARY, REPLICA, execute_sys_command, ENV_FOLDER, stop_process, OutputStrategy, \
+    UTF_8, PROJECT_ROOT, PRIMARY_PORT
 
 PRIMARY_VOLUME = "pgdata-primary"
 REPLICA_VOLUME = "pgdata-replica"
 EXPLORATION_VOLUME = "pgdata-exploration"
+
 DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
+
+REPLICATION_COMPOSE = "docker-compose-replication.yml"
+EXPLORATORY_COMPOSE = "docker-compose-exploration"
+
+REPLICATION_PROJECT_NAME = "replication"
+EXPLORATORY_PROJECT_NAME = "exploratory"
+
+IMAGE_TAG = "pgnp"
 
 
 # TODO use docker library (https://github.com/docker/docker-py)
 
-def cleanup_docker():
-    execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml down --volumes")
-    execute_sys_command(
-        f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
-    execute_sys_command(f"sudo docker volume rm {PRIMARY_VOLUME}")
-    execute_sys_command(f"sudo docker volume rm {REPLICA_VOLUME}")
-    execute_sys_command(f"sudo docker volume rm {EXPLORATION_VOLUME}")
+# Docker Utilities
 
-
-def start_docker() -> subprocess.Popen:
-    execute_sys_command(f"sudo docker volume create {PRIMARY_VOLUME}")
-    execute_sys_command(f"sudo docker volume create {REPLICA_VOLUME}")
-    execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{PRIMARY_VOLUME}")
-    execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{REPLICA_VOLUME}")
-    execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
+def build_image(tag: str):
     # TODO Uncoment me
-    execute_sys_command(f"sudo docker build --tag pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
-    # Hide output because TPCC aborts clog stdout
-    compose, _, _ = execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml up",
-                                        block=False, output_strategy=OutputStrategy.Hide)
-    wait_for_pg_ready(PRIMARY)
-    wait_for_pg_ready(REPLICA)
-    return compose
+    execute_sys_command(f"sudo docker build --{tag} pgnp --file {ENV_FOLDER}/Dockerfile {PROJECT_ROOT}")
 
 
-def start_exploration_docker() -> subprocess.Popen:
-    execute_sys_command(f"sudo docker volume create {EXPLORATION_VOLUME}")
-    execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
+def remove_volume(volume_name: str):
+    execute_sys_command(f"sudo docker volume rm {volume_name}")
+
+
+def create_volume(volume_name: str):
+    execute_sys_command(f"sudo docker volume create {volume_name}")
+    execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{volume_name}")
+
+
+def create_container(compose_yml: str, project_name: str, output_strategy: OutputStrategy) -> subprocess.Popen:
     compose, _, _ = execute_sys_command(
-        f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml up",
-        block=False, output_strategy=OutputStrategy.Capture)
-
-    # Hack to wait for container to start
-    docker_not_started = True
-    while docker_not_started:
-        line = compose.stdout.readline()
-        if line is not None:
-            line = line.decode(UTF_8)
-        print(line)
-        docker_not_started = "Exploring" not in line and compose.poll() is None
-        time.sleep(10)
+        f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml}.yml up",
+        block=False, output_strategy=output_strategy)
     return compose
+
+
+def stop_container(container: subprocess.Popen):
+    stop_process(container)
+
+
+def destroy_container(compose_yml: str, project_name: str):
+    execute_sys_command(f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} down --volumes")
 
 
 def execute_in_container(container_name: str, cmd: str, block: bool = True,
@@ -67,28 +63,57 @@ def execute_in_container(container_name: str, cmd: str, block: bool = True,
     return execute_sys_command(docker_cmd, block=block, output_strategy=output_strategy)
 
 
-def is_pg_ready(container_name: str, port: int) -> bool:
-    is_ready_res, _, _ = execute_in_container(container_name,
-                                              f"{CONTAINER_BIN_DIR}/pg_isready --host {container_name} --port {port} "
-                                              f"--username noisepage", output_strategy=OutputStrategy.Hide)
-    return is_ready_res.returncode == 0
+# Exploratory functionality
+
+def setup_docker_env():
+    cleanup_docker_env()
+    build_image(IMAGE_TAG)
 
 
-# TODO add timeout
-def wait_for_pg_ready(container_name: str):
-    while not is_pg_ready(container_name, 15721):
-        time.sleep(1)
+def cleanup_docker_env():
+    destroy_container(REPLICATION_COMPOSE)
+    destroy_container(EXPLORATORY_COMPOSE)
+    remove_volume(PRIMARY_VOLUME)
+    remove_volume(REPLICA_VOLUME)
+    remove_volume(EXPLORATION_VOLUME)
 
 
-def shutdown_docker(docker_process: subprocess.Popen):
-    stop_process(docker_process)
-    execute_sys_command(f"sudo docker-compose -f {ENV_FOLDER}/docker-compose-replication.yml down --volumes")
-    execute_sys_command(f"sudo docker volume rm {PRIMARY_VOLUME}")
-    execute_sys_command(f"sudo docker volume rm {REPLICA_VOLUME}")
+def start_replication_docker() -> subprocess.Popen:
+    create_volume(PRIMARY_VOLUME)
+    create_volume(REPLICA_VOLUME)
+    # Make sure that container doesn't reuse machine's IP address
+    execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
+    # Hide output because TPCC aborts clog stdout
+    compose = create_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, OutputStrategy.Hide)
+    wait_for_pg_ready(PRIMARY, PRIMARY_PORT, compose)
+    wait_for_pg_ready(REPLICA, PRIMARY_PORT, compose)
+    return compose
+
+
+def start_exploration_docker() -> subprocess.Popen:
+    create_volume(EXPLORATION_VOLUME)
+    compose = create_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, OutputStrategy.Capture)
+
+    # TODO Hack to wait for container to start
+    docker_not_started = True
+    while docker_not_started:
+        line = compose.stdout.readline()
+        if line is not None:
+            line = line.decode(UTF_8)
+        print(line)
+        docker_not_started = "Exploring" not in line and compose.poll() is None
+        time.sleep(10)
+    return compose
+
+
+def shutdown_replication_docker(docker_process: subprocess.Popen):
+    stop_container(docker_process)
+    destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME)
+    remove_volume(PRIMARY_VOLUME)
+    remove_volume(REPLICA_VOLUME)
 
 
 def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
-    stop_process(exploratory_docker_process)
-    execute_sys_command(
-        f"sudo docker-compose -p exploratory -f {ENV_FOLDER}/docker-compose-exploration.yml down --volumes")
-    execute_sys_command(f"sudo docker volume rm {EXPLORATION_VOLUME}")
+    stop_container(exploratory_docker_process)
+    destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME)
+    remove_volume(EXPLORATION_VOLUME)

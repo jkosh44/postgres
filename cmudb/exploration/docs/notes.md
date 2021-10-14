@@ -49,3 +49,7 @@ Final experiment
 - Throw out logs after checkpoints
 - Try larger DBs
 - Am I pinging is_ready too much?
+
+
+
+Look at: /etc/postgresql/12/main/pg_hba.conf, do we need to copy this?

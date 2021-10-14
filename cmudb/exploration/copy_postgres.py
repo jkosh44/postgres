@@ -1,18 +1,19 @@
 import subprocess
+import time
 from functools import reduce
 from typing import Tuple
 
-import time
-
 from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
-from pgnp_docker import start_docker, shutdown_docker, execute_in_container, \
-    is_pg_ready, start_exploration_docker, \
-    shutdown_exploratory_docker, cleanup_docker
-from sql import execute_sql, validate_sql_results, validate_table_has_values
-from util import CONTAINER_BIN_DIR, PGDATA_LOC, PGDATA2_LOC, \
+from cmudb.exploration.data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
+from pgnp_docker import start_replication_docker, shutdown_replication_docker, execute_in_container, \
+    start_exploration_docker, \
+    shutdown_exploratory_docker, setup_docker_env
+from sql import execute_sql, validate_sql_results, validate_table_has_values, checkpoint, \
+    start_and_wait_for_postgres_instance, stop_postgres_instance
+from util import PGDATA_LOC, PGDATA2_LOC, \
     EXPLORATION_PORT, \
-    stop_process, OutputStrategy, PRIMARY_PORT, PGDATA_REPLICA_LOC, EXPLORATION, \
-    REPLICA_PORT, execute_sys_command
+    OutputStrategy, PRIMARY_PORT, EXPLORATION, \
+    timed_execution
 
 RESULT_FILE = "./experiment_{}.json"
 
@@ -23,37 +24,6 @@ def load_validation_data():
     execute_sql("INSERT INTO foo VALUES (42), (666);", PRIMARY_PORT)
 
 
-def copy_pgdata() -> int:
-    start = time.time_ns()
-    execute_sys_command("sudo zfs snapshot zpool-docker/volumes/pgdata-replica@explore")
-    execute_sys_command("sudo zfs clone zpool-docker/volumes/pgdata-replica@explore zpool-docker/volumes/pgdata-exploration")
-    end = time.time_ns()
-    return end - start
-
-
-def start_exploration_postgres() -> Tuple[subprocess.Popen, int, bool]:
-    start = time.time_ns()
-    exploration_proc, _, _ = execute_in_container(EXPLORATION,
-                                                  f"{CONTAINER_BIN_DIR}/postgres -D {PGDATA_LOC} -p {EXPLORATION_PORT}",
-                                                  block=False)
-
-    while not is_pg_ready(EXPLORATION, EXPLORATION_PORT) and exploration_proc.poll() is None:
-        time.sleep(1)
-
-    # Return code is only set when process exits and exploration proc is daemon (shouldn't exit)
-    end = time.time_ns()
-    total_time = end - start
-    if exploration_proc.returncode is not None:
-        print(f"Exploration instance failed to start up with error code: {exploration_proc.returncode}")
-        return exploration_proc, total_time, False
-
-    return exploration_proc, total_time, True
-
-
-def stop_exploration_postgres(exploration_process: subprocess.Popen):
-    stop_process(exploration_process)
-
-
 def validate_exploration_process() -> bool:
     tables = ["usertable"]
     return \
@@ -61,42 +31,49 @@ def validate_exploration_process() -> bool:
         and reduce(lambda a, b: a and b, [validate_table_has_values(table, EXPLORATION_PORT) for table in tables])
 
 
-def test_copy() -> Tuple[int, int, bool]:
+def test_copy() -> Tuple[int, int, int, int, bool]:
+    # Start exploration instance
+    print("Taking checkpoint")
+    _, checkpoint_time_ns = timed_execution(checkpoint)
+    print("Checkpoint complete")
     print("Copying replica data")
-    # print(execute_sql("CHECKPOINT", REPLICA_PORT))
-    copy_time_ns = copy_pgdata()
+    _, copy_time_ns = timed_execution(copy_pgdata_cow)
     print("Exploration data copied")
     print("Starting exploration container")
-    exploratory_container = start_exploration_docker()
+    exploratory_container, docker_start_time_ns = timed_execution(start_exploration_docker)
     if exploratory_container.returncode is not None:
         shutdown_exploratory_docker(exploratory_container)
-        execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-exploration")
-        execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-replica@explore")
-        return 0, 0, False
+        destroy_exploratory_data_cow()
+        return checkpoint_time_ns, copy_time_ns, 0, 0, False
     execute_in_container(EXPLORATION, f"sudo chown terrier:terrier -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/postmaster.pid")
     execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/standby.signal")
     print("Exploration container started")
     print("Starting exploration postgres instance")
-    exploration_process, startup_time, valid = start_exploration_postgres()
+    (exploration_process, valid), startup_time = timed_execution(start_and_wait_for_postgres_instance, EXPLORATION,
+                                                                 EXPLORATION_PORT)
     if not valid:
         shutdown_exploratory_docker(exploratory_container)
-        execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-exploration")
-        execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-replica@explore")
-        return copy_time_ns, startup_time, valid
+        destroy_exploratory_data_cow()
+        return checkpoint_time_ns, copy_time_ns, startup_time, 0, valid
     print("Exploration postgres instance started")
+
+    # Validate exploration instance
     valid = validate_exploration_process()
+
+    # Shutdown exploration instance
     print("Killing exploration postgres process")
-    stop_exploration_postgres(exploration_process)
+    _, postgres_stop_time_ns = timed_execution(stop_postgres_instance, exploration_process)
     print("Exploration postgres killed successfully")
-    execute_in_container(EXPLORATION, f"sudo rm -rf {PGDATA2_LOC}/*")
+    _, pgdata_remove_time = timed_execution(execute_in_container, EXPLORATION, f"sudo rm -rf {PGDATA2_LOC}/*")
     print("Killing exploration container")
-    shutdown_exploratory_docker(exploratory_container)
+    _, docker_teardown_time = timed_execution(shutdown_exploratory_docker, exploratory_container)
     print("Exploration container killed")
-    execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-exploration")
-    execute_sys_command("sudo zfs destroy zpool-docker/volumes/pgdata-replica@explore")
-    return copy_time_ns, startup_time, valid
+    _, snapshot_destroy_time = timed_execution(destroy_exploratory_data_cow)
+    teardown_time = postgres_stop_time_ns + pgdata_remove_time + docker_teardown_time + snapshot_destroy_time
+
+    return checkpoint_time_ns, copy_time_ns, startup_time, teardown_time, valid
 
 
 def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
@@ -107,13 +84,15 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
         f.write("[\n")
         first_obj = True
         while benchbase_proc.poll() is None:
-            copy_time_ns, startup_time, valid = test_copy()
+            checkpoint_time_ns, copy_time_ns, startup_time_ns, teardown_time_ns, valid = test_copy()
             if not first_obj:
                 f.write(",\n")
             f.write("\t{\n")
             f.write(f'\t\t"iteration": {i},\n')
+            f.write(f'\t\t"checkpoint_time_ns": {checkpoint_time_ns},\n')
             f.write(f'\t\t"copy_time_ns": {copy_time_ns},\n')
-            f.write(f'\t\t"startup_time_ns": {startup_time},\n')
+            f.write(f'\t\t"startup_time_ns": {startup_time_ns},\n')
+            f.write(f'\t\t"teardown_time_ns": {teardown_time_ns},\n')
             f.write(f'\t\t"valid": {"true" if valid else "false"}\n')
             f.write("\t}")
             i += 1
@@ -123,12 +102,12 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
 
 
 def main():
-    print("Cleaning up any previous docker instances")
-    cleanup_docker()
-    print("Previous docker instances cleaned up")
+    print("Set up Docker environment")
+    setup_docker_env()
+    print("Docker environment set up")
 
     print("Starting Docker containers")
-    docker_process = start_docker()
+    docker_process = start_replication_docker()
     print("Docker containers started successfully")
 
     execute_sql("ALTER SYSTEM SET log_min_error_statement TO 'FATAL';", 15721)
@@ -151,7 +130,7 @@ def main():
 
     cleanup_benchbase()
     print("Killing Docker containers")
-    shutdown_docker(docker_process)
+    shutdown_replication_docker(docker_process)
     print("Docker containers killed successfully")
 
 

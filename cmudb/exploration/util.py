@@ -1,6 +1,7 @@
 import signal
 import subprocess
 import sys
+import time
 from enum import Enum
 from typing import List, Tuple, AnyStr
 from typing import Union
@@ -57,3 +58,9 @@ def stop_process(proc: subprocess.Popen, block: bool = True):
             proc.communicate(timeout=60)
         except subprocess.TimeoutExpired:
             proc.terminate()
+
+
+def timed_execution(fn, *args):
+    start = time.time_ns()
+    res = fn(*args)
+    return res, time.time_ns() - start

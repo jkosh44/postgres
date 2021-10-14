@@ -16,6 +16,7 @@ def setup_benchbase():
 # TODO consider pulling and building benchbase and being a little smarter
 # TODO figure out how to do this without cwd (requires benchbase changes)
 # TODO when benchbase abort output is fixed stop hiding output
+# TODO paramterize inputs (config, benchmark)
 def run_benchbase(create: bool, load: bool, execute: bool, block: bool = True,
                   output_strategy: OutputStrategy = OutputStrategy.Print) -> subprocess.Popen:
     benchbase_proc, _, _ = execute_sys_command(
