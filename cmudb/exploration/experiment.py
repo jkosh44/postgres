@@ -13,7 +13,7 @@ from sql import execute_sql, validate_sql_results, validate_table_has_values, ch
 from util import PGDATA_LOC, PGDATA2_LOC, \
     EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
-    timed_execution, REPLICA, PRIMARY
+    timed_execution, REPLICA, PRIMARY, REPLICA_PORT
 
 RESULT_FILE = "./experiment_{}.json"
 
@@ -34,7 +34,7 @@ def validate_exploration_process() -> bool:
 def test_copy() -> Tuple[int, int, int, int, bool]:
     # Start exploration instance
     print("Taking checkpoint")
-    _, checkpoint_time_ns = timed_execution(checkpoint)
+    _, checkpoint_time_ns = timed_execution(checkpoint, REPLICA_PORT)
     print("Checkpoint complete")
     print("Copying replica data")
     _, copy_time_ns = timed_execution(copy_pgdata_cow)
