@@ -12,7 +12,7 @@ EXPLORATION_VOLUME = "pgdata-exploration"
 DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
 
 REPLICATION_COMPOSE = "docker-compose-replication.yml"
-EXPLORATORY_COMPOSE = "docker-compose-exploration"
+EXPLORATORY_COMPOSE = "docker-compose-exploration.yml"
 
 REPLICATION_PROJECT_NAME = "replication"
 EXPLORATORY_PROJECT_NAME = "exploratory"
