@@ -13,6 +13,8 @@ nvme0n1 259:1    0 465.8G  0 disk /mnt       Samsung SSD 970 EVO Plus 500GB
 
 the one I added is now called `nvme0n1`
 
+sudo fdisk -l
+
 ## Commands
 
 `sudo zfs list -r`: List all pools
@@ -41,3 +43,9 @@ sudo zfs create zpool-docker/volumes/pgdata-replica
 8. Create exploratory volume: `sudo docker volume create pgdata-exploration`
 9. Create exploratory container
 10. Start postgres
+
+## Database Lab
+Creates copies of postgres databases: https://postgres.ai/docs/database-lab 
+- **Thin Clone**: Uses ZFS to create a snapshot 
+- https://postgres.ai/docs/tutorials/database-lab-tutorial#need-to-start-over-here-is-how-to-clean-up
+- `export DBLAB_DISK="/dev/nvme0n1"`
