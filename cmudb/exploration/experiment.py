@@ -15,7 +15,7 @@ from util import PGDATA_LOC, PGDATA2_LOC, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
     timed_execution, REPLICA, PRIMARY, REPLICA_PORT
 
-RESULT_FILE = "./result_{}.json"
+RESULT_FILE = "./test_result_{}.json"
 
 
 # TODO extract constants
