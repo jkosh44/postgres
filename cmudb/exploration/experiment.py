@@ -13,7 +13,7 @@ from pgnp_docker import start_replication_docker, shutdown_replication_docker, \
 from sql import execute_sql, validate_sql_results, validate_table_has_values, \
     checkpoint, \
     start_and_wait_for_postgres_instance, stop_postgres_instance, \
-    wait_for_pg_ready
+    wait_for_pg_ready, reset_wal
 from util import PGDATA_LOC, PGDATA2_LOC, \
     EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
@@ -38,7 +38,7 @@ def validate_exploration_process() -> bool:
                     in tables])
 
 
-def test_copy() -> Tuple[int, int, int, int, int, bool]:
+def test_copy() -> Tuple[int, int, int, int, int, int, bool]:
     # Start exploration instance
     print("Taking checkpoint")
     _, checkpoint_time_ns = timed_execution(checkpoint, REPLICA_PORT)
@@ -52,7 +52,7 @@ def test_copy() -> Tuple[int, int, int, int, int, bool]:
     if exploratory_container.returncode is not None:
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
-        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, 0, 0, False
+        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, 0, 0, 0, False
     execute_in_container(EXPLORATION,
                          f"sudo chown terrier:terrier -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
@@ -60,13 +60,15 @@ def test_copy() -> Tuple[int, int, int, int, int, bool]:
     execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/standby.signal")
     print("Exploration container started")
     print("Starting exploration postgres instance")
+    _, reset_wal_time = timed_execution(reset_wal, EXPLORATION,
+                                        EXPLORATION_PORT)
     (exploration_process, valid), postgres_startup_time = timed_execution(
         start_and_wait_for_postgres_instance, EXPLORATION,
         EXPLORATION_PORT)
     if not valid:
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
-        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, postgres_startup_time, 0, valid
+        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, 0, valid
     print("Exploration postgres instance started")
 
     # Validate exploration instance
@@ -86,7 +88,7 @@ def test_copy() -> Tuple[int, int, int, int, int, bool]:
     _, snapshot_destroy_time = timed_execution(destroy_exploratory_data_cow)
     teardown_time = postgres_stop_time_ns + pgdata_remove_time + docker_teardown_time + snapshot_destroy_time
 
-    return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, postgres_startup_time, teardown_time, valid
+    return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, teardown_time, valid
 
 
 def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
@@ -97,7 +99,7 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
         f.write("[\n")
         first_obj = True
         while benchbase_proc.poll() is None:
-            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, postgres_startup_time_ns, teardown_time_ns, valid = test_copy()
+            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid = test_copy()
             if not first_obj:
                 f.write(",\n")
             f.write("\t{\n")
@@ -106,6 +108,8 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
             f.write(f'\t\t"copy_time_ns": {copy_time_ns},\n')
             f.write(
                 f'\t\t"docker_startup_time_ns": {docker_startup_time_ns},\n')
+            f.write(
+                f'\t\t"reset_wal_time_ns": {reset_wal_time_ns},\n')
             f.write(
                 f'\t\t"postgres_startup_time_ns": {postgres_startup_time_ns},\n')
             f.write(f'\t\t"teardown_time_ns": {teardown_time_ns},\n')
