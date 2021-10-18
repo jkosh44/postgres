@@ -33,7 +33,7 @@ nvme0n1 259:1    0 465.8G  0 disk /mnt       Samsung SSD 970 EVO Plus 500GB
 ```
 the one I added is now called `nvme0n1`
 
-sudo fdisk -l
+Inspect disks: `sudo fdisk -l`
 
 ziffean skew is YCSB
 come up with degenerative case
