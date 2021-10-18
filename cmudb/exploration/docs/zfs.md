@@ -49,3 +49,7 @@ Creates copies of postgres databases: https://postgres.ai/docs/database-lab
 - **Thin Clone**: Uses ZFS to create a snapshot 
 - https://postgres.ai/docs/tutorials/database-lab-tutorial#need-to-start-over-here-is-how-to-clean-up
 - `export DBLAB_DISK="/dev/nvme0n1"`
+
+sudo zpool create -f zpool-primary -m /mnt/pgprimary /dev/nvme1n1
+sudo zfs create zpool-primary/pgdata
+sudo ln -s /mnt/pgprimary/pgdata /mnt/docker/volumes/pgdata-primary
