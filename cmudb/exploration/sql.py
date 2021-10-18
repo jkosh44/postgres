@@ -113,6 +113,6 @@ Tuple[subprocess.Popen, bool]:
     return proc, valid
 
 
-def reset_wal(container_name: str, port: int):
+def reset_wal(container_name: str):
     execute_in_container(container_name,
-                         f"{CONTAINER_BIN_DIR}/pg_resetwal -f {PGDATA_LOC} -p {port}")
+                         f"{CONTAINER_BIN_DIR}/pg_resetwal -f {PGDATA_LOC}")
