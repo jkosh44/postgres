@@ -125,6 +125,10 @@ def main():
     setup_docker_env()
     print("Docker environment set up")
 
+    print("Clean any existing ZFS snapshots and clones")
+    destroy_exploratory_data_cow()
+    print("Existing ZFS snapshots and clones cleaned")
+
     print("Starting Docker containers")
     docker_process = start_replication_docker()
     wait_for_pg_ready(PRIMARY, PRIMARY_PORT, docker_process)

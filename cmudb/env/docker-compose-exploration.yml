@@ -12,10 +12,7 @@ services:
       - POSTGRES_PASSWORD=terrier
       - NP_REPLICATION_TYPE=exploratory
     volumes:
-      - pgdata-replica:/replica-pgdata
       - pgdata-exploration:/pgdata
 volumes:
-  pgdata-replica:
-    external: true
   pgdata-exploration:
     external: true
