@@ -1,10 +1,11 @@
 import signal
 import subprocess
-import sys
-import time
 from enum import Enum
 from typing import List, Tuple, AnyStr
 from typing import Union
+
+import sys
+import time
 
 # TODO make cmd line args maybe
 PROJECT_ROOT = "../.."
@@ -40,7 +41,8 @@ def execute_sys_command(cmd: Union[str, List[str]],
     if isinstance(cmd, str):
         cmd = cmd.split(" ")
 
-    res = subprocess.Popen(cmd, stdout=output_strategy.value[0], stderr=output_strategy.value[1], cwd=cwd, env=env)
+    res = subprocess.Popen(cmd, stdout=output_strategy.value[0],
+                           stderr=output_strategy.value[1], cwd=cwd, env=env)
     out = ""
     err = ""
     if block:
@@ -64,3 +66,12 @@ def timed_execution(fn, *args):
     start = time.time_ns()
     res = fn(*args)
     return res, time.time_ns() - start
+
+
+def remove_primary_data():
+    execute_sys_command("sudo rm -rf /mnt/pgprimary/pgdata/_data")
+
+
+def create_primary_sym_link():
+    execute_sys_command(
+        "sudo ln -s /mnt/pgprimary/pgdata /mnt/docker/volumes/pgdata-primary")

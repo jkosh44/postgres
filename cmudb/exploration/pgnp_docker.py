@@ -3,7 +3,7 @@ import time
 from typing import AnyStr, Tuple
 
 from util import execute_sys_command, ENV_FOLDER, stop_process, OutputStrategy, \
-    UTF_8, PROJECT_ROOT
+    UTF_8, PROJECT_ROOT, remove_primary_data, create_primary_sym_link
 
 PRIMARY_VOLUME = "pgdata-primary"
 REPLICA_VOLUME = "pgdata-replica"
@@ -71,12 +71,14 @@ def setup_docker_env():
 def cleanup_docker_env():
     destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME)
     destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME)
+    remove_primary_data()
     remove_volume(PRIMARY_VOLUME)
     remove_volume(REPLICA_VOLUME)
     remove_volume(EXPLORATION_VOLUME)
 
 
 def start_replication_docker() -> subprocess.Popen:
+    create_primary_sym_link()
     create_volume(PRIMARY_VOLUME)
     create_volume(REPLICA_VOLUME)
     # Make sure that container doesn't reuse machine's IP address
@@ -104,6 +106,7 @@ def start_exploration_docker() -> subprocess.Popen:
 def shutdown_replication_docker(docker_process: subprocess.Popen):
     stop_container(docker_process)
     destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME)
+    remove_primary_data()
     remove_volume(PRIMARY_VOLUME)
     remove_volume(REPLICA_VOLUME)
 

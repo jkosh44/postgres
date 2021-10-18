@@ -52,7 +52,7 @@ def test_copy() -> Tuple[int, int, int, int, int, bool]:
     if exploratory_container.returncode is not None:
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
-        return checkpoint_time_ns, copy_time_ns, 0, 0, False
+        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, 0, 0, False
     execute_in_container(EXPLORATION,
                          f"sudo chown terrier:terrier -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
@@ -66,7 +66,7 @@ def test_copy() -> Tuple[int, int, int, int, int, bool]:
     if not valid:
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
-        return checkpoint_time_ns, copy_time_ns, postgres_startup_time, 0, valid
+        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, postgres_startup_time, 0, valid
     print("Exploration postgres instance started")
 
     # Validate exploration instance
