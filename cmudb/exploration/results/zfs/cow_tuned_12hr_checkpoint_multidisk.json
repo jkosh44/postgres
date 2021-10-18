@@ -1,0 +1,10 @@
+[
+	{
+		"iteration": 0,
+		"checkpoint_time_ns": 71489857,
+		"copy_time_ns": 2382654913,
+		"startup_time_ns": 528634865859,
+		"teardown_time_ns": 103887423602,
+		"valid": true
+	}
+]
