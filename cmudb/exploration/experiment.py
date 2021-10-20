@@ -60,18 +60,22 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool]:
     execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/standby.signal")
     print("Exploration container started")
     print("Starting exploration postgres instance")
-    _, reset_wal_time = timed_execution(reset_wal, EXPLORATION)
+    # _, reset_wal_time = timed_execution(reset_wal, EXPLORATION)
+    reset_wal_time = 0
     (exploration_process, valid), postgres_startup_time = timed_execution(
         start_and_wait_for_postgres_instance, EXPLORATION,
         EXPLORATION_PORT)
     if not valid:
+        stop_postgres_instance(exploration_process)
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
         return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, 0, valid
     print("Exploration postgres instance started")
 
     # Validate exploration instance
+    print("Validating data")
     valid = validate_exploration_process()
+    print("Done validating data")
 
     # Shutdown exploration instance
     print("Killing exploration postgres process")
