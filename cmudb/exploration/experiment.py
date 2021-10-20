@@ -87,7 +87,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool]:
                                               exploratory_container)
     print("Exploration container killed")
     _, snapshot_destroy_time = timed_execution(destroy_exploratory_data_cow)
-    teardown_time = postgres_stop_time_ns + pgdata_remove_time + docker_teardown_time + snapshot_destroy_time
+    teardown_time = postgres_stop_time_ns + docker_teardown_time + snapshot_destroy_time
 
     return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, teardown_time, valid
 
