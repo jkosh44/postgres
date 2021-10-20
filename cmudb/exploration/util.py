@@ -1,11 +1,10 @@
 import signal
 import subprocess
+import sys
+import time
 from enum import Enum
 from typing import List, Tuple, AnyStr
 from typing import Union
-
-import sys
-import time
 
 # TODO make cmd line args maybe
 PROJECT_ROOT = "../.."

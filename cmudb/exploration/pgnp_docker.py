@@ -114,4 +114,9 @@ def shutdown_replication_docker(docker_process: subprocess.Popen):
 def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
     stop_container(exploratory_docker_process)
     destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME)
+    remove_exploratory_data()
     remove_volume(EXPLORATION_VOLUME)
+
+
+def remove_exploratory_data():
+    execute_sys_command(f"sudo rm -rf {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")

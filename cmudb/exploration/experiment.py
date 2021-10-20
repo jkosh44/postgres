@@ -1,8 +1,7 @@
 import subprocess
+import time
 from functools import reduce
 from typing import Tuple
-
-import time
 
 from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
 from data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
@@ -14,8 +13,7 @@ from sql import execute_sql, validate_sql_results, validate_table_is_not_empty, 
     checkpoint, \
     start_and_wait_for_postgres_instance, stop_postgres_instance, \
     wait_for_pg_ready, reset_wal
-from util import PGDATA_LOC, PGDATA2_LOC, \
-    EXPLORATION_PORT, \
+from util import PGDATA_LOC, EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
     timed_execution, REPLICA, PRIMARY, REPLICA_PORT
 

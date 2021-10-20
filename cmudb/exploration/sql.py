@@ -1,8 +1,7 @@
 import os
 import subprocess
-from typing import List, Tuple
-
 import time
+from typing import List, Tuple
 
 from pgnp_docker import execute_in_container
 from util import execute_sys_command, OutputStrategy, CONTAINER_BIN_DIR, \
@@ -116,7 +115,7 @@ def wait_for_pg_ready(container_name: str, port: int,
 
 
 def start_and_wait_for_postgres_instance(container_name: str, port: int) -> \
-Tuple[subprocess.Popen, bool]:
+        Tuple[subprocess.Popen, bool]:
     proc = start_postgres_instance(container_name, port)
     valid = wait_for_pg_ready(container_name, port, proc)
     return proc, valid

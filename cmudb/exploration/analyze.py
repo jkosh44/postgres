@@ -40,7 +40,6 @@ def main():
         df[sec_measurement] = df[ns_measurement] / NS_PER_SEC
         df[TOTAL_TIME] += df[sec_measurement]
 
-
     valid_measurements = df[df[VALID]]
     # valid_measurements.plot(x=ITERATION, y=sec_measurements,
     #                         kind="line", title="COW (seconds)")
