@@ -82,8 +82,6 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool]:
     _, postgres_stop_time_ns = timed_execution(stop_postgres_instance,
                                                exploration_process)
     print("Exploration postgres killed successfully")
-    _, pgdata_remove_time = timed_execution(execute_in_container, EXPLORATION,
-                                            f"sudo rm -rf {PGDATA2_LOC}/*")
     print("Killing exploration container")
     _, docker_teardown_time = timed_execution(shutdown_exploratory_docker,
                                               exploratory_container)

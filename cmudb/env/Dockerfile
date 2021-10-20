@@ -15,6 +15,7 @@ ENV POSTGRES_HOST_AUTH_METHOD ""
 
 # PostgreSQL env vars that we customize.
 ENV PGDATA "/pgdata"
+# TODO pretty sure we can delete this
 ENV PGDATA2 "/replica-pgdata"
 ENV PGPORT "15721"
 # NoisePage env vars.
