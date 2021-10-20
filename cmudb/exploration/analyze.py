@@ -8,8 +8,10 @@ COPY_TIME_NS = "copy_time_ns"
 COPY_TIME = "copy_time"
 DOCKER_STARTUP_TIME_NS = "docker_startup_time_ns"
 DOCKER_STARTUP_TIME = "docker_startup_time"
+RESET_WAL_TIME_NS = "reset_wal_time_ns"
+RESET_WAL_TIME = "reset_wal_time"
 POSTGRES_STARTUP_TIME_NS = "postgres_startup_time_ns"
-POSTGRES_STARTUP_TIME = "postgre_startup_time"
+POSTGRES_STARTUP_TIME = "postgres_startup_time"
 TEARDOWN_TIME_NS = "teardown_time_ns"
 TEARDOWN_TIME = "teardown_time"
 TOTAL_TIME = "total_time"
@@ -18,7 +20,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/zfs/cow_tuned_12hr_checkpoint_multidisk_short.json"
+FILE_NAME = "results/zfs/cow_tuned_12hr_checkpoint_multidisk_reset.json"
 
 
 def main():
@@ -26,6 +28,7 @@ def main():
         (CHECKPOINT_TIME_NS, CHECKPOINT_TIME),
         (COPY_TIME_NS, COPY_TIME),
         (DOCKER_STARTUP_TIME_NS, DOCKER_STARTUP_TIME),
+        (RESET_WAL_TIME_NS, RESET_WAL_TIME),
         (POSTGRES_STARTUP_TIME_NS, POSTGRES_STARTUP_TIME),
         (TEARDOWN_TIME_NS, TEARDOWN_TIME)
     ]

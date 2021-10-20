@@ -10,7 +10,7 @@ from pgnp_docker import start_replication_docker, shutdown_replication_docker, \
     execute_in_container, \
     start_exploration_docker, \
     shutdown_exploratory_docker, setup_docker_env
-from sql import execute_sql, validate_sql_results, validate_table_has_values, \
+from sql import execute_sql, validate_sql_results, validate_table_is_not_empty, \
     checkpoint, \
     start_and_wait_for_postgres_instance, stop_postgres_instance, \
     wait_for_pg_ready, reset_wal
@@ -34,7 +34,7 @@ def validate_exploration_process() -> bool:
         validate_sql_results(execute_sql("SELECT * FROM foo", EXPLORATION_PORT),
                              ['42', '666']) \
         and reduce(lambda a, b: a and b,
-                   [validate_table_has_values(table, EXPLORATION_PORT) for table
+                   [validate_table_is_not_empty(table, EXPLORATION_PORT) for table
                     in tables])
 
 

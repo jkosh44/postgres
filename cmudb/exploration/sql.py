@@ -62,11 +62,20 @@ def count_table_sql(table: str, port: int) -> int:
     return int(res)
 
 
-def validate_table_has_values(table: str, port: int) -> bool:
-    res = count_table_sql(table, port) > 0
-    if not res:
-        print(f"Table {table} has no data")
-    return res
+def validate_table_is_not_empty(table: str, port: int) -> bool:
+    # SELECT EXISTS(SELECT 1 FROM yourTableName);
+    res = execute_sql(f"SELECT EXISTS(SELECT 1 FROM {table})", port)
+    if len(res) != 1:
+        print(f"Invalid res from empty check. Table: {table}, Res: {res}")
+        return False
+    res = res[0]
+    if res == 't':
+        return True
+    elif res == 'f':
+        return False
+    else:
+        print(f"Invalid res from empty check. Table: {table}, Res: {res}")
+        return False
 
 
 # Postgres functionality
