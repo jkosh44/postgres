@@ -13,11 +13,11 @@ from pgnp_docker import start_replication_docker, shutdown_replication_docker, \
 from sql import execute_sql, validate_sql_results, validate_table_is_not_empty, \
     checkpoint, \
     start_and_wait_for_postgres_instance, stop_postgres_instance, \
-    wait_for_pg_ready, reset_wal
+    wait_for_pg_ready, reset_wal, count_table_sql
 from util import PGDATA_LOC, PGDATA2_LOC, \
     EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
-    timed_execution, REPLICA, PRIMARY, REPLICA_PORT
+    timed_execution, REPLICA, PRIMARY, REPLICA_PORT, stop_process
 
 RESULT_FILE = "./test_result_{}.json"
 
@@ -123,6 +123,50 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
         f.write("\n")
         f.write("]\n")
 
+def reset_test(benchbase_proc):
+    # Start exploration instance
+    print("Taking checkpoint")
+    checkpoint(REPLICA_PORT)
+    print("Checkpoint complete")
+
+    print("Copying replica data")
+    copy_pgdata_cow()
+    print("Exploration data copied")
+    stop_process(benchbase_proc)
+
+    print("\n")
+    table = "usertable"
+    print(f"REPLICA COUNT: {count_table_sql(table, REPLICA_PORT)}")
+    print("\n")
+
+    print("Starting exploration container")
+    exploratory_container = start_exploration_docker()
+    execute_in_container(EXPLORATION,
+                         f"sudo chown terrier:terrier -R {PGDATA_LOC}")
+    execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
+    execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/postmaster.pid")
+    execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/standby.signal")
+    print("Exploration container started")
+    print("Starting exploration postgres instance")
+    reset_wal(EXPLORATION)
+    exploration_process, valid = start_and_wait_for_postgres_instance(EXPLORATION, EXPLORATION_PORT)
+    print("Exploration postgres instance started")
+
+
+    print("\n")
+    print(f"Exploratory COUNT: {count_table_sql(table, EXPLORATION_PORT)}")
+    print("\n")
+
+    # Shutdown exploration instance
+    print("Killing exploration postgres process")
+    stop_postgres_instance(exploration_process)
+    print("Exploration postgres killed successfully")
+    execute_in_container(EXPLORATION, f"sudo rm -rf {PGDATA2_LOC}/*")
+    print("Killing exploration container")
+    shutdown_exploratory_docker(exploratory_container)
+    print("Exploration container killed")
+    destroy_exploratory_data_cow()
+
 
 def main():
     print("Set up Docker environment")
@@ -150,13 +194,18 @@ def main():
     run_benchbase(create=True, load=True, execute=False)
     print("Data loaded")
 
-    result_file = RESULT_FILE.format(time.time())
+
+
+
+    # result_file = RESULT_FILE.format(time.time())
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                    block=False,
                                    output_strategy=OutputStrategy.Hide)
 
-    collect_results(result_file, benchbase_proc)
+    reset_test(benchbase_proc)
+
+    # collect_results(result_file, benchbase_proc)
 
     cleanup_benchbase()
     print("Killing Docker containers")
