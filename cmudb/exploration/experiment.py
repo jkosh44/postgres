@@ -152,12 +152,12 @@ def main():
                                    block=False,
                                    output_strategy=OutputStrategy.Capture)
 
-    # collect_results(result_file, benchbase_proc)
+    collect_results(result_file, benchbase_proc)
 
     throughput = get_benchbase_throughput(benchbase_proc)
     result_throughput_file = f"{result_file}.throughput"
     with open(result_throughput_file, "w") as f:
-        f.write(throughput)
+        f.write(f"{throughput}\n")
 
     cleanup_benchbase()
     print("Killing Docker containers")
