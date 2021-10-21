@@ -18,8 +18,8 @@
     <terminals>50</terminals>
     <works>
         <work>
-<!--            <time>43200</time>-->
-            <time>14400</time>
+            <time>43200</time>
+<!--            <time>14400</time>-->
 <!--            <time>300</time>-->
 <!--            <time>30</time>-->
             <rate>10000</rate>
