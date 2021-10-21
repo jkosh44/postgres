@@ -155,7 +155,8 @@ def main():
     # collect_results(result_file, benchbase_proc)
 
     out, _ = benchbase_proc.communicate()
-    print(out)
+    print(f"SANITY, poll is {benchbase_proc.poll()}")
+    print(out.encode("UTF-8"))
 
     cleanup_benchbase()
     print("Killing Docker containers")
