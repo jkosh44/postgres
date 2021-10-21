@@ -150,9 +150,12 @@ def main():
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                    block=False,
-                                   output_strategy=OutputStrategy.Hide)
+                                   output_strategy=OutputStrategy.Capture)
 
     collect_results(result_file, benchbase_proc)
+
+    out, _ = benchbase_proc.communicate()
+    print(out)
 
     cleanup_benchbase()
     print("Killing Docker containers")

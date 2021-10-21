@@ -65,7 +65,8 @@ def execute_in_container(container_name: str, cmd: str, block: bool = True,
 
 def setup_docker_env():
     cleanup_docker_env()
-    build_image(IMAGE_TAG)
+    # TODO uncomment
+    # build_image(IMAGE_TAG)
 
 
 def cleanup_docker_env():
