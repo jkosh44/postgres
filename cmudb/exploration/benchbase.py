@@ -1,3 +1,4 @@
+import re
 import subprocess
 
 from util import execute_sys_command, OutputStrategy
@@ -21,7 +22,7 @@ def run_benchbase(create: bool, load: bool, execute: bool, block: bool = True,
                   output_strategy: OutputStrategy = OutputStrategy.Print) -> subprocess.Popen:
     if execute and output_strategy == OutputStrategy.Capture:
         # The benchbase output is so huge we need to ignore most of it except for the end which contains the throughput.
-        # We accomplish this by just piping everything to tail.
+        # We accomplish this by just piping everything to tail. A bit hacky but it works.
         benchbase_proc = subprocess.Popen(
             f"java -jar benchbase.jar -b ycsb -c ../noisepage_ycsb_update_only_config.xml --create={create} "
             f"--load={load} --execute={execute} | tail --lines=100", cwd=BENCHBASE_DIR, shell=True,
@@ -36,3 +37,13 @@ def run_benchbase(create: bool, load: bool, execute: bool, block: bool = True,
 
 def cleanup_benchbase():
     execute_sys_command(f"rm -rf {BENCHBASE_DIR}")
+
+
+def get_benchbase_throughput(benchbase_proc: subprocess.Popen):
+    out, _ = benchbase_proc.communicate()
+    out = out.decode("UTF-8")
+
+    p = re.compile(
+        r"Rate limited reqs/s: Results\(nanoSeconds=\d+, measuredRequests=d+\) = (\d+.\d+ requests/sec)")
+    throughput = p.search(out)
+    return throughput.group(1)

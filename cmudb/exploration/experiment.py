@@ -3,7 +3,7 @@ import time
 from functools import reduce
 from typing import Tuple
 
-from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
+from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase, get_benchbase_throughput
 from data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
 from pgnp_docker import start_replication_docker, shutdown_replication_docker, \
     execute_in_container, \
@@ -154,9 +154,8 @@ def main():
 
     # collect_results(result_file, benchbase_proc)
 
-    out, _ = benchbase_proc.communicate()
-    print(f"SANITY, poll is {benchbase_proc.poll()}")
-    print(out.decode("UTF-8"))
+    throughput = get_benchbase_throughput(benchbase_proc)
+    print(throughput)
 
     cleanup_benchbase()
     print("Killing Docker containers")
