@@ -152,7 +152,7 @@ def main():
                                    block=False,
                                    output_strategy=OutputStrategy.Capture)
 
-    collect_results(result_file, benchbase_proc)
+    # collect_results(result_file, benchbase_proc)
 
     out, _ = benchbase_proc.communicate()
     print(out)
