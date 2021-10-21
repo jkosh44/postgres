@@ -155,7 +155,9 @@ def main():
     # collect_results(result_file, benchbase_proc)
 
     throughput = get_benchbase_throughput(benchbase_proc)
-    print(throughput)
+    result_throughput_file = f"throughput_{result_file}"
+    with open(result_throughput_file, "w") as f:
+        f.write(throughput)
 
     cleanup_benchbase()
     print("Killing Docker containers")
