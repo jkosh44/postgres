@@ -11,7 +11,8 @@
     <batchsize>128</batchsize>
 
     <!-- Scalefactor in YCSB is *1000 the number of rows in the USERTABLE-->
-    <scalefactor>10000</scalefactor>
+<!--    <scalefactor>10000</scalefactor>-->
+ <scalefactor>1000</scalefactor>
 <!--    <scalefactor>1</scalefactor>-->
 
     <!-- The workload -->
