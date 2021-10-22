@@ -25,7 +25,7 @@ def run_benchbase(create: bool, load: bool, execute: bool, block: bool = True,
         # We accomplish this by just piping everything to tail. A bit hacky but it works.
         benchbase_proc = subprocess.Popen(
             f"java -jar benchbase.jar -b ycsb -c ../noisepage_ycsb_update_only_config.xml --create={create} "
-            f"--load={load} --execute={execute} | tail --lines=100", cwd=BENCHBASE_DIR, shell=True,
+            f"--load={load} --execute={execute} | tail --lines=5000", cwd=BENCHBASE_DIR, shell=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     else:
         benchbase_proc, _, _ = execute_sys_command(
@@ -40,10 +40,13 @@ def cleanup_benchbase():
 
 
 def get_benchbase_throughput(benchbase_proc: subprocess.Popen):
-    out, _ = benchbase_proc.communicate()
-    out = out.decode("UTF-8")
+    try:
+        out, _ = benchbase_proc.communicate()
+        out = out.decode("UTF-8")
 
-    p = re.compile(
-        "Rate limited reqs/s: Results\\(nanoSeconds=\\d+, measuredRequests=\\d+\\) = (\\d+.\\d+ requests/sec)")
-    throughput = p.search(out)
-    return throughput.group(1)
+        p = re.compile(
+            "Rate limited reqs/s: Results\\(nanoSeconds=\\d+, measuredRequests=\\d+\\) = (\\d+.\\d+ requests/sec)")
+        throughput = p.search(out)
+        return throughput.group(1)
+    except Exception as e:
+        return f"Error getting throughput: {e}"
