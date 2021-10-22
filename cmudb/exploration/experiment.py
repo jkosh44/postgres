@@ -154,8 +154,8 @@ def main():
 
     collect_results(result_file, benchbase_proc)
 
-    print("Saving throughput")
     throughput = get_benchbase_throughput(benchbase_proc)
+    print(f"Saving throughput {throughput}")
     result_throughput_file = f"{result_file}.throughput"
     with open(result_throughput_file, "w") as f:
         f.write(f"{throughput}\n")
