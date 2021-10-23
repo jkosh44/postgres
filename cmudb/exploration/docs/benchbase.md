@@ -1,5 +1,6 @@
 ## Data
 Using YCSB Update only to load data before the copy, and update data during the copy.
+`du -h /pgdata`
 ### Data Size (by scalefactor)
 - **1:**
 ```
@@ -91,7 +92,7 @@ Using YCSB Update only to load data before the copy, and update data during the 
 129M    /pgdata/pg_wal
 273M    /pgdata
 ```
--**1000**:
+-**1,000**:
 ```
 7.3M    /pgdata/base/12660
 7.3M    /pgdata/base/12659
@@ -121,7 +122,7 @@ Using YCSB Update only to load data before the copy, and update data during the 
 1.1G    /pgdata/pg_wal
 2.2G    /pgdata/
 ```
-- **10000**:
+- **10,000**:
 ```
 7.3M    /pgdata/base/12660
 7.3M    /pgdata/base/12659
@@ -151,3 +152,32 @@ Using YCSB Update only to load data before the copy, and update data during the 
 1.1G    /pgdata/pg_wal
 13G     /pgdata
 ```
+
+- **100,000**
+21K     /pgdata/pg_stat_tmp
+512     /pgdata/pg_stat
+9.0K    /pgdata/pg_multixact/members
+9.0K    /pgdata/pg_multixact/offsets
+19K     /pgdata/pg_multixact
+113G    /pgdata/base/16385
+8.5M    /pgdata/base/12660
+8.2M    /pgdata/base/12659
+8.2M    /pgdata/base/1
+113G    /pgdata/base
+259K    /pgdata/pg_subtrans
+591K    /pgdata/global
+512     /pgdata/pg_commit_ts
+259K    /pgdata/pg_xact
+512     /pgdata/pg_logical/mappings
+512     /pgdata/pg_logical/snapshots
+2.5K    /pgdata/pg_logical
+512     /pgdata/pg_tblspc
+512     /pgdata/pg_notify
+512     /pgdata/pg_serial
+512     /pgdata/pg_wal/archive_status
+1.1G    /pgdata/pg_wal
+512     /pgdata/pg_twophase
+512     /pgdata/pg_replslot
+512     /pgdata/pg_snapshots
+512     /pgdata/pg_dynshmem
+114G    /pgdata/

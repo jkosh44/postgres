@@ -36,6 +36,8 @@ def get_benchbase_throughput(benchbase_proc: subprocess.Popen):
         out, _ = benchbase_proc.communicate()
         out = out.decode("UTF-8")
 
+        print(out)
+
         p = re.compile(
             "Rate limited reqs/s: Results\\(nanoSeconds=\\d+, measuredRequests=\\d+\\) = (\\d+.\\d+ requests/sec)")
         throughput = p.search(out)

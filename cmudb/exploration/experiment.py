@@ -3,7 +3,7 @@ import time
 from functools import reduce
 from typing import Tuple
 
-from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
+from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase, get_benchbase_throughput
 from data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
 from pgnp_docker import start_replication_docker, shutdown_replication_docker, \
     execute_in_container, \
@@ -150,16 +150,16 @@ def main():
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                    block=False,
-                                   output_strategy=OutputStrategy.Hide)
+                                   output_strategy=OutputStrategy.Capture)
 
     collect_results(result_file, benchbase_proc)
 
-    # throughput = get_benchbase_throughput(benchbase_proc)
-    # print(f"Saving throughput {throughput}")
-    # result_throughput_file = f"{result_file}.throughput"
-    # with open(result_throughput_file, "w") as f:
-    #     f.write(f"{throughput}\n")
-    # print("Throughput saved")
+    throughput = get_benchbase_throughput(benchbase_proc)
+    print(f"Saving throughput {throughput}")
+    result_throughput_file = f"{result_file}.throughput"
+    with open(result_throughput_file, "w") as f:
+        f.write(f"{throughput}\n")
+    print("Throughput saved")
 
     cleanup_benchbase()
     print("Killing Docker containers")
