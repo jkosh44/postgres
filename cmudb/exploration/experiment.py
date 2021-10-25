@@ -98,6 +98,7 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
         f.write("[\n")
         first_obj = True
         while benchbase_proc.poll() is None:
+            print(f"benchbase poll: {benchbase_proc.poll()}")
             checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid = test_copy()
             if not first_obj:
                 f.write(",\n")
