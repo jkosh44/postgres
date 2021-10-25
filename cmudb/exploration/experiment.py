@@ -150,16 +150,16 @@ def main():
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                    block=False,
-                                   output_strategy=OutputStrategy.Capture)
+                                   output_strategy=OutputStrategy.Print)
 
     collect_results(result_file, benchbase_proc)
 
-    throughput = get_benchbase_throughput(benchbase_proc)
-    print(f"Saving throughput {throughput}")
-    result_throughput_file = f"{result_file}.throughput"
-    with open(result_throughput_file, "w") as f:
-        f.write(f"{throughput}\n")
-    print("Throughput saved")
+    # throughput = get_benchbase_throughput(benchbase_proc)
+    # print(f"Saving throughput {throughput}")
+    # result_throughput_file = f"{result_file}.throughput"
+    # with open(result_throughput_file, "w") as f:
+    #     f.write(f"{throughput}\n")
+    # print("Throughput saved")
 
     cleanup_benchbase()
     print("Killing Docker containers")
