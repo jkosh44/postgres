@@ -25,8 +25,8 @@
         <work>
 <!--            <time>43200</time>-->
 <!--            <time>14400</time>-->
-<!--            <time>300</time>-->
-            <time>30</time>
+            <time>300</time>
+<!--            <time>30</time>-->
             <rate>10000</rate>
             <weights>100</weights>
         </work>
