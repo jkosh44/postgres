@@ -88,8 +88,7 @@ def stop_process(proc: subprocess.Popen):
     proc
         process to stop
     """
-    # TODO send SIGQUIT to postgres instance for immediate exit
-    proc.send_signal(signal.SIGINT)
+    proc.send_signal(signal.SIGTERM)
     try:
         proc.communicate(timeout=60)
     except subprocess.TimeoutExpired:

@@ -1,5 +1,6 @@
 import argparse
 import subprocess
+from typing import Tuple
 
 from data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
 from pgnp_docker import start_exploration_docker, shutdown_exploratory_docker, setup_docker_env
@@ -13,6 +14,10 @@ from util import ZFS_DOCKER_VOLUME_POOL, REPLICA_VOLUME_POOL, REPLICA_PORT, EXPL
 def main():
     """
     The exploratory daemon is responsible for creating a copy of replica instances, to be used for model training.
+    To set up a machine to ues the exploratory daemon you must perform the following steps:
+    1. Install ZFS on one of the disks
+    2. Set up a ZFS pool on the disk
+    3. Start a postgres instance that stores pgdata/ in the ZFS pool
     """
     aparser = argparse.ArgumentParser(description="Exploratory Daemon")
     # postgres args
@@ -55,16 +60,19 @@ def run_daemon(replica_port: int, exploratory_port: int, zfs_volume_pool: str, z
     destroy_exploratory_data_cow(zfs_volume_pool, zfs_replica_pool)
     # Make sure that container doesn't reuse machine's IP address
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
-    exploratory_docker_proc = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,
-                                                           zfs_replica_pool, docker_volume_dir)
-    print(execute_sql("CREATE TABLE foo(a int);", EXPLORATION_PORT))
-    print(execute_sql("INSERT INTO foo VALUES (42), (666);", EXPLORATION_PORT))
-    print(execute_sql("SELECT * FROM foo;", EXPLORATION_PORT))
+    exploratory_docker_proc, valid = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,
+                                                                  zfs_replica_pool, docker_volume_dir)
+    if valid:
+        print(execute_sql("CREATE TABLE foo(a int);", EXPLORATION_PORT))
+        print(execute_sql("INSERT INTO foo VALUES (42), (666);", EXPLORATION_PORT))
+        print(execute_sql("SELECT * FROM foo;", EXPLORATION_PORT))
+    else:
+        print("Failed to start exploratory instance")
     spin_down_exploratory_instance(exploratory_docker_proc, zfs_volume_pool, zfs_replica_pool, docker_volume_dir)
 
 
 def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_volume_pool: str, zfs_replica_pool: str,
-                                 docker_volume_dir: str) -> subprocess.Popen:
+                                 docker_volume_dir: str) -> Tuple[subprocess.Popen, bool]:
     """
     Start exploratory instance
     Parameters
@@ -83,6 +91,8 @@ def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_v
     -------
     exploratory_instance
         docker process that is running exploratory instance
+    valid
+        True if the container started successfully, False otherwise
     """
     print("Taking checkpoint in replica")
     checkpoint(replica_port)
@@ -92,10 +102,9 @@ def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_v
     print("Replica data copied")
     print("Starting exploratory instance")
     exploratory_docker_proc = start_exploration_docker(docker_volume_dir)
-    wait_for_pg_ready(EXPLORATION_CONTAINER_NAME, exploratory_port, exploratory_docker_proc)
-    # TODO handle invalid
+    valid = wait_for_pg_ready(EXPLORATION_CONTAINER_NAME, exploratory_port, exploratory_docker_proc)
     print("Exploratory instance started")
-    return exploratory_docker_proc
+    return exploratory_docker_proc, valid
 
 
 def spin_down_exploratory_instance(exploratory_docker_proc: subprocess.Popen, zfs_volume_pool: str,

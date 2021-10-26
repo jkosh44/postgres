@@ -73,7 +73,11 @@ _pgctl_start() {
 }
 
 _pg_stop() {
-  ${BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w stop
+  if [ "${NP_REPLICATION_TYPE}" = "exploratory" ]; then
+    ${BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w --mode=immediate stop
+  else
+    ${BIN_DIR}/pg_ctl --pgdata=${PGDATA} -w stop
+  fi
 }
 
 _pg_start() {
@@ -138,8 +142,6 @@ _pg_setup_replication() {
   echo "max_replication_slots = 10" >> ${AUTO_CONF}
   # hot_standby_feedback: True if standby should tell primary about what queries are currently executing.
   echo "hot_standby_feedback = on" >> ${AUTO_CONF}
-  # suppress logs
-  echo "log_min_error_statement = FATAL" >> ${AUTO_CONF}
 
   # PGTune configs
   # DB Version: 13
@@ -147,7 +149,7 @@ _pg_setup_replication() {
     # DB Type: oltp
     # Total Memory (RAM): 188 GB
     # CPUs num: 80
-    # Number of connections
+    # Number of connections: 50
     # Data Storage: SSD
 
   echo "max_connections = 100" >> ${AUTO_CONF}
