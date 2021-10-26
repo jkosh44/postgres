@@ -143,7 +143,7 @@ _pg_setup_replication() {
   # hot_standby_feedback: True if standby should tell primary about what queries are currently executing.
   echo "hot_standby_feedback = on" >> ${AUTO_CONF}
 
-  # PGTune configs
+  # PGTune configs (Most configs divided by two to accommodate two instances)
   # DB Version: 13
     # OS Type: linux
     # DB Type: oltp
