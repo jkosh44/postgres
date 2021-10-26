@@ -1,7 +1,6 @@
 import signal
 import subprocess
 import sys
-import time
 from enum import Enum
 from typing import List, Tuple, AnyStr
 from typing import Union
@@ -11,19 +10,26 @@ PROJECT_ROOT = "../.."
 ENV_FOLDER = "../env"
 CONTAINER_BIN_DIR = "/home/terrier/repo/build/bin"
 PGDATA_LOC = "/pgdata"
-PGDATA_REPLICA_LOC = "/replica-pgdata"
-PGDATA2_LOC = "/pgdata2"
-PRIMARY_PORT = 15721
 REPLICA_PORT = 15722
 EXPLORATION_PORT = 42666
-# This takes a couple of minutes to create. Just add more 0s to increase time
-SERIES_LENGTH = 1000000000
 
-PRIMARY = "primary"
-REPLICA = "replica"
-EXPLORATION = "exploration"
+EXPLORATION_CONTAINER_NAME = "exploration"
 
 UTF_8 = "utf-8"
+
+ZFS_DOCKER_VOLUME_POOL = "zpool-docker/volumes"
+REPLICA_VOLUME_POOL = "pgdata-replica"
+EXPLORATION_VOLUME_POOL = "pgdata-exploration"
+ZFS_SNAPSHOT_NAME = "explore"
+
+
+DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
+
+EXPLORATORY_COMPOSE = "docker-compose-exploration.yml"
+
+EXPLORATORY_PROJECT_NAME = "exploratory"
+
+IMAGE_TAG = "pgnp"
 
 
 class OutputStrategy(Enum):
@@ -60,18 +66,3 @@ def stop_process(proc: subprocess.Popen, block: bool = True):
             proc.communicate(timeout=60)
         except subprocess.TimeoutExpired:
             proc.terminate()
-
-
-def timed_execution(fn, *args):
-    start = time.time_ns()
-    res = fn(*args)
-    return res, time.time_ns() - start
-
-
-def remove_primary_data():
-    execute_sys_command("sudo rm -rf /mnt/pgprimary/pgdata/_data")
-
-
-def create_primary_sym_link():
-    execute_sys_command(
-        "sudo ln -s /mnt/pgprimary/pgdata /mnt/docker/volumes/pgdata-primary")

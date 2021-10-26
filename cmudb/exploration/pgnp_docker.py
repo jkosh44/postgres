@@ -3,21 +3,9 @@ import time
 from typing import AnyStr, Tuple
 
 from util import execute_sys_command, ENV_FOLDER, stop_process, OutputStrategy, \
-    UTF_8, PROJECT_ROOT, remove_primary_data, create_primary_sym_link
-
-PRIMARY_VOLUME = "pgdata-primary"
-REPLICA_VOLUME = "pgdata-replica"
-EXPLORATION_VOLUME = "pgdata-exploration"
-
-DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
-
-REPLICATION_COMPOSE = "docker-compose-replication.yml"
-EXPLORATORY_COMPOSE = "docker-compose-exploration.yml"
-
-REPLICATION_PROJECT_NAME = "replication"
-EXPLORATORY_PROJECT_NAME = "exploratory"
-
-IMAGE_TAG = "pgnp"
+    UTF_8, PROJECT_ROOT, EXPLORATORY_COMPOSE, \
+    EXPLORATION_VOLUME_POOL, \
+    EXPLORATORY_PROJECT_NAME, IMAGE_TAG
 
 
 # TODO use docker library (https://github.com/docker/docker-py)
@@ -32,9 +20,9 @@ def remove_volume(volume_name: str):
     execute_sys_command(f"sudo docker volume rm {volume_name}")
 
 
-def create_volume(volume_name: str):
+def create_volume(docker_volume_dir: str, volume_name: str):
     execute_sys_command(f"sudo docker volume create {volume_name}")
-    execute_sys_command(f"sudo chown -R 1000:1000 {DOCKER_VOLUME_DIR}/{volume_name}")
+    execute_sys_command(f"sudo chown -R 1000:1000 {docker_volume_dir}/{volume_name}")
 
 
 def create_container(compose_yml: str, project_name: str, output_strategy: OutputStrategy) -> subprocess.Popen:
@@ -53,8 +41,8 @@ def destroy_container(compose_yml: str, project_name: str):
 
 
 def execute_in_container(container_name: str, cmd: str, block: bool = True,
-                         output_strategy: OutputStrategy = OutputStrategy.Print) -> Tuple[
-    subprocess.Popen, AnyStr, AnyStr]:
+                         output_strategy: OutputStrategy = OutputStrategy.Print) -> \
+        Tuple[subprocess.Popen, AnyStr, AnyStr]:
     docker_cmd = f'docker exec {container_name} /bin/bash -c'.split(" ")
     docker_cmd.append(f'{cmd}')
 
@@ -63,33 +51,19 @@ def execute_in_container(container_name: str, cmd: str, block: bool = True,
 
 # Exploratory functionality
 
-def setup_docker_env():
-    cleanup_docker_env()
-    # TODO uncomment
-    # build_image(IMAGE_TAG)
+def setup_docker_env(docker_volume_dir: str):
+    cleanup_docker_env(docker_volume_dir)
+    build_image(IMAGE_TAG)
 
 
-def cleanup_docker_env():
-    destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME)
+def cleanup_docker_env(docker_volume_dir: str):
     destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME)
-    remove_primary_data()
-    remove_volume(PRIMARY_VOLUME)
-    remove_volume(REPLICA_VOLUME)
-    remove_volume(EXPLORATION_VOLUME)
+    remove_exploratory_data(docker_volume_dir)
+    remove_volume(EXPLORATION_VOLUME_POOL)
 
 
-def start_replication_docker() -> subprocess.Popen:
-    create_primary_sym_link()
-    create_volume(PRIMARY_VOLUME)
-    create_volume(REPLICA_VOLUME)
-    # Make sure that container doesn't reuse machine's IP address
-    execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
-    # Hide output because TPCC aborts clog stdout
-    return create_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, OutputStrategy.Hide)
-
-
-def start_exploration_docker() -> subprocess.Popen:
-    create_volume(EXPLORATION_VOLUME)
+def start_exploration_docker(docker_volume_dir: str) -> subprocess.Popen:
+    create_volume(docker_volume_dir, EXPLORATION_VOLUME_POOL)
     compose = create_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, OutputStrategy.Capture)
 
     # TODO Hack to wait for container to start
@@ -104,20 +78,10 @@ def start_exploration_docker() -> subprocess.Popen:
     return compose
 
 
-def shutdown_replication_docker(docker_process: subprocess.Popen):
-    stop_container(docker_process)
-    destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME)
-    remove_primary_data()
-    remove_volume(PRIMARY_VOLUME)
-    remove_volume(REPLICA_VOLUME)
-
-
-def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
+def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen, docker_volume_dir: str):
     stop_container(exploratory_docker_process)
-    destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME)
-    remove_exploratory_data()
-    remove_volume(EXPLORATION_VOLUME)
+    cleanup_docker_env(docker_volume_dir)
 
 
-def remove_exploratory_data():
-    execute_sys_command(f"sudo rm -rf {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
+def remove_exploratory_data(docker_volume_dir: str):
+    execute_sys_command(f"sudo rm -rf {docker_volume_dir}/{EXPLORATION_VOLUME_POOL}")
