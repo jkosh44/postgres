@@ -38,26 +38,29 @@ def run_daemon(replica_port: int, exploratory_port: int, zfs_volume_pool: str, z
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
     docker_proc, postgres_proc = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,
                                                               zfs_replica_pool, docker_volume_dir)
-    execute_sql("CREATE TABLE foo(a int);", EXPLORATION_PORT)
-    execute_sql("INSERT INTO foo VALUES (42), (666);", EXPLORATION_PORT)
-    execute_sql("SELECT * FROM foo;", EXPLORATION_PORT)
+    print(execute_sql("CREATE TABLE foo(a int);", EXPLORATION_PORT))
+    print(execute_sql("INSERT INTO foo VALUES (42), (666);", EXPLORATION_PORT))
+    print(execute_sql("SELECT * FROM foo;", EXPLORATION_PORT))
     spin_down_exploratory_instance(docker_proc, postgres_proc, zfs_volume_pool, zfs_replica_pool, docker_volume_dir)
 
 
 def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_volume_pool: str, zfs_replica_pool: str,
                                  docker_volume_dir: str) -> Tuple[subprocess.Popen, subprocess.Popen]:
+    print("Taking checkpoint in replica")
     checkpoint(replica_port)
+    print("Checkpoint complete")
+    print("Copying replica data")
     copy_pgdata_cow(zfs_volume_pool, zfs_replica_pool)
+    print("Replica data copied")
     # TODO can combine the rest in entry script
+    print("Starting exploratory instance")
     docker_proc = start_exploration_docker(docker_volume_dir)
-    execute_in_container(EXPLORATION_CONTAINER_NAME,
-                         f"sudo chown terrier:terrier -R {PGDATA_LOC}")
-    execute_in_container(EXPLORATION_CONTAINER_NAME, f"sudo chmod 700 -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION_CONTAINER_NAME, f"rm {PGDATA_LOC}/postmaster.pid")
     execute_in_container(EXPLORATION_CONTAINER_NAME, f"rm {PGDATA_LOC}/standby.signal")
     reset_wal(EXPLORATION_CONTAINER_NAME)
     postgres_proc, valid = start_and_wait_for_postgres_instance(EXPLORATION_CONTAINER_NAME, exploratory_port)
     # TODO handle invalid
+    print("Exploratory instance started")
     return docker_proc, postgres_proc
 
 

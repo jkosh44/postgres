@@ -15,8 +15,6 @@ ENV POSTGRES_HOST_AUTH_METHOD ""
 
 # PostgreSQL env vars that we customize.
 ENV PGDATA "/pgdata"
-# TODO pretty sure we can delete this
-ENV PGDATA2 "/replica-pgdata"
 ENV PGPORT "15721"
 # NoisePage env vars.
 # BIN_DIR       :   Destination for PostgreSQL binaries.
@@ -47,15 +45,7 @@ WORKDIR /home/terrier
 # TODO: Try removing the CHOWN, maybe it's messing with the volume???
 RUN sudo mkdir -p "$PGDATA" \
     && sudo chown --recursive terrier:terrier "$PGDATA" \
-    && sudo chmod 700 "$PGDATA" \
-    && sudo mkdir -p "$PGDATA2" \
-    && sudo chown --recursive terrier:terrier "$PGDATA2" \
-    && sudo chmod 700 "$PGDATA2"
-
-#RUN sudo chown --recursive terrier:terrier "$PGDATA" \
-#    && sudo chmod 700 "$PGDATA" \
-#    && sudo chown --recursive terrier:terrier "$PGDATA2" \
-#    && sudo chmod 700 "$PGDATA2"
+    && sudo chmod 700 "$PGDATA"
 
 
 # Copy the contents of the build context (working directory).

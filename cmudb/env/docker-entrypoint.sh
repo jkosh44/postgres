@@ -236,6 +236,10 @@ _main_replica() {
   _pg_start
 }
 
+_main_exploratory() {
+  echo "test"
+}
+
 _cleanup() {
   _pg_stop
 }
@@ -248,7 +252,7 @@ main() {
     _main_replica
   elif [ "${NP_REPLICATION_TYPE}" = "exploratory" ]; then
     # TODO: might consider copying data and starting postgres here...?
-    echo "Exploring"
+    _main_exploratory
     tail -F anything
     echo "Why must I cry"
   else
