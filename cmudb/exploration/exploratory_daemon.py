@@ -27,7 +27,7 @@ def main():
                          default=DOCKER_VOLUME_DIR)
     args = vars(aparser.parse_args())
 
-    run_daemon(args["postgres-replica-port"], args["postgres-exploratory-port"], args["zfs_volume_pool"],
+    run_daemon(args["postgres_replica_port"], args["postgres_exploratory_port"], args["zfs_volume_pool"],
                args["zfs_replica_pool"], args["docker_volume_directory"])
 
 
