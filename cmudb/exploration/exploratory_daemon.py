@@ -34,6 +34,7 @@ def main():
 def run_daemon(replica_port: int, exploratory_port: int, zfs_volume_pool: str, zfs_replica_pool: str,
                docker_volume_dir: str):
     setup_docker_env(docker_volume_dir)
+    destroy_exploratory_data_cow(zfs_volume_pool, zfs_replica_pool)
     # Make sure that container doesn't reuse machine's IP address
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
     docker_proc, postgres_proc = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,

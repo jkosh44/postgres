@@ -22,7 +22,6 @@ REPLICA_VOLUME_POOL = "pgdata-replica"
 EXPLORATION_VOLUME_POOL = "pgdata-exploration"
 ZFS_SNAPSHOT_NAME = "explore"
 
-
 DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
 
 EXPLORATORY_COMPOSE = "docker-compose-exploration.yml"
