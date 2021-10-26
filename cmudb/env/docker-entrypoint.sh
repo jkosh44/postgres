@@ -238,6 +238,7 @@ _main_replica() {
 
 _main_exploratory() {
   echo "Exploring"
+  sudo chmod 700 "${PGDATA}"
 }
 
 _cleanup() {
