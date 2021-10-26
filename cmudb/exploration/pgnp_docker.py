@@ -33,6 +33,7 @@ def create_volume(docker_volume_dir: str, volume_name: str):
         name of docker volume to remove
     """
     execute_sys_command(f"sudo docker volume create {volume_name}")
+    execute_sys_command(f"sudo chown -R 1000:1000 {docker_volume_dir}/{volume_name}")
 
 
 def remove_volume(volume_name: str):
