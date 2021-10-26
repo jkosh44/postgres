@@ -5,31 +5,30 @@ from enum import Enum
 from typing import List, Tuple, AnyStr
 from typing import Union
 
-# TODO make cmd line args maybe
+# Project (relative to exploration directory)
 PROJECT_ROOT = "../.."
 ENV_FOLDER = "../env"
+
+# Docker
 CONTAINER_BIN_DIR = "/home/terrier/repo/build/bin"
-PGDATA_LOC = "/pgdata"
+DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
+IMAGE_TAG = "pgnp"
+EXPLORATION_CONTAINER_NAME = "exploration"
+EXPLORATORY_COMPOSE = "docker-compose-exploration.yml"
+EXPLORATORY_PROJECT_NAME = "exploratory"
+
+# Postgres
 REPLICA_PORT = 15722
 EXPLORATION_PORT = 42666
 
-EXPLORATION_CONTAINER_NAME = "exploration"
-
-UTF_8 = "utf-8"
-
+# ZFS
 ZFS_DOCKER_VOLUME_POOL = "zpool-docker/volumes"
 REPLICA_VOLUME_POOL = "pgdata-replica"
 EXPLORATION_VOLUME_POOL = "pgdata-exploration"
 ZFS_SNAPSHOT_NAME = "explore"
 
-
-DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
-
-EXPLORATORY_COMPOSE = "docker-compose-exploration.yml"
-
-EXPLORATORY_PROJECT_NAME = "exploratory"
-
-IMAGE_TAG = "pgnp"
+# Misc
+UTF_8 = "utf-8"
 
 
 class OutputStrategy(Enum):
@@ -43,6 +42,29 @@ def execute_sys_command(cmd: Union[str, List[str]],
                         output_strategy: OutputStrategy = OutputStrategy.Print,
                         cwd: str = None,
                         env=None) -> Tuple[subprocess.Popen, AnyStr, AnyStr]:
+    """
+    Execute bash command
+    Parameters
+    ----------
+    cmd
+        command to execute
+    block
+        whether or not to block until command is complete
+    output_strategy
+        strategy for handling command output
+    cwd
+        Sets the current directory before the child is executed.
+    env
+        Defines the environment variables for the new process.
+    Returns
+    -------
+    process
+        process running command
+    stdout
+        stdout if block is True and output_strategy is Capture
+    stderr
+        stderr if block is True and output_strategy is Capture
+    """
     if isinstance(cmd, str):
         cmd = cmd.split(" ")
 
@@ -58,11 +80,16 @@ def execute_sys_command(cmd: Union[str, List[str]],
     return res, out, err
 
 
-def stop_process(proc: subprocess.Popen, block: bool = True):
-    # SIGQUIT for postgress instance
-    proc.send_signal(signal.SIGINT)
-    if block:
-        try:
-            proc.communicate(timeout=60)
-        except subprocess.TimeoutExpired:
-            proc.terminate()
+def stop_process(proc: subprocess.Popen):
+    """
+    Stop process
+    Parameters
+    ----------
+    proc
+        process to stop
+    """
+    proc.send_signal(signal.SIGTERM)
+    try:
+        proc.communicate(timeout=60)
+    except subprocess.TimeoutExpired:
+        proc.terminate()

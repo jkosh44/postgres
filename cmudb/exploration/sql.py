@@ -1,16 +1,28 @@
 import os
 import subprocess
 import time
-from typing import List, Tuple
+from typing import List
 
 from pgnp_docker import execute_in_container
-from util import execute_sys_command, OutputStrategy, CONTAINER_BIN_DIR, \
-    stop_process, PGDATA_LOC
+from util import execute_sys_command, OutputStrategy, CONTAINER_BIN_DIR
 
 
 # SQL functionality
 
 def execute_sql(query: str, port: int) -> List[str]:
+    """
+    Execute SQL query
+    Parameters
+    ----------
+    query
+        SQL query to execute
+    port
+        port that postgres instance is running on
+    Returns
+    -------
+    output
+        output of SQL query
+    """
     env = os.environ.copy()
     env["PGPASSWORD"] = "terrier"
     cmd = f"psql -h localhost -p {port} -U noisepage -t -P pager=off".split(" ")
@@ -22,23 +34,37 @@ def execute_sql(query: str, port: int) -> List[str]:
 
 
 def checkpoint(port: int) -> List[str]:
+    """
+    Run CHECKPOINT
+    Parameters
+    ----------
+    port
+        port that postgres instance is running on
+    Returns
+    -------
+    output
+        output of CHECKPOINT query
+    """
     return execute_sql("CHECKPOINT", port)
 
 
 # Postgres functionality
 
-def start_postgres_instance(container_name: str, port: int) -> subprocess.Popen:
-    postgres_proc, _, _ = execute_in_container(container_name,
-                                               f"{CONTAINER_BIN_DIR}/postgres -D {PGDATA_LOC} -p {port}",
-                                               block=False)
-    return postgres_proc
-
-
-def stop_postgres_instance(postgres_process: subprocess.Popen):
-    stop_process(postgres_process)
-
 
 def is_pg_ready(container_name: str, port: int) -> bool:
+    """
+    Determine if postgres instance is ready
+    Parameters
+    ----------
+    container_name
+        name of docker container running postgres instance
+    port
+        port that postgres instance is running on
+    Returns
+    -------
+    is_ready
+        True if postgres is ready, False otherwise
+    """
     is_ready_res, _, _ = execute_in_container(container_name,
                                               f"{CONTAINER_BIN_DIR}/pg_isready --host {container_name} --port {port} "
                                               f"--username noisepage",
@@ -48,6 +74,21 @@ def is_pg_ready(container_name: str, port: int) -> bool:
 
 # TODO add timeout
 def wait_for_pg_ready(container_name: str, port: int, postgres_process: subprocess.Popen) -> bool:
+    """
+    Wait for postgres instance to be ready
+    Parameters
+    ----------
+    container_name
+        name of docker container running postgres instance
+    port
+        port that postgres instance is running on
+    postgres_process
+        process running postgres instance
+    Returns
+    -------
+    is_ready
+        True if postgres is ready, False if postgres failed to startup
+    """
     while not is_pg_ready(container_name,
                           port) and postgres_process.poll() is None:
         time.sleep(1)
@@ -59,13 +100,3 @@ def wait_for_pg_ready(container_name: str, port: int, postgres_process: subproce
         return False
 
     return True
-
-
-def start_and_wait_for_postgres_instance(container_name: str, port: int) -> Tuple[subprocess.Popen, bool]:
-    proc = start_postgres_instance(container_name, port)
-    valid = wait_for_pg_ready(container_name, port, proc)
-    return proc, valid
-
-
-def reset_wal(container_name: str):
-    execute_in_container(container_name, f"{CONTAINER_BIN_DIR}/pg_resetwal -f {PGDATA_LOC}")

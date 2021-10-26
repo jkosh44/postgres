@@ -6,7 +6,7 @@ services:
     ports:
       - "42666:42666"
     environment:
-      - PGPORT=4266
+      - PGPORT=42666
       - POSTGRES_DB=noisepage
       - POSTGRES_USER=noisepage
       - POSTGRES_PASSWORD=terrier

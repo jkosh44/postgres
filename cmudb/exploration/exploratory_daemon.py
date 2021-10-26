@@ -3,14 +3,22 @@ import subprocess
 from typing import Tuple
 
 from data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
-from pgnp_docker import start_exploration_docker, execute_in_container, shutdown_exploratory_docker, setup_docker_env
-from sql import checkpoint, reset_wal, start_and_wait_for_postgres_instance, stop_postgres_instance, execute_sql
+from pgnp_docker import start_exploration_docker, shutdown_exploratory_docker, setup_docker_env
+from sql import checkpoint, execute_sql, \
+    wait_for_pg_ready
 from util import ZFS_DOCKER_VOLUME_POOL, REPLICA_VOLUME_POOL, REPLICA_PORT, EXPLORATION_PORT, \
     EXPLORATION_CONTAINER_NAME, \
-    PGDATA_LOC, DOCKER_VOLUME_DIR, execute_sys_command
+    DOCKER_VOLUME_DIR, execute_sys_command
 
 
 def main():
+    """
+    The exploratory daemon is responsible for creating a copy of replica instances, to be used for model training.
+    To set up a machine to ues the exploratory daemon you must perform the following steps:
+    1. Install ZFS on one of the disks
+    2. Set up a ZFS pool on the disk
+    3. Start a postgres instance that stores pgdata/ in the ZFS pool
+    """
     aparser = argparse.ArgumentParser(description="Exploratory Daemon")
     # postgres args
     aparser.add_argument("--postgres-replica-port", help="Port that replica instance is running on",
@@ -33,39 +41,91 @@ def main():
 
 def run_daemon(replica_port: int, exploratory_port: int, zfs_volume_pool: str, zfs_replica_pool: str,
                docker_volume_dir: str):
+    """
+    Run exploratory daemon
+    Parameters
+    ----------
+    replica_port
+        port that replica instance is reachable from
+    exploratory_port
+        port that exploratory instance will be reachable from
+    zfs_volume_pool
+        name of zfs pool used to store docker volumes
+    zfs_replica_pool
+        relative name of zfs pool used to store postgres replica data
+    docker_volume_dir
+        directory path that docker uses for volumes
+    """
     setup_docker_env(docker_volume_dir)
+    destroy_exploratory_data_cow(zfs_volume_pool, zfs_replica_pool)
     # Make sure that container doesn't reuse machine's IP address
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
-    docker_proc, postgres_proc = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,
-                                                              zfs_replica_pool, docker_volume_dir)
-    execute_sql("CREATE TABLE foo(a int);", EXPLORATION_PORT)
-    execute_sql("INSERT INTO foo VALUES (42), (666);", EXPLORATION_PORT)
-    execute_sql("SELECT * FROM foo;", EXPLORATION_PORT)
-    spin_down_exploratory_instance(docker_proc, postgres_proc, zfs_volume_pool, zfs_replica_pool, docker_volume_dir)
+    exploratory_docker_proc, valid = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,
+                                                                  zfs_replica_pool, docker_volume_dir)
+    if valid:
+        print(execute_sql("CREATE TABLE foo(a int);", EXPLORATION_PORT))
+        print(execute_sql("INSERT INTO foo VALUES (42), (666);", EXPLORATION_PORT))
+        print(execute_sql("SELECT * FROM foo;", EXPLORATION_PORT))
+    else:
+        print("Failed to start exploratory instance")
+    spin_down_exploratory_instance(exploratory_docker_proc, zfs_volume_pool, zfs_replica_pool, docker_volume_dir)
 
 
 def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_volume_pool: str, zfs_replica_pool: str,
-                                 docker_volume_dir: str) -> Tuple[subprocess.Popen, subprocess.Popen]:
+                                 docker_volume_dir: str) -> Tuple[subprocess.Popen, bool]:
+    """
+    Start exploratory instance
+    Parameters
+    ----------
+    replica_port
+        port that replica instance is reachable from
+    exploratory_port
+        port that exploratory instance will be reachable from
+    zfs_volume_pool
+        name of zfs pool used to store docker volumes
+    zfs_replica_pool
+        relative name of zfs pool used to store postgres replica data
+    docker_volume_dir
+        directory path that docker uses for volumes
+    Returns
+    -------
+    exploratory_instance
+        docker process that is running exploratory instance
+    valid
+        True if the container started successfully, False otherwise
+    """
+    print("Taking checkpoint in replica")
     checkpoint(replica_port)
+    print("Checkpoint complete")
+    print("Copying replica data")
     copy_pgdata_cow(zfs_volume_pool, zfs_replica_pool)
-    # TODO can combine the rest in entry script
-    docker_proc = start_exploration_docker(docker_volume_dir)
-    execute_in_container(EXPLORATION_CONTAINER_NAME,
-                         f"sudo chown terrier:terrier -R {PGDATA_LOC}")
-    execute_in_container(EXPLORATION_CONTAINER_NAME, f"sudo chmod 700 -R {PGDATA_LOC}")
-    execute_in_container(EXPLORATION_CONTAINER_NAME, f"rm {PGDATA_LOC}/postmaster.pid")
-    execute_in_container(EXPLORATION_CONTAINER_NAME, f"rm {PGDATA_LOC}/standby.signal")
-    reset_wal(EXPLORATION_CONTAINER_NAME)
-    postgres_proc, valid = start_and_wait_for_postgres_instance(EXPLORATION_CONTAINER_NAME, exploratory_port)
-    # TODO handle invalid
-    return docker_proc, postgres_proc
+    print("Replica data copied")
+    print("Starting exploratory instance")
+    exploratory_docker_proc = start_exploration_docker(docker_volume_dir)
+    valid = wait_for_pg_ready(EXPLORATION_CONTAINER_NAME, exploratory_port, exploratory_docker_proc)
+    print("Exploratory instance started")
+    return exploratory_docker_proc, valid
 
 
-def spin_down_exploratory_instance(docker_proc: subprocess.Popen, postgres_proc: subprocess.Popen, zfs_volume_pool: str,
+def spin_down_exploratory_instance(exploratory_docker_proc: subprocess.Popen, zfs_volume_pool: str,
                                    zfs_replica_pool: str, docker_volume_dir: str):
-    stop_postgres_instance(postgres_proc)
-    shutdown_exploratory_docker(docker_proc, docker_volume_dir)
+    """
+    Stop and destroy exploratory instance
+    Parameters
+    ----------
+    exploratory_docker_proc
+        docker process that is running exploratory instance
+    zfs_volume_pool
+        name of zfs pool used to store docker volumes
+    zfs_replica_pool
+        relative name of zfs pool used to store postgres replica data
+    docker_volume_dir
+        directory path that docker uses for volumes
+    """
+    print("Shutting down exploratory instance")
+    shutdown_exploratory_docker(exploratory_docker_proc, docker_volume_dir)
     destroy_exploratory_data_cow(zfs_volume_pool, zfs_replica_pool)
+    print("Exploratory instance shut down")
 
 
 if __name__ == '__main__':
