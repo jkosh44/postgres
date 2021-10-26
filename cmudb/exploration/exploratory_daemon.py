@@ -56,7 +56,9 @@ def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_v
     # TODO can combine the rest in entry script
     print("Starting exploratory instance")
     docker_proc = start_exploration_docker(docker_volume_dir)
+    print("Waiting for pg ready")
     wait_for_pg_ready(EXPLORATION_CONTAINER_NAME, exploratory_port, docker_proc)
+    print("pg is ready")
     # TODO handle invalid
     print("Exploratory instance started")
     return docker_proc
