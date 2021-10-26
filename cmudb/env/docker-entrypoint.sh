@@ -242,6 +242,7 @@ _main_exploratory() {
   rm -f "${PGDATA}/postmaster.pid"
   rm -f "${PGDATA}/standby.signal"
   "${BIN_DIR}"/pg_resetwal -f "${PGDATA}"
+  _pg_start
 }
 
 _cleanup() {

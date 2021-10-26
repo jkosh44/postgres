@@ -64,17 +64,7 @@ def cleanup_docker_env(docker_volume_dir: str):
 
 def start_exploration_docker(docker_volume_dir: str) -> subprocess.Popen:
     create_volume(docker_volume_dir, EXPLORATION_VOLUME_POOL)
-    compose = create_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, OutputStrategy.Capture)
-
-    # TODO Hack to wait for container to start
-    docker_not_started = True
-    while docker_not_started:
-        line = compose.stdout.readline()
-        if line is not None:
-            line = line.decode(UTF_8)
-        print(line)
-        docker_not_started = "Exploring" not in line and compose.poll() is None
-        time.sleep(10)
+    compose = create_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, OutputStrategy.Print)
     return compose
 
 

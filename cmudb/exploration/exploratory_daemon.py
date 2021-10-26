@@ -1,13 +1,13 @@
 import argparse
 import subprocess
-from typing import Tuple
 
 from data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
-from pgnp_docker import start_exploration_docker, execute_in_container, shutdown_exploratory_docker, setup_docker_env
-from sql import checkpoint, reset_wal, start_and_wait_for_postgres_instance, stop_postgres_instance, execute_sql
+from pgnp_docker import start_exploration_docker, shutdown_exploratory_docker, setup_docker_env
+from sql import checkpoint, stop_postgres_instance, execute_sql, \
+    wait_for_pg_ready
 from util import ZFS_DOCKER_VOLUME_POOL, REPLICA_VOLUME_POOL, REPLICA_PORT, EXPLORATION_PORT, \
     EXPLORATION_CONTAINER_NAME, \
-    PGDATA_LOC, DOCKER_VOLUME_DIR, execute_sys_command
+    DOCKER_VOLUME_DIR, execute_sys_command
 
 
 def main():
@@ -37,16 +37,16 @@ def run_daemon(replica_port: int, exploratory_port: int, zfs_volume_pool: str, z
     destroy_exploratory_data_cow(zfs_volume_pool, zfs_replica_pool)
     # Make sure that container doesn't reuse machine's IP address
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
-    docker_proc, postgres_proc = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,
-                                                              zfs_replica_pool, docker_volume_dir)
+    docker_proc = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,
+                                               zfs_replica_pool, docker_volume_dir)
     print(execute_sql("CREATE TABLE foo(a int);", EXPLORATION_PORT))
     print(execute_sql("INSERT INTO foo VALUES (42), (666);", EXPLORATION_PORT))
     print(execute_sql("SELECT * FROM foo;", EXPLORATION_PORT))
-    spin_down_exploratory_instance(docker_proc, postgres_proc, zfs_volume_pool, zfs_replica_pool, docker_volume_dir)
+    spin_down_exploratory_instance(docker_proc, zfs_volume_pool, zfs_replica_pool, docker_volume_dir)
 
 
 def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_volume_pool: str, zfs_replica_pool: str,
-                                 docker_volume_dir: str) -> Tuple[subprocess.Popen, subprocess.Popen]:
+                                 docker_volume_dir: str) -> subprocess.Popen:
     print("Taking checkpoint in replica")
     checkpoint(replica_port)
     print("Checkpoint complete")
@@ -56,15 +56,14 @@ def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_v
     # TODO can combine the rest in entry script
     print("Starting exploratory instance")
     docker_proc = start_exploration_docker(docker_volume_dir)
-    postgres_proc, valid = start_and_wait_for_postgres_instance(EXPLORATION_CONTAINER_NAME, exploratory_port)
+    wait_for_pg_ready(EXPLORATION_CONTAINER_NAME, exploratory_port, docker_proc)
     # TODO handle invalid
     print("Exploratory instance started")
-    return docker_proc, postgres_proc
+    return docker_proc
 
 
-def spin_down_exploratory_instance(docker_proc: subprocess.Popen, postgres_proc: subprocess.Popen, zfs_volume_pool: str,
-                                   zfs_replica_pool: str, docker_volume_dir: str):
-    stop_postgres_instance(postgres_proc)
+def spin_down_exploratory_instance(docker_proc: subprocess.Popen, zfs_volume_pool: str, zfs_replica_pool: str,
+                                   docker_volume_dir: str):
     shutdown_exploratory_docker(docker_proc, docker_volume_dir)
     destroy_exploratory_data_cow(zfs_volume_pool, zfs_replica_pool)
 
