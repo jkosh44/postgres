@@ -16,10 +16,21 @@ TODO
 - COW with checkpoint
 - COW with pg_resetwal
 - COW with checkpoint and pg_resetwal
+  - Various sizez 
 - EXT4
 - EXT4 with checkpoint
 - EXT4 with pg_resetwal
 - EXT4 with checkpoint and pg_resetwal
+- Replay lag y axis, x-axis is time. Create exploration and run benchbase
+- Page cache experiment:
+  - Load DB
+  - call pg_warm
+  - SELECT * FROM table
+  - Create exploration instance
+  - call pg_warm in container
+  - 0% hit in BPM
+  - 100% hit rate in OS page cache
+  - Discuss what would happen without OS page cache (we'd have more misses in exploratory)
 
 #### Reset WAL
 `pg_resetwal`: https://www.postgresql.org/docs/13/app-pgresetwal.html

@@ -1,0 +1,12 @@
+[
+  {
+    "size": 2,
+    "checkpoint": 17.770724,
+    "copy": 0.420172,
+    "docker startup": 22.977849,
+    "reset_wal": 0.963082,
+    "postgres startup": 1.480079,
+    "teardown": ,
+    "percent valid":
+  }
+]
