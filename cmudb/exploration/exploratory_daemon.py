@@ -28,7 +28,7 @@ def main():
     args = vars(aparser.parse_args())
 
     run_daemon(args["postgres_replica_port"], args["postgres_exploratory_port"], args["zfs_volume_pool"],
-               args["zfs_replica_pool"], args["docker_volume_directory"])
+               args["zfs_replica_pool_name"], args["docker_volume_directory"])
 
 
 def run_daemon(replica_port: int, exploratory_port: int, zfs_volume_pool: str, zfs_replica_pool: str,
