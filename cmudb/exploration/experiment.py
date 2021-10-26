@@ -148,7 +148,7 @@ def main():
     print("Data loaded")
 
     result_file = RESULT_FILE.format(time.time())
-    db_size = get_pg_data_size(EXPLORATION)
+    db_size = get_pg_data_size(REPLICA)
     result_file = f"{result_file}_{db_size}"
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True,
