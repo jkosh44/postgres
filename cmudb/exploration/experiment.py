@@ -15,7 +15,7 @@ from sql import execute_sql, validate_sql_results, validate_table_is_not_empty, 
     wait_for_pg_ready, reset_wal
 from util import PGDATA_LOC, EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
-    timed_execution, REPLICA, PRIMARY, REPLICA_PORT
+    timed_execution, REPLICA, PRIMARY, REPLICA_PORT, get_pg_data_size
 
 RESULT_FILE = "./test_result_{}.json"
 
@@ -148,6 +148,8 @@ def main():
     print("Data loaded")
 
     result_file = RESULT_FILE.format(time.time())
+    db_size = get_pg_data_size(EXPLORATION)
+    result_file = f"{db_size}_{result_file}"
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                    block=False,
