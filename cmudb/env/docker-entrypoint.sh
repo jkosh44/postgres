@@ -241,6 +241,7 @@ _main_exploratory() {
   sudo chmod 700 "${PGDATA}"
   rm -f "${PGDATA}/postmaster.pid"
   rm -f "${PGDATA}/standby.signal"
+  "${BIN_DIR}"/pg_resetwal -f "${PGDATA}"
 }
 
 _cleanup() {
