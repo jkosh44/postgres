@@ -237,7 +237,7 @@ _main_replica() {
 }
 
 _main_exploratory() {
-  echo "test"
+  echo "Exploring"
 }
 
 _cleanup() {
