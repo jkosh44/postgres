@@ -237,7 +237,6 @@ _main_replica() {
 }
 
 _main_exploratory() {
-  echo "Exploring"
   sudo chmod 700 "${PGDATA}"
   rm -f "${PGDATA}/postmaster.pid"
   rm -f "${PGDATA}/standby.signal"
@@ -256,10 +255,7 @@ main() {
   elif [ "${NP_REPLICATION_TYPE}" = "replica" ]; then
     _main_replica
   elif [ "${NP_REPLICATION_TYPE}" = "exploratory" ]; then
-    # TODO: might consider copying data and starting postgres here...?
     _main_exploratory
-    tail -F anything
-    echo "Why must I cry"
   else
     echo "Unknown replication type: ${NP_REPLICATION_TYPE}"
     exit 1
