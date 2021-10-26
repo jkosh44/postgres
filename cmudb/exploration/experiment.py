@@ -149,7 +149,7 @@ def main():
 
     result_file = RESULT_FILE.format(time.time())
     db_size = get_pg_data_size(EXPLORATION)
-    result_file = f"{db_size}_{result_file}"
+    result_file = f"{result_file}_{db_size}"
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                    block=False,
