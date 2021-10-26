@@ -42,7 +42,7 @@ def is_pg_ready(container_name: str, port: int) -> bool:
     is_ready_res, _, _ = execute_in_container(container_name,
                                               f"{CONTAINER_BIN_DIR}/pg_isready --host {container_name} --port {port} "
                                               f"--username noisepage",
-                                              output_strategy=OutputStrategy.Hide)
+                                              output_strategy=OutputStrategy.Print)
     return is_ready_res.returncode == 0
 
 
