@@ -7,7 +7,7 @@ from pgnp_docker import start_exploration_docker, execute_in_container, shutdown
 from sql import checkpoint, reset_wal, start_and_wait_for_postgres_instance, stop_postgres_instance, execute_sql
 from util import ZFS_DOCKER_VOLUME_POOL, REPLICA_VOLUME_POOL, REPLICA_PORT, EXPLORATION_PORT, \
     EXPLORATION_CONTAINER_NAME, \
-    PGDATA_LOC, DOCKER_VOLUME_DIR
+    PGDATA_LOC, DOCKER_VOLUME_DIR, execute_sys_command
 
 
 def main():
@@ -34,7 +34,10 @@ def main():
 def run_daemon(replica_port: int, exploratory_port: int, zfs_volume_pool: str, zfs_replica_pool: str,
                docker_volume_dir: str):
     setup_docker_env(docker_volume_dir)
-    docker_proc, postgres_proc = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool, zfs_replica_pool, docker_volume_dir)
+    # Make sure that container doesn't reuse machine's IP address
+    execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
+    docker_proc, postgres_proc = spin_up_exploratory_instance(replica_port, exploratory_port, zfs_volume_pool,
+                                                              zfs_replica_pool, docker_volume_dir)
     execute_sql("CREATE TABLE foo(a int);", EXPLORATION_PORT)
     execute_sql("INSERT INTO foo VALUES (42), (666);", EXPLORATION_PORT)
     execute_sql("SELECT * FROM foo;", EXPLORATION_PORT)
