@@ -106,11 +106,11 @@ _pg_config() {
   HBA_CONF=${PGDATA}/pg_hba.conf
 
   # pg_hba.conf
-  sudo echo "host all all 0.0.0.0/0 ${POSTGRES_HOST_AUTH_METHOD}" >> ${HBA_CONF}
+  echo "host all all 0.0.0.0/0 ${POSTGRES_HOST_AUTH_METHOD}" >> ${HBA_CONF}
 
   # postgresql.auto.conf
   # Allow Docker host to connect to container.
-  sudo echo "listen_addresses = '*'" >> ${AUTO_CONF}
+  echo "listen_addresses = '*'" >> ${AUTO_CONF}
 }
 
 _pg_create_user_and_db() {
@@ -129,17 +129,17 @@ _pg_setup_replication() {
   # See PostgreSQL docs for complete description of parameters.
 
   # wal_level: How much information to ship over.
-  sudo echo "wal_level = ${NP_WAL_LEVEL}" >> ${AUTO_CONF}
+  echo "wal_level = ${NP_WAL_LEVEL}" >> ${AUTO_CONF}
   # hot_standby: True to enable connecting and running queries during recovery.
-  sudo echo "hot_standby = on" >> ${AUTO_CONF}
+  echo "hot_standby = on" >> ${AUTO_CONF}
   # max_wal_senders: Maximum number of concurrent connections to standby/backup clients.
-  sudo echo "max_wal_senders = 10" >> ${AUTO_CONF}
+  echo "max_wal_senders = 10" >> ${AUTO_CONF}
   # max_replication_slots: Maximum number of replication slots.
-  sudo echo "max_replication_slots = 10" >> ${AUTO_CONF}
+  echo "max_replication_slots = 10" >> ${AUTO_CONF}
   # hot_standby_feedback: True if standby should tell primary about what queries are currently executing.
-  sudo echo "hot_standby_feedback = on" >> ${AUTO_CONF}
+  echo "hot_standby_feedback = on" >> ${AUTO_CONF}
   # suppress logs
-  sudo echo "log_min_error_statement = FATAL" >> ${AUTO_CONF}
+  echo "log_min_error_statement = FATAL" >> ${AUTO_CONF}
 
   # PGTune configs
   # DB Version: 13
@@ -147,24 +147,25 @@ _pg_setup_replication() {
     # DB Type: oltp
     # Total Memory (RAM): 188 GB
     # CPUs num: 80
+    # Number of connections
     # Data Storage: SSD
 
-    echo "max_connections = 100" >> ${AUTO_CONF}
-    echo "shared_buffers = 15GB" >> ${AUTO_CONF}
-    echo "effective_cache_size = 47GB" >> ${AUTO_CONF}
-    echo "maintenance_work_mem = 2GB" >> ${AUTO_CONF}
-    echo "checkpoint_completion_target = 0.9" >> ${AUTO_CONF}
-    echo "wal_buffers = 16MB" >> ${AUTO_CONF}
-    echo "default_statistics_target = 100" >> ${AUTO_CONF}
-    echo "random_page_cost = 1.1" >> ${AUTO_CONF}
-    echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
-    echo "work_mem = 13689kB" >> ${AUTO_CONF}
-    echo "min_wal_size = 2GB" >> ${AUTO_CONF}
-    echo "max_wal_size = 8GB" >> ${AUTO_CONF}
-    echo "max_worker_processes = 80" >> ${AUTO_CONF}
-    echo "max_parallel_workers_per_gather = 4" >> ${AUTO_CONF}
-    echo "max_parallel_workers = 80" >> ${AUTO_CONF}
-    echo "max_parallel_maintenance_workers = 4" >> ${AUTO_CONF}
+  echo "max_connections = 100" >> ${AUTO_CONF}
+  echo "shared_buffers = 23.5GB" >> ${AUTO_CONF}
+  echo "effective_cache_size = 70.5GB" >> ${AUTO_CONF}
+  echo "maintenance_work_mem = 2GB" >> ${AUTO_CONF}
+  echo "checkpoint_completion_target = 0.9" >> ${AUTO_CONF}
+  echo "wal_buffers = 16MB" >> ${AUTO_CONF}
+  echo "default_statistics_target = 100" >> ${AUTO_CONF}
+  echo "random_page_cost = 1.1" >> ${AUTO_CONF}
+  echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
+  echo "work_mem = 123207.5kB" >> ${AUTO_CONF}
+  echo "min_wal_size = 2GB" >> ${AUTO_CONF}
+  echo "max_wal_size = 8GB" >> ${AUTO_CONF}
+  echo "max_worker_processes = 80" >> ${AUTO_CONF}
+  echo "max_parallel_workers_per_gather = 4" >> ${AUTO_CONF}
+  echo "max_parallel_workers = 80" >> ${AUTO_CONF}
+  echo "max_parallel_maintenance_workers = 4" >> ${AUTO_CONF}
 
   if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
     # ===============================
@@ -174,7 +175,7 @@ _pg_setup_replication() {
     # Create replication user.
     ${BIN_DIR}/psql -c "create user ${NP_REPLICATION_USER} with replication encrypted password '${NP_REPLICATION_PASSWORD}'" postgres
     # Allow replication user to connect..
-    sudo echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
+    echo "host replication ${NP_REPLICATION_USER} 0.0.0.0/0 md5" >> ${HBA_CONF}
     # Reload configuration.
     ${BIN_DIR}/psql -c "select pg_reload_conf()" postgres
     echo ${NP_REPLICATION_PHYSICAL_SLOTS}
