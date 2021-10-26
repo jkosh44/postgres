@@ -23,7 +23,7 @@ def main():
     aparser.add_argument("--zfs-replica-pool-name", help="Relative name of ZFS pool used for the replica volume",
                          default=REPLICA_VOLUME_POOL)
     # Docker args
-    aparser.add_argument("docker-volume-directory", help="directory path of the docker volume directory",
+    aparser.add_argument("--docker-volume-directory", help="directory path of the docker volume directory",
                          default=DOCKER_VOLUME_DIR)
     args = vars(aparser.parse_args())
 
