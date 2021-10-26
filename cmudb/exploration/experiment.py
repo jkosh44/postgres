@@ -8,14 +8,14 @@ from data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
 from pgnp_docker import start_replication_docker, shutdown_replication_docker, \
     execute_in_container, \
     start_exploration_docker, \
-    shutdown_exploratory_docker, setup_docker_env
+    shutdown_exploratory_docker, setup_docker_env, get_pg_data_size
 from sql import execute_sql, validate_sql_results, validate_table_is_not_empty, \
     checkpoint, \
     start_and_wait_for_postgres_instance, stop_postgres_instance, \
     wait_for_pg_ready, reset_wal
 from util import PGDATA_LOC, EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
-    timed_execution, REPLICA, PRIMARY, REPLICA_PORT, get_pg_data_size
+    timed_execution, REPLICA, PRIMARY, REPLICA_PORT
 
 RESULT_FILE = "./test_result_{}.json"
 
