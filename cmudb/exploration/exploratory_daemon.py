@@ -56,8 +56,6 @@ def spin_up_exploratory_instance(replica_port: int, exploratory_port: int, zfs_v
     # TODO can combine the rest in entry script
     print("Starting exploratory instance")
     docker_proc = start_exploration_docker(docker_volume_dir)
-    execute_in_container(EXPLORATION_CONTAINER_NAME, f"rm {PGDATA_LOC}/postmaster.pid")
-    execute_in_container(EXPLORATION_CONTAINER_NAME, f"rm {PGDATA_LOC}/standby.signal")
     reset_wal(EXPLORATION_CONTAINER_NAME)
     postgres_proc, valid = start_and_wait_for_postgres_instance(EXPLORATION_CONTAINER_NAME, exploratory_port)
     # TODO handle invalid

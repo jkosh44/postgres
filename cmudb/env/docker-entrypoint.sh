@@ -239,6 +239,8 @@ _main_replica() {
 _main_exploratory() {
   echo "Exploring"
   sudo chmod 700 "${PGDATA}"
+  rm -f "${PGDATA}/postmaster.pid"
+  rm -f "${PGDATA}/standby.signal"
 }
 
 _cleanup() {
