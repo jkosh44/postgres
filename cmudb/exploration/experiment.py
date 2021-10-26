@@ -3,7 +3,7 @@ import time
 from functools import reduce
 from typing import Tuple
 
-from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase, get_benchbase_throughput
+from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
 from data_copy import copy_pgdata_cow, destroy_exploratory_data_cow
 from pgnp_docker import start_replication_docker, shutdown_replication_docker, \
     execute_in_container, \
