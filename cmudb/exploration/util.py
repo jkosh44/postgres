@@ -7,7 +7,6 @@ from typing import List, Tuple, AnyStr
 from typing import Union
 
 # TODO make cmd line args maybe
-from pgnp_docker import execute_in_container
 
 PROJECT_ROOT = "../.."
 ENV_FOLDER = "../env"
@@ -77,8 +76,3 @@ def remove_primary_data():
 def create_primary_sym_link():
     execute_sys_command(
         "sudo ln -s /mnt/pgprimary/pgdata /mnt/docker/volumes/pgdata-primary")
-
-
-def get_pg_data_size(contianer_name: str) -> str:
-    _, out, _, = execute_in_container(contianer_name, "du -sh /pgdata", block=True, output_strategy=OutputStrategy.Capture)
-    return out.split("\t")[0]

@@ -120,3 +120,9 @@ def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
 
 def remove_exploratory_data():
     execute_sys_command(f"sudo rm -rf {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
+
+
+def get_pg_data_size(contianer_name: str) -> str:
+    _, out, _, = execute_in_container(contianer_name, "du -sh /pgdata", block=True,
+                                      output_strategy=OutputStrategy.Capture)
+    return out.split("\t")[0]
