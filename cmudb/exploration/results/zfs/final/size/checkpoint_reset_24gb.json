@@ -1,0 +1,232 @@
+[
+	{
+		"iteration": 0,
+		"checkpoint_time_ns": 201760040022,
+		"copy_time_ns": 9358383650,
+		"docker_startup_time_ns": 35332815538,
+		"reset_wal_time_ns": 10649518530,
+		"postgres_startup_time_ns": 2659368427,
+		"teardown_time_ns": 110987450679,
+		"valid": true
+	},
+	{
+		"iteration": 1,
+		"checkpoint_time_ns": 90433277305,
+		"copy_time_ns": 1175114794,
+		"docker_startup_time_ns": 43621983397,
+		"reset_wal_time_ns": 34196799689,
+		"postgres_startup_time_ns": 2632411255,
+		"teardown_time_ns": 101755499921,
+		"valid": true
+	},
+	{
+		"iteration": 2,
+		"checkpoint_time_ns": 176112316130,
+		"copy_time_ns": 142314830,
+		"docker_startup_time_ns": 71014682341,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 3,
+		"checkpoint_time_ns": 49367620660,
+		"copy_time_ns": 2088163473,
+		"docker_startup_time_ns": 71269862899,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 4,
+		"checkpoint_time_ns": 218910948835,
+		"copy_time_ns": 2271413667,
+		"docker_startup_time_ns": 71041074490,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 5,
+		"checkpoint_time_ns": 209289210600,
+		"copy_time_ns": 552128621,
+		"docker_startup_time_ns": 26383959667,
+		"reset_wal_time_ns": 28771253889,
+		"postgres_startup_time_ns": 2830510053,
+		"teardown_time_ns": 223229809369,
+		"valid": true
+	},
+	{
+		"iteration": 6,
+		"checkpoint_time_ns": 1213549295,
+		"copy_time_ns": 528968802,
+		"docker_startup_time_ns": 23230996613,
+		"reset_wal_time_ns": 32366195108,
+		"postgres_startup_time_ns": 2727815839,
+		"teardown_time_ns": 194962508754,
+		"valid": true
+	},
+	{
+		"iteration": 7,
+		"checkpoint_time_ns": 3171030855,
+		"copy_time_ns": 1600038900,
+		"docker_startup_time_ns": 23529426759,
+		"reset_wal_time_ns": 34011367233,
+		"postgres_startup_time_ns": 2817981147,
+		"teardown_time_ns": 170297026907,
+		"valid": true
+	},
+	{
+		"iteration": 8,
+		"checkpoint_time_ns": 203037237549,
+		"copy_time_ns": 463249413,
+		"docker_startup_time_ns": 23395366929,
+		"reset_wal_time_ns": 953350306,
+		"postgres_startup_time_ns": 1576983791,
+		"teardown_time_ns": 282189155995,
+		"valid": true
+	},
+	{
+		"iteration": 9,
+		"checkpoint_time_ns": 16462012212,
+		"copy_time_ns": 1276987722,
+		"docker_startup_time_ns": 23532519039,
+		"reset_wal_time_ns": 55875566305,
+		"postgres_startup_time_ns": 2776381187,
+		"teardown_time_ns": 94050413530,
+		"valid": true
+	},
+	{
+		"iteration": 10,
+		"checkpoint_time_ns": 298470929629,
+		"copy_time_ns": 335786771,
+		"docker_startup_time_ns": 23563022787,
+		"reset_wal_time_ns": 18595017746,
+		"postgres_startup_time_ns": 2991804105,
+		"teardown_time_ns": 177285078871,
+		"valid": true
+	},
+	{
+		"iteration": 11,
+		"checkpoint_time_ns": 1714789013,
+		"copy_time_ns": 886980055,
+		"docker_startup_time_ns": 71022655341,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 12,
+		"checkpoint_time_ns": 33108738861,
+		"copy_time_ns": 636853701,
+		"docker_startup_time_ns": 24058091572,
+		"reset_wal_time_ns": 30512616915,
+		"postgres_startup_time_ns": 2923985819,
+		"teardown_time_ns": 197820549629,
+		"valid": true
+	},
+	{
+		"iteration": 13,
+		"checkpoint_time_ns": 13512557934,
+		"copy_time_ns": 629626111,
+		"docker_startup_time_ns": 71201986877,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 14,
+		"checkpoint_time_ns": 58436508295,
+		"copy_time_ns": 746290043,
+		"docker_startup_time_ns": 25886448808,
+		"reset_wal_time_ns": 24536503647,
+		"postgres_startup_time_ns": 3009581912,
+		"teardown_time_ns": 185027017748,
+		"valid": true
+	},
+	{
+		"iteration": 15,
+		"checkpoint_time_ns": 53116002692,
+		"copy_time_ns": 1630036239,
+		"docker_startup_time_ns": 25201850229,
+		"reset_wal_time_ns": 28292802332,
+		"postgres_startup_time_ns": 2936299937,
+		"teardown_time_ns": 191643558713,
+		"valid": true
+	},
+	{
+		"iteration": 16,
+		"checkpoint_time_ns": 904737765,
+		"copy_time_ns": 514453758,
+		"docker_startup_time_ns": 23690375701,
+		"reset_wal_time_ns": 37134271407,
+		"postgres_startup_time_ns": 2837391438,
+		"teardown_time_ns": 212734802382,
+		"valid": true
+	},
+	{
+		"iteration": 17,
+		"checkpoint_time_ns": 1163870467,
+		"copy_time_ns": 690348426,
+		"docker_startup_time_ns": 23643404809,
+		"reset_wal_time_ns": 32443811436,
+		"postgres_startup_time_ns": 2666250261,
+		"teardown_time_ns": 136493480326,
+		"valid": true
+	},
+	{
+		"iteration": 18,
+		"checkpoint_time_ns": 69694508683,
+		"copy_time_ns": 1352719413,
+		"docker_startup_time_ns": 24493365728,
+		"reset_wal_time_ns": 27389354444,
+		"postgres_startup_time_ns": 2728736584,
+		"teardown_time_ns": 123986585834,
+		"valid": true
+	},
+	{
+		"iteration": 19,
+		"checkpoint_time_ns": 77642359358,
+		"copy_time_ns": 441837133,
+		"docker_startup_time_ns": 23776974626,
+		"reset_wal_time_ns": 11402483515,
+		"postgres_startup_time_ns": 3141024235,
+		"teardown_time_ns": 177372411903,
+		"valid": true
+	},
+	{
+		"iteration": 20,
+		"checkpoint_time_ns": 295243671254,
+		"copy_time_ns": 256408320,
+		"docker_startup_time_ns": 23121941360,
+		"reset_wal_time_ns": 35321901037,
+		"postgres_startup_time_ns": 3465671399,
+		"teardown_time_ns": 232069050441,
+		"valid": true
+	},
+	{
+		"iteration": 21,
+		"checkpoint_time_ns": 981011780,
+		"copy_time_ns": 678658929,
+		"docker_startup_time_ns": 24203571715,
+		"reset_wal_time_ns": 30752800171,
+		"postgres_startup_time_ns": 1609627950,
+		"teardown_time_ns": 201454997577,
+		"valid": true
+	},
+	{
+		"iteration": 22,
+		"checkpoint_time_ns": 23524167510,
+		"copy_time_ns": 1455098142,
+		"docker_startup_time_ns": 24848992257,
+		"reset_wal_time_ns": 37725365946,
+		"postgres_startup_time_ns": 2749402069,
+		"teardown_time_ns": 186092064617,
+		"valid": true
+	}
+]
