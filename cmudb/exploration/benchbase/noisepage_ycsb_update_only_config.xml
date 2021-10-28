@@ -13,7 +13,7 @@
     <!-- Scalefactor in YCSB is *1000 the number of rows in the USERTABLE-->
 <!-- 114G  -->
 <!-- <scalefactor>100000</scalefactor>-->
-     <scalefactor>40000</scalefactor>
+     <scalefactor>50000</scalefactor>
  <!-- 13G -->
 <!--     <scalefactor>10000</scalefactor>-->
 <!-- 2G -->
