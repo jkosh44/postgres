@@ -55,3 +55,5 @@ Final experiment
 Get disk usage: `iostat -xd 1`
 
 Look at: /etc/postgresql/12/main/pg_hba.conf, do we need to copy this?
+
+`sftp jkoshako@dev8.db.pdl.local.cmu.edu:/home/jkoshako/postgres/cmudb/exploration/`
