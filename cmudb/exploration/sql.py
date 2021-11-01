@@ -1,12 +1,11 @@
 import os
-import signal
 import subprocess
 import time
 from typing import List, Tuple
 
 from pgnp_docker import execute_in_container
 from util import execute_sys_command, OutputStrategy, CONTAINER_BIN_DIR, \
-    PGDATA_LOC
+    PGDATA_LOC, stop_process
 
 
 # SQL functionality
@@ -88,11 +87,7 @@ def start_postgres_instance(container_name: str, port: int) -> subprocess.Popen:
 
 
 def stop_postgres_instance(postgres_process: subprocess.Popen):
-    postgres_process.send_signal(signal.SIGQUIT)
-    try:
-        postgres_process.communicate(timeout=60)
-    except subprocess.TimeoutExpired:
-        postgres_process.terminate()
+    stop_process(postgres_process)
 
 
 def is_pg_ready(container_name: str, port: int) -> bool:

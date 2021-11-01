@@ -54,7 +54,6 @@ def execute_sys_command(cmd: Union[str, List[str]],
 
 
 def stop_process(proc: subprocess.Popen, block: bool = True):
-    # SIGQUIT for postgress instance
     proc.send_signal(signal.SIGINT)
     if block:
         try:
