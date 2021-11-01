@@ -165,6 +165,7 @@ _pg_setup_replication() {
     echo "max_parallel_workers_per_gather = 4" >> ${AUTO_CONF}
     echo "max_parallel_workers = 80" >> ${AUTO_CONF}
     echo "max_parallel_maintenance_workers = 4" >> ${AUTO_CONF}
+    echo "max_pred_locks_per_transaction = 1024" >> ${AUTO_CONF}
 
   if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
     # ===============================

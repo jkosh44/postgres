@@ -181,3 +181,10 @@ Using YCSB Update only to load data before the copy, and update data during the 
 512     /pgdata/pg_snapshots
 512     /pgdata/pg_dynshmem
 114G    /pgdata/
+
+
+[WARN ] 2021-10-31 20:53:48,507 [YCSBWorker<008>]  com.oltpbenchmark.api.Worker doWork - SQLException occurr
+ed during [com.oltpbenchmark.benchmarks.ycsb.procedures.UpdateRecord/01] and will not be retried... sql stat
+e [53200], error code [0].                                                                                  
+org.postgresql.util.PSQLException: ERROR: out of shared memory                                              
+  Hint: You might need to increase max_pred_locks_per_transaction. 

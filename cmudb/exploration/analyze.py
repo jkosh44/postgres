@@ -20,7 +20,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/zfs/final/size/checkpoint_reset_29gb.json"
+FILE_NAME = "results/zfs/final/size/test_result_1635700944.5134664.json_37G"
 
 
 def main():
