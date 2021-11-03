@@ -1,6 +1,7 @@
 import subprocess
 import time
 from functools import reduce
+from threading import Thread
 from typing import Tuple
 
 from benchbase import cleanup_benchbase, run_benchbase, setup_benchbase
@@ -15,7 +16,7 @@ from sql import execute_sql, validate_sql_results, validate_table_is_not_empty, 
     wait_for_pg_ready, reset_wal
 from util import PGDATA_LOC, EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
-    timed_execution, REPLICA, PRIMARY, REPLICA_PORT
+    timed_execution, REPLICA, PRIMARY, REPLICA_PORT, execute_sys_command
 
 RESULT_FILE = "./test_result_{}.json"
 
@@ -36,7 +37,7 @@ def validate_exploration_process() -> bool:
                     in tables])
 
 
-def test_copy() -> Tuple[int, int, int, int, int, int, bool]:
+def test_copy() -> Tuple[int, int, int, int, int, int, bool, str]:
     # Start exploration instance
     print("Taking checkpoint")
     _, checkpoint_time_ns = timed_execution(checkpoint, REPLICA_PORT)
@@ -50,7 +51,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool]:
     if exploratory_container.returncode is not None:
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
-        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, 0, 0, 0, False
+        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, 0, 0, 0, False, "Container failed to start"
     execute_in_container(EXPLORATION,
                          f"sudo chown terrier:terrier -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
@@ -67,7 +68,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool]:
         stop_postgres_instance(exploration_process)
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
-        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, 0, valid
+        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, 0, valid, "Postgres failed to start"
     print("Exploration postgres instance started")
 
     # Validate exploration instance
@@ -87,7 +88,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool]:
     _, snapshot_destroy_time = timed_execution(destroy_exploratory_data_cow)
     teardown_time = postgres_stop_time_ns + docker_teardown_time + snapshot_destroy_time
 
-    return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, teardown_time, valid
+    return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, teardown_time, valid, "" if valid else "Data lost"
 
 
 def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
@@ -99,11 +100,13 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
         first_obj = True
         while benchbase_proc.poll() is None:
             print(f"benchbase poll: {benchbase_proc.poll()}")
-            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid = test_copy()
+            start_time = time.time_ns()
+            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid, error_msg = test_copy()
             if not first_obj:
                 f.write(",\n")
             f.write("\t{\n")
             f.write(f'\t\t"iteration": {i},\n')
+            f.write(f'\t\t"start_time_ns: {start_time},\n')
             f.write(f'\t\t"checkpoint_time_ns": {checkpoint_time_ns},\n')
             f.write(f'\t\t"copy_time_ns": {copy_time_ns},\n')
             f.write(
@@ -113,7 +116,8 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
             f.write(
                 f'\t\t"postgres_startup_time_ns": {postgres_startup_time_ns},\n')
             f.write(f'\t\t"teardown_time_ns": {teardown_time_ns},\n')
-            f.write(f'\t\t"valid": {"true" if valid else "false"}\n')
+            f.write(f'\t\t"valid": {"true" if valid else "false"},\n')
+            f.write(f'\t\t"error": "{error_msg}"\n')
             f.write("\t}")
             f.flush()
             i += 1
@@ -148,7 +152,8 @@ def main():
     run_benchbase(create=True, load=True, execute=False)
     print("Data loaded")
 
-    result_file = RESULT_FILE.format(time.time())
+    test_time = time.time()
+    result_file = RESULT_FILE.format(test_time)
     db_size = get_pg_data_size(REPLICA)
     result_file = f"{result_file}_{db_size}"
 
@@ -156,7 +161,15 @@ def main():
                                    block=False,
                                    output_strategy=OutputStrategy.Print)
 
+    io_thread = Thread(target=collect_io_stats, args=(test_time,))
+    ssd_thread = Thread(target=collect_io_stats, args=(test_time,))
+    io_thread.start()
+    ssd_thread.start()
     collect_results(result_file, benchbase_proc)
+    global done
+    done = True
+    io_thread.join()
+    ssd_thread.join()
 
     # throughput = get_benchbase_throughput(benchbase_proc)
     # print(f"Saving throughput {throughput}")
@@ -170,6 +183,31 @@ def main():
     shutdown_replication_docker(docker_process)
     print("Docker containers killed successfully")
 
+
+def collect_io_stats(test_time: float):
+    with open(f"iostats_{test_time}", "w") as f:
+        while not done:
+            start_time = time.time_ns()
+            _, out, _ = execute_sys_command("iostat -x", output_strategy=OutputStrategy.Capture, block=True)
+            f.write(f"Time: {start_time}\n")
+            f.write(f"{out}\n\n")
+            f.flush()
+            time.sleep(10)
+
+
+def collect_ssd_stats(test_time: float):
+    with open(f"ssdstats_{test_time}", "w") as f:
+        while not done:
+            start_time = time.time_ns()
+            _, out, _ = execute_sys_command("sudo nvme smart-log /dev/nvme0n1", output_strategy=OutputStrategy.Capture,
+                                            block=True)
+            f.write(f"Time: {start_time}\n")
+            f.write(f"{out}\n\n")
+            f.flush()
+            time.sleep(10)
+
+
+done = False
 
 if __name__ == "__main__":
     main()

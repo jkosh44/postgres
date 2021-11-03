@@ -50,3 +50,5 @@ Loss = (10000000 - 9968874)/10000000 = 0.0031126
 - Scaling Distributed Machine Learning with the Parameter Server
   - Stale data is OK for ML
   - TODO
+
+### Checkpoint Investigation
