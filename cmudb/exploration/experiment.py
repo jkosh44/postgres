@@ -106,7 +106,7 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
                 f.write(",\n")
             f.write("\t{\n")
             f.write(f'\t\t"iteration": {i},\n')
-            f.write(f'\t\t"start_time_ns: {start_time},\n')
+            f.write(f'\t\t"start_time_ns": {start_time},\n')
             f.write(f'\t\t"checkpoint_time_ns": {checkpoint_time_ns},\n')
             f.write(f'\t\t"copy_time_ns": {copy_time_ns},\n')
             f.write(
