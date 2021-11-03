@@ -49,9 +49,11 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str]:
     exploratory_container, docker_start_time_ns = timed_execution(
         start_exploration_docker)
     if exploratory_container.returncode is not None:
+        ret_code = exploratory_container.returncode
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
-        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, 0, 0, 0, False, "Container failed to start"
+        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, 0, 0, 0, False, \
+               f"Container failed to start, return code {ret_code}"
     execute_in_container(EXPLORATION,
                          f"sudo chown terrier:terrier -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
@@ -65,10 +67,12 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str]:
         start_and_wait_for_postgres_instance, EXPLORATION,
         EXPLORATION_PORT)
     if not valid:
+        ret_code = exploration_process.returncode
         stop_postgres_instance(exploration_process)
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
-        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, 0, valid, "Postgres failed to start"
+        return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, 0, valid, \
+               f"Postgres failed to start, return code {ret_code}"
     print("Exploration postgres instance started")
 
     # Validate exploration instance
