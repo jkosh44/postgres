@@ -161,11 +161,11 @@ def main():
                                    block=False,
                                    output_strategy=OutputStrategy.Capture)
 
-    for c in iter(lambda: benchbase_proc.stdout.read(1), b''):
-        if isinstance(c, bytes):
-            c = c.decode(UTF_8)
-        print(c)
-        if "MEASURE :: Warmup complete, starting measurements" in c:
+    for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
+        if isinstance(line, bytes):
+            line = line.decode(UTF_8)
+        print(line)
+        if "MEASURE :: Warmup complete, starting measurements" in line:
             break
 
     io_thread = Thread(target=collect_io_stats, args=(test_time,))
@@ -219,10 +219,10 @@ def collect_ssd_stats(test_time: float):
 
 def print_benchbase_output(benchbase_proc: subprocess.Popen):
     while not done:
-        for c in iter(lambda: benchbase_proc.stdout.read(1), b''):
-            if isinstance(c, bytes):
-                c = c.decode(UTF_8)
-            print(c)
+        for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
+            if isinstance(line, bytes):
+                line = line.decode(UTF_8)
+            print(line)
 
 
 done = False
