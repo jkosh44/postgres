@@ -164,8 +164,8 @@ def main():
     for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
         if isinstance(line, bytes):
             line = line.decode(UTF_8)
-        print(line)
-        if "MEASURE :: Warmup complete, starting measurements" in line:
+        print(line, end="")
+        if "Warmup complete, starting measurements" in line:
             print("!!!!Benchbase starting!!!!")
             break
         else:
@@ -225,7 +225,7 @@ def print_benchbase_output(benchbase_proc: subprocess.Popen):
         for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
             if isinstance(line, bytes):
                 line = line.decode(UTF_8)
-            print(line)
+            print(line, end="")
 
 
 done = False
