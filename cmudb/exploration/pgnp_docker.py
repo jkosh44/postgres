@@ -1,9 +1,9 @@
 import subprocess
 import time
-from typing import AnyStr, Tuple
+from typing import AnyStr, Tuple, List
 
 from util import execute_sys_command, ENV_FOLDER, stop_process, OutputStrategy, \
-    UTF_8, PROJECT_ROOT, remove_primary_data, create_primary_sym_link
+    UTF_8, PROJECT_ROOT, remove_primary_data, create_primary_sym_link, EXPLORATION, REPLICA, PRIMARY
 
 PRIMARY_VOLUME = "pgdata-primary"
 REPLICA_VOLUME = "pgdata-replica"
@@ -48,8 +48,10 @@ def stop_container(container: subprocess.Popen):
     stop_process(container)
 
 
-def destroy_container(compose_yml: str, project_name: str):
+def destroy_container(compose_yml: str, project_name: str, container_names: List[str]):
     execute_sys_command(f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} down --volumes")
+    for container_name in container_names:
+        execute_sys_command(f"sudo docker rm {container_name}")
 
 
 def execute_in_container(container_name: str, cmd: str, block: bool = True,
@@ -69,8 +71,8 @@ def setup_docker_env():
 
 
 def cleanup_docker_env():
-    destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME)
-    destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME)
+    destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, [PRIMARY, REPLICA])
+    destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, [EXPLORATION])
     remove_primary_data()
     remove_volume(PRIMARY_VOLUME)
     remove_volume(REPLICA_VOLUME)
@@ -105,7 +107,7 @@ def start_exploration_docker() -> subprocess.Popen:
 
 def shutdown_replication_docker(docker_process: subprocess.Popen):
     stop_container(docker_process)
-    destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME)
+    destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, [PRIMARY, REPLICA])
     remove_primary_data()
     remove_volume(PRIMARY_VOLUME)
     remove_volume(REPLICA_VOLUME)
@@ -113,7 +115,7 @@ def shutdown_replication_docker(docker_process: subprocess.Popen):
 
 def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
     stop_container(exploratory_docker_process)
-    destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME)
+    destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, [EXPLORATION])
     remove_exploratory_data()
     remove_volume(EXPLORATION_VOLUME)
 

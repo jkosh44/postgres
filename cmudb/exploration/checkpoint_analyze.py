@@ -11,9 +11,9 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/test_result_1635904882.374361.json"
-IO_FILE_NAME = "results/zfs/checkpoint/iostats_1635904524.2487922"
-SSD_FILE_NAME = "results/zfs/checkpoint/ssdstats_1635904882.374361"
+TEST_FILE_NAME = "results/zfs/checkpoint/test_result_1635906955.702432.json_41G"
+IO_FILE_NAME = "results/zfs/checkpoint/iostats_1635906955.702432"
+SSD_FILE_NAME = "results/zfs/checkpoint/ssdstats_1635906955.702432"
 
 
 def main():
@@ -34,7 +34,7 @@ def analyze_checkpoint_time():
 
     valid_measurements = df[df[VALID]]
 
-    valid_measurements.plot(x=START_TIME, y=CHECKPOINT_TIME, kind="line", title="Checkpoint")
+    valid_measurements.plot(x=START_TIME, y=CHECKPOINT_TIME, kind="line", title="Checkpoint time (sec)")
     plt.show()
 
 
@@ -107,10 +107,8 @@ def analyze_ssd_stats():
             cur_lines = cur_lines[metric_offset:]
 
             metric_line = cur_lines[0]
-            print(metric_line)
             metric_search = re.search(".*?(\\d+).*", metric_line)
             metric = int(metric_search.group(1))
-            print(metric)
             stats.append((time, metric))
             lines = lines[segment_length:]
 
