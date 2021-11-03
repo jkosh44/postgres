@@ -10,5 +10,17 @@
 		"teardown_time_ns": 71762744769,
 		"valid": true,
 		"error": "Data lost"
+	},
+	{
+		"iteration": 0,
+		"start_time_ns": 1635906882589305566,
+		"checkpoint_time_ns": 975017,
+		"copy_time_ns": 269628615,
+		"docker_startup_time_ns": 21754652617,
+		"reset_wal_time_ns": 431879072,
+		"postgres_startup_time_ns": 1450075978,
+		"teardown_time_ns": 71762744769,
+		"valid": true,
+		"error": "Data lost"
 	}
 ]
