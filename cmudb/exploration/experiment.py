@@ -214,6 +214,14 @@ def collect_ssd_stats(test_time: float):
             time.sleep(10)
 
 
+def print_benchbase_output(benchbase_proc: subprocess.Popen):
+    while not done:
+        for c in iter(lambda: benchbase_proc.stdout.read(1), b''):
+            if isinstance(c, bytes):
+                c = c.decode(UTF_8)
+            print(c)
+
+
 done = False
 
 if __name__ == "__main__":
