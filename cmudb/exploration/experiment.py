@@ -170,13 +170,16 @@ def main():
 
     io_thread = Thread(target=collect_io_stats, args=(test_time,))
     ssd_thread = Thread(target=collect_ssd_stats, args=(test_time,))
+    print_thread = Thread(target=print_benchbase_output, args=(benchbase_proc,))
     io_thread.start()
     ssd_thread.start()
+    print_thread.start()
     collect_results(result_file, benchbase_proc)
     global done
     done = True
     io_thread.join()
     ssd_thread.join()
+    print_thread.join()
 
     # throughput = get_benchbase_throughput(benchbase_proc)
     # print(f"Saving throughput {throughput}")
