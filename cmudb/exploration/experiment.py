@@ -16,7 +16,7 @@ from sql import execute_sql, validate_sql_results, validate_table_is_not_empty, 
     wait_for_pg_ready, reset_wal
 from util import PGDATA_LOC, EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
-    timed_execution, REPLICA, PRIMARY, REPLICA_PORT, execute_sys_command
+    timed_execution, REPLICA, PRIMARY, REPLICA_PORT, execute_sys_command, UTF_8
 
 RESULT_FILE = "./test_result_{}.json"
 
@@ -159,7 +159,14 @@ def main():
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                    block=False,
-                                   output_strategy=OutputStrategy.Print)
+                                   output_strategy=OutputStrategy.Capture)
+
+    for c in iter(lambda: benchbase_proc.stdout.read(1), b''):
+        if isinstance(c, bytes):
+            c = c.decode(UTF_8)
+        print(c)
+        if "MEASURE :: Warmup complete, starting measurements" in c:
+            break
 
     io_thread = Thread(target=collect_io_stats, args=(test_time,))
     ssd_thread = Thread(target=collect_ssd_stats, args=(test_time,))
