@@ -20,7 +20,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/zfs/final/size/test_result_1635700944.5134664.json_37G"
+FILE_NAME = "results/zfs/final/size/checkpoint_reset_43gb.json"
 
 
 def main():
@@ -43,8 +43,8 @@ def main():
     valid_measurements = df[df[VALID]]
     # valid_measurements.plot(x=ITERATION, y=sec_measurements,
     #                         kind="line", title="COW (seconds)")
-    valid_measurements.plot(x=ITERATION, y=sec_measurements, kind="bar",
-                            stacked=True, title="COW (seconds)")
+    valid_measurements[:20].plot(x=ITERATION, y=sec_measurements, kind="bar",
+                                 stacked=True, title="COW 43 GB (seconds)")
     plt.show()
 
     for sec_measurement in sec_measurements:

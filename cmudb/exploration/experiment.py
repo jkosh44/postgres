@@ -115,6 +115,7 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
             f.write(f'\t\t"teardown_time_ns": {teardown_time_ns},\n')
             f.write(f'\t\t"valid": {"true" if valid else "false"}\n')
             f.write("\t}")
+            f.flush()
             i += 1
             first_obj = False
         f.write("\n")

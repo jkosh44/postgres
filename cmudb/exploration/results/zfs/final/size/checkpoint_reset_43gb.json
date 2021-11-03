@@ -1,0 +1,142 @@
+[
+	{
+		"iteration": 0,
+		"checkpoint_time_ns": 150730783900,
+		"copy_time_ns": 2768352845,
+		"docker_startup_time_ns": 32446706119,
+		"reset_wal_time_ns": 8761740338,
+		"postgres_startup_time_ns": 1674617759,
+		"teardown_time_ns": 100281191515,
+		"valid": true
+	},
+	{
+		"iteration": 1,
+		"checkpoint_time_ns": 185076821405,
+		"copy_time_ns": 1805471474,
+		"docker_startup_time_ns": 28309476929,
+		"reset_wal_time_ns": 2793453029,
+		"postgres_startup_time_ns": 1466767317,
+		"teardown_time_ns": 115288305738,
+		"valid": true
+	},
+	{
+		"iteration": 2,
+		"checkpoint_time_ns": 169327671166,
+		"copy_time_ns": 2328566044,
+		"docker_startup_time_ns": 29794869970,
+		"reset_wal_time_ns": 4845679972,
+		"postgres_startup_time_ns": 1612526218,
+		"teardown_time_ns": 101341779856,
+		"valid": true
+	},
+	{
+		"iteration": 3,
+		"checkpoint_time_ns": 196174722091,
+		"copy_time_ns": 2002312829,
+		"docker_startup_time_ns": 33280243796,
+		"reset_wal_time_ns": 4132406047,
+		"postgres_startup_time_ns": 1587743286,
+		"teardown_time_ns": 85748241624,
+		"valid": true
+	},
+	{
+		"iteration": 4,
+		"checkpoint_time_ns": 1824243528531,
+		"copy_time_ns": 4038153331,
+		"docker_startup_time_ns": 71558306043,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 5,
+		"checkpoint_time_ns": 1891832721202,
+		"copy_time_ns": 10429492321,
+		"docker_startup_time_ns": 72478124506,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 6,
+		"checkpoint_time_ns": 1910083275234,
+		"copy_time_ns": 3803375815,
+		"docker_startup_time_ns": 71321892889,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 7,
+		"checkpoint_time_ns": 2318642452213,
+		"copy_time_ns": 4888857942,
+		"docker_startup_time_ns": 57827078440,
+		"reset_wal_time_ns": 37101349327,
+		"postgres_startup_time_ns": 3534509352,
+		"teardown_time_ns": 144708836040,
+		"valid": true
+	},
+	{
+		"iteration": 8,
+		"checkpoint_time_ns": 2449766571641,
+		"copy_time_ns": 4351020990,
+		"docker_startup_time_ns": 41046777529,
+		"reset_wal_time_ns": 83620710239,
+		"postgres_startup_time_ns": 2902037487,
+		"teardown_time_ns": 110271779664,
+		"valid": true
+	},
+	{
+		"iteration": 9,
+		"checkpoint_time_ns": 2892394552766,
+		"copy_time_ns": 2453887179,
+		"docker_startup_time_ns": 34586548609,
+		"reset_wal_time_ns": 51659876983,
+		"postgres_startup_time_ns": 3104790150,
+		"teardown_time_ns": 162014966395,
+		"valid": true
+	},
+	{
+		"iteration": 10,
+		"checkpoint_time_ns": 2325234537294,
+		"copy_time_ns": 7388199173,
+		"docker_startup_time_ns": 71941646429,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	},
+	{
+		"iteration": 11,
+		"checkpoint_time_ns": 3278159746919,
+		"copy_time_ns": 3291682465,
+		"docker_startup_time_ns": 23228965879,
+		"reset_wal_time_ns": 59825416197,
+		"postgres_startup_time_ns": 1867441703,
+		"teardown_time_ns": 101284490601,
+		"valid": true
+	},
+	{
+		"iteration": 12,
+		"checkpoint_time_ns": 2637951214871,
+		"copy_time_ns": 4122582263,
+		"docker_startup_time_ns": 63048293658,
+		"reset_wal_time_ns": 60067694827,
+		"postgres_startup_time_ns": 2979209372,
+		"teardown_time_ns": 105742264766,
+		"valid": true
+	},
+	{
+		"iteration": 13,
+		"checkpoint_time_ns": 2240726937988,
+		"copy_time_ns": 11129743431,
+		"docker_startup_time_ns": 72365174841,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 0,
+		"teardown_time_ns": 0,
+		"valid": false
+	}
+]
