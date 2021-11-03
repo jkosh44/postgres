@@ -166,10 +166,7 @@ def main():
             line = line.decode(UTF_8)
         print(line, end="")
         if "Warmup complete, starting measurements" in line:
-            print("!!!!Benchbase starting!!!!")
             break
-        else:
-            print("!!!!Warming up!!!!")
 
     io_thread = Thread(target=collect_io_stats, args=(test_time,))
     ssd_thread = Thread(target=collect_ssd_stats, args=(test_time,))
