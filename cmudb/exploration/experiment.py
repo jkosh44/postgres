@@ -178,7 +178,12 @@ def main():
     io_thread.start()
     ssd_thread.start()
     print_thread.start()
+
+    print("Sleeping for 30 min")
+    time.sleep(1800)
+    print("Done sleeping, starting measurements")
     collect_results(result_file, benchbase_proc)
+
     global done
     done = True
     io_thread.join()

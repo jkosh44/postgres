@@ -11,15 +11,19 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/test_result_1635906955.702432.json_41G"
-IO_FILE_NAME = "results/zfs/checkpoint/iostats_1635906955.702432"
-SSD_FILE_NAME = "results/zfs/checkpoint/ssdstats_1635906955.702432"
+TEST_FILE_NAME = "results/zfs/checkpoint/test_result_1635966178.0825412.json_41G"
+IO_FILE_NAME = "results/zfs/checkpoint/iostats_1635966178.0825412"
+SSD_FILE_NAME = "results/zfs/checkpoint/ssdstats_1635966178.0825412"
 
 
 def main():
     analyze_checkpoint_time()
-    analyze_io_stats()
-    analyze_ssd_stats()
+    analyze_io_stats("wkB/s")
+    analyze_io_stats("rkB/s")
+    analyze_io_stats("r_await")
+    analyze_io_stats("w_await")
+    analyze_io_stats("%util")
+    analyze_ssd_stats("temperature")
 
 
 def analyze_checkpoint_time():
@@ -38,9 +42,8 @@ def analyze_checkpoint_time():
     plt.show()
 
 
-def analyze_io_stats():
+def analyze_io_stats(metric_name: str):
     stats = []
-    metric_name = "wkB/s"
     segment_length = 14
     with open(IO_FILE_NAME, "r") as f:
         lines = f.readlines()
@@ -80,14 +83,14 @@ def analyze_io_stats():
             stats.append((time, metric))
             lines = lines[segment_length:]
 
+    print(stats)
     df = pd.DataFrame(stats, columns=["Time", metric_name])
     df.plot(x="Time", y=metric_name, kind="line", title=metric_name)
     plt.show()
 
 
-def analyze_ssd_stats():
+def analyze_ssd_stats(metric_name: str):
     stats = []
-    metric_name = "temperature"
     segment_length = 27
     with open(SSD_FILE_NAME, "r") as f:
         lines = f.readlines()
