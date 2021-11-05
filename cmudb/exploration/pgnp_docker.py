@@ -99,7 +99,7 @@ def start_exploration_docker() -> subprocess.Popen:
         line = compose.stdout.readline()
         if line is not None:
             line = line.decode(UTF_8)
-        print(line)
+        print(line, sep="")
         docker_not_started = "Exploring" not in line and compose.poll() is None
         time.sleep(10)
     return compose

@@ -115,7 +115,7 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
         while benchbase_proc.poll() is None:
             print(f"benchbase poll: {benchbase_proc.poll()}")
             start_time = time.time_ns()
-            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid, error_msg, precheckpoint_dirty_pages, precheckpoint_dirty_pages = test_copy()
+            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid, error_msg, precheckpoint_dirty_pages, postcheckpoint_dirty_pages = test_copy()
             if not first_obj:
                 f.write(",\n")
             f.write("\t{\n")

@@ -64,11 +64,6 @@ if [ -z "$NP_WAL_LEVEL" ]; then
   NP_WAL_LEVEL="replica"
 fi
 
-#TODO fix this hack
-cd /home/terrier/repo/contrib/pg_buffercache
-make install
-cd -
-
 # =====================================================================
 # Helper functions.
 # =====================================================================
@@ -228,12 +223,16 @@ _wait_for_primary() {
 }
 
 _main_primary() {
+  #TODO fix this hack
+  make install -f /home/terrier/repo/contrib/pg_buffercache
   _pg_start_all
   _pg_stop
   _pg_start
 }
 
 _main_replica() {
+  #TODO fix this hack
+  make install -f /home/terrier/repo/contrib/pg_buffercache
   _wait_for_primary
 
   # Initialize replica backup from primary.
