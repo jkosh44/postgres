@@ -11,9 +11,9 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/test_result_1635966178.0825412.json_41G"
-IO_FILE_NAME = "results/zfs/checkpoint/iostats_1635966178.0825412"
-SSD_FILE_NAME = "results/zfs/checkpoint/ssdstats_1635966178.0825412"
+TEST_FILE_NAME = "results/zfs/checkpoint/pause/test_result_1636047716.0916283.json_42G"
+IO_FILE_NAME = "results/zfs/checkpoint/pause/iostats_1636047716.0916283"
+SSD_FILE_NAME = "results/zfs/checkpoint/pause/ssdstats_1636047716.0916283"
 
 
 def main():

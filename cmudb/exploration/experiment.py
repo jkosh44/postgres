@@ -37,10 +37,14 @@ def validate_exploration_process() -> bool:
                     in tables])
 
 
-def test_copy() -> Tuple[int, int, int, int, int, int, bool, str]:
+def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
     # Start exploration instance
     print("Taking checkpoint")
+    precheckpoint_dirty_pages = int(
+        execute_sql("SELECT COUNT(*) FROM pg_buffercache WHERE isdirty = 't'", REPLICA_PORT)[0])
     _, checkpoint_time_ns = timed_execution(checkpoint, REPLICA_PORT)
+    postcheckpoint_dirty_pages = int(
+        execute_sql("SELECT COUNT(*) FROM pg_buffercache WHERE isdirty = 't'", REPLICA_PORT)[0])
     print("Checkpoint complete")
     print("Copying replica data")
     _, copy_time_ns = timed_execution(copy_pgdata_cow)
@@ -53,7 +57,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str]:
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
         return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, 0, 0, 0, False, \
-               f"Container failed to start, return code {ret_code}"
+               f"Container failed to start, return code {ret_code}", precheckpoint_dirty_pages, postcheckpoint_dirty_pages
     execute_in_container(EXPLORATION,
                          f"sudo chown terrier:terrier -R {PGDATA_LOC}")
     execute_in_container(EXPLORATION, f"sudo chmod 700 -R {PGDATA_LOC}")
@@ -72,7 +76,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str]:
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
         return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, 0, valid, \
-               f"Postgres failed to start, return code {ret_code}"
+               f"Postgres failed to start, return code {ret_code}", precheckpoint_dirty_pages, postcheckpoint_dirty_pages
     print("Exploration postgres instance started")
 
     # Validate exploration instance
@@ -92,7 +96,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str]:
     _, snapshot_destroy_time = timed_execution(destroy_exploratory_data_cow)
     teardown_time = postgres_stop_time_ns + docker_teardown_time + snapshot_destroy_time
 
-    return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, teardown_time, valid, "" if valid else "Data lost"
+    return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, teardown_time, valid, "" if valid else "Data lost", precheckpoint_dirty_pages, postcheckpoint_dirty_pages
 
 
 def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
@@ -105,13 +109,15 @@ def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
         while benchbase_proc.poll() is None:
             print(f"benchbase poll: {benchbase_proc.poll()}")
             start_time = time.time_ns()
-            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid, error_msg = test_copy()
+            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid, error_msg, precheckpoint_dirty_pages, precheckpoint_dirty_pages = test_copy()
             if not first_obj:
                 f.write(",\n")
             f.write("\t{\n")
             f.write(f'\t\t"iteration": {i},\n')
             f.write(f'\t\t"start_time_ns": {start_time},\n')
+            f.write(f'\t\t"precheckpoint_dirty_pages": {precheckpoint_dirty_pages},\n')
             f.write(f'\t\t"checkpoint_time_ns": {checkpoint_time_ns},\n')
+            f.write(f'\t\t"postcheckpoint_dirty_pages": {postcheckpoint_dirty_pages},\n')
             f.write(f'\t\t"copy_time_ns": {copy_time_ns},\n')
             f.write(
                 f'\t\t"docker_startup_time_ns": {docker_startup_time_ns},\n')
@@ -147,6 +153,8 @@ def main():
 
     execute_sql("ALTER SYSTEM SET log_min_error_statement TO 'FATAL';", 15721)
     execute_sql("ALTER SYSTEM SET log_min_error_statement TO 'FATAL';", 15722)
+    execute_sql("CREATE EXTENSION pg_buffercache;", 15721)
+    execute_sql("CREATE EXTENSION pg_buffercache;", 15722)
 
     # Load some data into primary for validation
     load_validation_data()
@@ -179,9 +187,6 @@ def main():
     ssd_thread.start()
     print_thread.start()
 
-    print("Sleeping for 30 min")
-    time.sleep(1800)
-    print("Done sleeping, starting measurements")
     collect_results(result_file, benchbase_proc)
 
     global done

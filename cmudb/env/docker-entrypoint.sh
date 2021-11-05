@@ -64,6 +64,11 @@ if [ -z "$NP_WAL_LEVEL" ]; then
   NP_WAL_LEVEL="replica"
 fi
 
+#TODO fix this hack
+cd /home/terrier/repo/contrib/pg_buffercache
+make install
+cd -
+
 # =====================================================================
 # Helper functions.
 # =====================================================================
