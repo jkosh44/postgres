@@ -224,7 +224,7 @@ _wait_for_primary() {
 
 _main_primary() {
   #TODO fix this hack
-  make install -f /home/terrier/repo/contrib/pg_buffercache
+  make install -f /home/terrier/repo/contrib/pg_buffercache/Makefile -C /home/terrier/repo/contrib/pg_buffercache
   _pg_start_all
   _pg_stop
   _pg_start
