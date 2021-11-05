@@ -41,14 +41,14 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
     # Start exploration instance
     print("Taking checkpoint")
     precheckpoint_dirty_pages = execute_sql("SELECT COUNT(*) FROM pg_buffercache WHERE isdirty != 'f'", REPLICA_PORT)
-    print(precheckpoint_dirty_pages)
     if len(precheckpoint_dirty_pages) > 0:
         precheckpoint_dirty_pages = int(precheckpoint_dirty_pages[0])
     else:
         precheckpoint_dirty_pages = 0
+
     _, checkpoint_time_ns = timed_execution(checkpoint, REPLICA_PORT)
+
     postcheckpoint_dirty_pages = execute_sql("SELECT COUNT(*) FROM pg_buffercache WHERE isdirty != 'f'", REPLICA_PORT)
-    print(postcheckpoint_dirty_pages)
     if len(postcheckpoint_dirty_pages) > 0:
         postcheckpoint_dirty_pages = int(postcheckpoint_dirty_pages[0])
     else:

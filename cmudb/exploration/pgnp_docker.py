@@ -86,8 +86,7 @@ def start_replication_docker() -> subprocess.Popen:
     # Make sure that container doesn't reuse machine's IP address
     execute_sys_command("sudo docker network create --driver=bridge --subnet 172.19.253.0/30 tombstone")
     # Hide output because TPCC aborts clog stdout
-    # TODO change
-    return create_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, OutputStrategy.Print)
+    return create_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, OutputStrategy.Hide)
 
 
 def start_exploration_docker() -> subprocess.Popen:
