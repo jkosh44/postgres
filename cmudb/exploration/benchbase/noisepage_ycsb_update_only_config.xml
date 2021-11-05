@@ -13,22 +13,22 @@
     <!-- Scalefactor in YCSB is *1000 the number of rows in the USERTABLE-->
 <!-- 114G  -->
 <!-- <scalefactor>100000</scalefactor>-->
-<!--     <scalefactor>50000</scalefactor>-->
+     <scalefactor>50000</scalefactor>
  <!-- 13G -->
 <!--     <scalefactor>10000</scalefactor>-->
 <!-- 2G -->
- <scalefactor>1000</scalefactor>
+<!-- <scalefactor>1000</scalefactor>-->
 <!--    <scalefactor>1</scalefactor>-->
 
     <!-- The workload -->
     <terminals>50</terminals>
     <works>
         <work>
-<!--            <time>36000</time>-->
+            <time>36000</time>
 <!--            <time>43200</time>-->
 <!--            <time>14400</time>-->
 <!--            <time>600</time>-->
-            <time>120</time>
+<!--            <time>120</time>-->
             <rate>10000</rate>
             <weights>100</weights>
         </work>
