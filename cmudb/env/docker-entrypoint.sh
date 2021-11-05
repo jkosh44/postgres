@@ -232,7 +232,7 @@ _main_primary() {
 
 _main_replica() {
   #TODO fix this hack
-  make install -f /home/terrier/repo/contrib/pg_buffercache
+  make install -f /home/terrier/repo/contrib/pg_buffercache/Makefile -C /home/terrier/repo/contrib/pg_buffercache
   _wait_for_primary
 
   # Initialize replica backup from primary.
