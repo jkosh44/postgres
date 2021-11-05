@@ -17,8 +17,8 @@
  <!-- 13G -->
 <!--     <scalefactor>10000</scalefactor>-->
 <!-- 2G -->
-<!-- <scalefactor>1000</scalefactor>-->
-    <scalefactor>1</scalefactor>
+ <scalefactor>1000</scalefactor>
+<!--    <scalefactor>1</scalefactor>-->
 
     <!-- The workload -->
     <terminals>50</terminals>
@@ -28,7 +28,7 @@
 <!--            <time>43200</time>-->
 <!--            <time>14400</time>-->
 <!--            <time>600</time>-->
-            <time>30</time>
+            <time>120</time>
             <rate>10000</rate>
             <weights>100</weights>
         </work>
