@@ -5,19 +5,23 @@ from matplotlib import pyplot as plt
 
 CHECKPOINT_TIME_NS = "checkpoint_time_ns"
 CHECKPOINT_TIME = "checkpoint_time"
+PRECHECKPOINT_DIRTY_PAGE = "precheckpoint_dirty_pages"
+POSTCHECKPOINT_DIRTY_PAGE = "postcheckpoint_dirty_pages"
 START_TIME_NS = "start_time_ns"
 START_TIME = "start_time"
 VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/pause/test_result_1636047716.0916283.json_42G"
-IO_FILE_NAME = "results/zfs/checkpoint/pause/iostats_1636047716.0916283"
-SSD_FILE_NAME = "results/zfs/checkpoint/pause/ssdstats_1636047716.0916283"
+TEST_FILE_NAME = "results/zfs/checkpoint/buffercache/test_result_1636142832.179653.json_42G"
+IO_FILE_NAME = "results/zfs/checkpoint/buffercache/iostats_1636142832.179653"
+SSD_FILE_NAME = "results/zfs/checkpoint/buffercache/ssdstats_1636142832.179653"
 
 
 def main():
-    analyze_checkpoint_time()
+    analyze_postgres_stats_time(CHECKPOINT_TIME_NS, CHECKPOINT_TIME)
+    analyze_postgres_stats(PRECHECKPOINT_DIRTY_PAGE)
+    analyze_postgres_stats(POSTCHECKPOINT_DIRTY_PAGE)
     analyze_io_stats("wkB/s")
     analyze_io_stats("rkB/s")
     analyze_io_stats("r_await")
@@ -26,9 +30,9 @@ def main():
     analyze_ssd_stats("temperature")
 
 
-def analyze_checkpoint_time():
+def analyze_postgres_stats_time(metric_name_ns: str, metric_name_sec: str):
     measurements = [
-        (CHECKPOINT_TIME_NS, CHECKPOINT_TIME),
+        (metric_name_ns, metric_name_sec),
         (START_TIME_NS, START_TIME)
     ]
 
@@ -38,7 +42,17 @@ def analyze_checkpoint_time():
 
     valid_measurements = df[df[VALID]]
 
-    valid_measurements.plot(x=START_TIME, y=CHECKPOINT_TIME, kind="line", title="Checkpoint time (sec)")
+    valid_measurements.plot(x=START_TIME, y=metric_name_sec, kind="line", title=f"{metric_name_sec} (sec)")
+    plt.show()
+
+
+def analyze_postgres_stats(metric_name: str):
+    df = pd.read_json(TEST_FILE_NAME)
+    df[START_TIME] = df[START_TIME_NS] / NS_PER_SEC
+
+    valid_measurements = df[df[VALID]]
+
+    valid_measurements.plot(x=START_TIME, y=metric_name, kind="line", title=f"{metric_name}")
     plt.show()
 
 
@@ -83,7 +97,6 @@ def analyze_io_stats(metric_name: str):
             stats.append((time, metric))
             lines = lines[segment_length:]
 
-    print(stats)
     df = pd.DataFrame(stats, columns=["Time", metric_name])
     df.plot(x="Time", y=metric_name, kind="line", title=metric_name)
     plt.show()

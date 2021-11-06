@@ -20,7 +20,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/zfs/checkpoint/pause/test_result_1636047716.0916283.json_42G"
+FILE_NAME = "results/zfs/checkpoint/buffercache/test_result_1636142832.179653.json_42G"
 
 
 def main():
@@ -40,7 +40,8 @@ def main():
         df[sec_measurement] = df[ns_measurement] / NS_PER_SEC
         df[TOTAL_TIME] += df[sec_measurement]
 
-    valid_measurements = df[df[VALID]]
+    # valid_measurements = df[df[VALID]]
+    valid_measurements = df
     print(df[TOTAL_TIME])
     # valid_measurements.plot(x=ITERATION, y=sec_measurements,
     #                         kind="line", title="COW (seconds)")

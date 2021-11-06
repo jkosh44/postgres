@@ -110,36 +110,56 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
 def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
     # Incrementally write to file so we don't lose data in case of runtime failure
     with open(result_file, "w") as f:
-        i = 0
+        global_iteration = 0
         # TODO find out cleaner way to write json
         f.write("[\n")
         first_obj = True
-        while benchbase_proc.poll() is None:
-            print(f"benchbase poll: {benchbase_proc.poll()}")
-            start_time = time.time_ns()
-            checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid, error_msg, precheckpoint_dirty_pages, postcheckpoint_dirty_pages = test_copy()
-            if not first_obj:
-                f.write(",\n")
-            f.write("\t{\n")
-            f.write(f'\t\t"iteration": {i},\n')
-            f.write(f'\t\t"start_time_ns": {start_time},\n')
-            f.write(f'\t\t"precheckpoint_dirty_pages": {precheckpoint_dirty_pages},\n')
-            f.write(f'\t\t"checkpoint_time_ns": {checkpoint_time_ns},\n')
-            f.write(f'\t\t"postcheckpoint_dirty_pages": {postcheckpoint_dirty_pages},\n')
-            f.write(f'\t\t"copy_time_ns": {copy_time_ns},\n')
-            f.write(
-                f'\t\t"docker_startup_time_ns": {docker_startup_time_ns},\n')
-            f.write(
-                f'\t\t"reset_wal_time_ns": {reset_wal_time_ns},\n')
-            f.write(
-                f'\t\t"postgres_startup_time_ns": {postgres_startup_time_ns},\n')
-            f.write(f'\t\t"teardown_time_ns": {teardown_time_ns},\n')
-            f.write(f'\t\t"valid": {"true" if valid else "false"},\n')
-            f.write(f'\t\t"error": "{error_msg}"\n')
-            f.write("\t}")
-            f.flush()
-            i += 1
-            first_obj = False
+
+        for benchbase_iteration in range(5):
+            benchbase_proc = run_benchbase(create=False, load=False, execute=True,
+                                           block=False,
+                                           output_strategy=OutputStrategy.Capture)
+
+            for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
+                if isinstance(line, bytes):
+                    line = line.decode(UTF_8)
+                print(line, end="")
+                if "Warmup complete, starting measurements" in line:
+                    break
+
+            print_thread = Thread(target=print_benchbase_output, args=(benchbase_proc,))
+            print_thread.start()
+
+            while benchbase_proc.poll() is None:
+                print(f"benchbase poll: {benchbase_proc.poll()}")
+                start_time = time.time_ns()
+                checkpoint_time_ns, copy_time_ns, docker_startup_time_ns, reset_wal_time_ns, postgres_startup_time_ns, teardown_time_ns, valid, error_msg, precheckpoint_dirty_pages, postcheckpoint_dirty_pages = test_copy()
+                if not first_obj:
+                    f.write(",\n")
+                f.write("\t{\n")
+                f.write(f'\t\t"global_iteration": {global_iteration},\n')
+                f.write(f'\t\t"global_iteration": {benchbase_iteration},\n')
+                f.write(f'\t\t"start_time_ns": {start_time},\n')
+                f.write(f'\t\t"precheckpoint_dirty_pages": {precheckpoint_dirty_pages},\n')
+                f.write(f'\t\t"checkpoint_time_ns": {checkpoint_time_ns},\n')
+                f.write(f'\t\t"postcheckpoint_dirty_pages": {postcheckpoint_dirty_pages},\n')
+                f.write(f'\t\t"copy_time_ns": {copy_time_ns},\n')
+                f.write(
+                    f'\t\t"docker_startup_time_ns": {docker_startup_time_ns},\n')
+                f.write(
+                    f'\t\t"reset_wal_time_ns": {reset_wal_time_ns},\n')
+                f.write(
+                    f'\t\t"postgres_startup_time_ns": {postgres_startup_time_ns},\n')
+                f.write(f'\t\t"teardown_time_ns": {teardown_time_ns},\n')
+                f.write(f'\t\t"valid": {"true" if valid else "false"},\n')
+                f.write(f'\t\t"error": "{error_msg}"\n')
+                f.write("\t}")
+                f.flush()
+                global_iteration += 1
+                first_obj = False
+
+            print_thread.join()
+
         f.write("\n")
         f.write("]\n")
 
@@ -179,31 +199,18 @@ def main():
     db_size = get_pg_data_size(REPLICA)
     result_file = f"{result_file}_{db_size}"
 
-    benchbase_proc = run_benchbase(create=False, load=False, execute=True,
-                                   block=False,
-                                   output_strategy=OutputStrategy.Capture)
-
-    for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
-        if isinstance(line, bytes):
-            line = line.decode(UTF_8)
-        print(line, end="")
-        if "Warmup complete, starting measurements" in line:
-            break
-
     io_thread = Thread(target=collect_io_stats, args=(test_time,))
     ssd_thread = Thread(target=collect_ssd_stats, args=(test_time,))
-    print_thread = Thread(target=print_benchbase_output, args=(benchbase_proc,))
+
     io_thread.start()
     ssd_thread.start()
-    print_thread.start()
 
-    collect_results(result_file, benchbase_proc)
+    collect_results(result_file)
 
     global done
     done = True
     io_thread.join()
     ssd_thread.join()
-    print_thread.join()
 
     # throughput = get_benchbase_throughput(benchbase_proc)
     # print(f"Saving throughput {throughput}")
@@ -242,7 +249,7 @@ def collect_ssd_stats(test_time: float):
 
 
 def print_benchbase_output(benchbase_proc: subprocess.Popen):
-    while not done:
+    while benchbase_proc.poll() is None:
         for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
             if isinstance(line, bytes):
                 line = line.decode(UTF_8)
