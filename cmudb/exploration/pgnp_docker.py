@@ -1,3 +1,4 @@
+import os
 import subprocess
 import time
 from typing import AnyStr, Tuple, List
@@ -38,9 +39,11 @@ def create_volume(volume_name: str):
 
 
 def create_container(compose_yml: str, project_name: str, output_strategy: OutputStrategy) -> subprocess.Popen:
+    env = os.environ.copy()
+    env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 5)
     compose, _, _ = execute_sys_command(
         f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} up",
-        block=False, output_strategy=output_strategy)
+        env=env, block=False, output_strategy=output_strategy)
     return compose
 
 
@@ -49,7 +52,9 @@ def stop_container(container: subprocess.Popen):
 
 
 def destroy_container(compose_yml: str, project_name: str, container_names: List[str]):
-    execute_sys_command(f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} down --volumes")
+    env = os.environ.copy()
+    env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 5)
+    execute_sys_command(f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} down --volumes", env=env)
     for container_name in container_names:
         execute_sys_command(f"sudo docker rm {container_name}")
 

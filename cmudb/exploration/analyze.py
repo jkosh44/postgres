@@ -1,7 +1,8 @@
 import pandas as pd
 from matplotlib import pyplot as plt
 
-ITERATION = "iteration"
+GLOBAL_ITERATION = "global_iteration"
+BENCHBASE_ITERATION = "benchbase_iteration"
 CHECKPOINT_TIME_NS = "checkpoint_time_ns"
 CHECKPOINT_TIME = "checkpoint_time"
 COPY_TIME_NS = "copy_time_ns"
@@ -20,7 +21,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/zfs/checkpoint/buffercache/test_result_1636142832.179653.json_42G"
+FILE_NAME = "results/zfs/checkpoint/bench_restart/test_result_1636215027.390173.json_39G"
 
 
 def main():
@@ -40,13 +41,12 @@ def main():
         df[sec_measurement] = df[ns_measurement] / NS_PER_SEC
         df[TOTAL_TIME] += df[sec_measurement]
 
-    # valid_measurements = df[df[VALID]]
-    valid_measurements = df
+    valid_measurements = df[df[VALID]]
     print(df[TOTAL_TIME])
     # valid_measurements.plot(x=ITERATION, y=sec_measurements,
     #                         kind="line", title="COW (seconds)")
-    valid_measurements[:20].plot(x=ITERATION, y=sec_measurements, kind="bar",
-                                 stacked=True, title="COW 43 GB (seconds)")
+    valid_measurements.plot(x=GLOBAL_ITERATION, y=sec_measurements, kind="bar",
+                            stacked=True, title="COW 43 GB (seconds)")
     plt.show()
 
     for sec_measurement in sec_measurements:
