@@ -107,7 +107,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
     return checkpoint_time_ns, copy_time_ns, docker_start_time_ns, reset_wal_time, postgres_startup_time, teardown_time, valid, "" if valid else "Data lost", precheckpoint_dirty_pages, postcheckpoint_dirty_pages
 
 
-def collect_results(result_file: str, benchbase_proc: subprocess.Popen):
+def collect_results(result_file: str):
     # Incrementally write to file so we don't lose data in case of runtime failure
     with open(result_file, "w") as f:
         global_iteration = 0
