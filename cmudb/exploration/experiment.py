@@ -138,7 +138,7 @@ def collect_results(result_file: str):
                     f.write(",\n")
                 f.write("\t{\n")
                 f.write(f'\t\t"global_iteration": {global_iteration},\n')
-                f.write(f'\t\t"global_iteration": {benchbase_iteration},\n')
+                f.write(f'\t\t"benchbase_iteration": {benchbase_iteration},\n')
                 f.write(f'\t\t"start_time_ns": {start_time},\n')
                 f.write(f'\t\t"precheckpoint_dirty_pages": {precheckpoint_dirty_pages},\n')
                 f.write(f'\t\t"checkpoint_time_ns": {checkpoint_time_ns},\n')
