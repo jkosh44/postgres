@@ -13,9 +13,9 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/bench_restart/test_result_1636215027.390173.json_39G"
-IO_FILE_NAME = "results/zfs/checkpoint/bench_restart/iostats_1636215027.390173"
-SSD_FILE_NAME = "results/zfs/checkpoint/bench_restart/ssdstats_1636215027.390173"
+TEST_FILE_NAME = "results/zfs/checkpoint/increase_timeout/test_result_1636240563.7423668.json_42G"
+IO_FILE_NAME = "results/zfs/checkpoint/increase_timeout/iostats_1636240563.7423668"
+SSD_FILE_NAME = "results/zfs/checkpoint/increase_timeout/ssdstats_1636240563.7423668"
 
 
 def main():

@@ -61,6 +61,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
     exploratory_container, docker_start_time_ns = timed_execution(
         start_exploration_docker)
     if exploratory_container.returncode is not None:
+        print("Failed to start exploration container, cleaning up env")
         ret_code = exploratory_container.returncode
         shutdown_exploratory_docker(exploratory_container)
         destroy_exploratory_data_cow()
@@ -79,6 +80,7 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
         start_and_wait_for_postgres_instance, EXPLORATION,
         EXPLORATION_PORT)
     if not valid:
+        print("Failed to start exploration postgres instance, cleaning up env")
         ret_code = exploration_process.returncode
         stop_postgres_instance(exploration_process)
         shutdown_exploratory_docker(exploratory_container)
@@ -159,6 +161,7 @@ def collect_results(result_file: str):
                 first_obj = False
 
             print_thread.join()
+            time.sleep(60 * 15)
 
         f.write("\n")
         f.write("]\n")
