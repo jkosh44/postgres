@@ -161,7 +161,7 @@ def collect_results(result_file: str):
                 first_obj = False
 
             print_thread.join()
-            # time.sleep(60 * 15)
+            time.sleep(60 * 15)
 
         f.write("\n")
         f.write("]\n")
