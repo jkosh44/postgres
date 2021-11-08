@@ -161,7 +161,7 @@ def collect_results(result_file: str):
                 first_obj = False
 
             print_thread.join()
-            time.sleep(60 * 15)
+            # time.sleep(60 * 15)
 
         f.write("\n")
         f.write("]\n")
@@ -210,11 +210,13 @@ def main():
 
     collect_results(result_file)
 
+    print("Joining threads")
     global done
     done = True
     io_thread.join()
     ssd_thread.join()
     dstat_thread.join()
+    print("Threads joined")
 
     # throughput = get_benchbase_throughput(benchbase_proc)
     # print(f"Saving throughput {throughput}")
