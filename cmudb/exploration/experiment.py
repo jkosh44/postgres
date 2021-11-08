@@ -117,7 +117,7 @@ def collect_results(result_file: str):
         f.write("[\n")
         first_obj = True
 
-        for benchbase_iteration in range(5):
+        for benchbase_iteration in range(2):
             benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                            block=False,
                                            output_strategy=OutputStrategy.Capture)
@@ -168,8 +168,6 @@ def collect_results(result_file: str):
 
 
 def main():
-    # TODO set COMPOSE_HTTP_TIMEOUT to higher than 60
-
     print("Set up Docker environment")
     setup_docker_env()
     print("Docker environment set up")
@@ -204,9 +202,11 @@ def main():
 
     io_thread = Thread(target=collect_io_stats, args=(test_time,))
     ssd_thread = Thread(target=collect_ssd_stats, args=(test_time,))
+    dstat_thread = Thread(target=collect_dstat, args=(test_time,))
 
     io_thread.start()
     ssd_thread.start()
+    dstat_thread.start()
 
     collect_results(result_file)
 
@@ -214,6 +214,7 @@ def main():
     done = True
     io_thread.join()
     ssd_thread.join()
+    dstat_thread.join()
 
     # throughput = get_benchbase_throughput(benchbase_proc)
     # print(f"Saving throughput {throughput}")
@@ -257,6 +258,18 @@ def print_benchbase_output(benchbase_proc: subprocess.Popen):
             if isinstance(line, bytes):
                 line = line.decode(UTF_8)
             print(line, end="")
+
+
+def collect_dstat(test_time: float):
+    with open(f"dstat_{test_time}", "w") as f:
+        while not done:
+            start_time = time.time_ns()
+            _, out, _ = execute_sys_command(f"sudo dstat --noupdate -amst 1 1", output_strategy=OutputStrategy.Capture,
+                                            block=True)
+            f.write(f"Time: {start_time}\n")
+            f.write(f"{out}\n\n")
+            f.flush()
+            time.sleep(10)
 
 
 done = False
