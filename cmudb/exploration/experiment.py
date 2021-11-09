@@ -117,7 +117,7 @@ def collect_results(result_file: str):
         f.write("[\n")
         first_obj = True
 
-        benchbase_iterations = 3
+        benchbase_iterations = 1
         for benchbase_iteration in range(benchbase_iterations):
             benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                            block=False,
