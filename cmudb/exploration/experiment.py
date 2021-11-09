@@ -117,7 +117,7 @@ def collect_results(result_file: str):
         f.write("[\n")
         first_obj = True
 
-        benchbase_iterations = 1
+        benchbase_iterations = 5
         for benchbase_iteration in range(benchbase_iterations):
             benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                            block=False,
@@ -281,3 +281,7 @@ done = False
 
 if __name__ == "__main__":
     main()
+
+
+# TODO get benchbase throughput bucketed (-b)
+# TODO check when the vaccuum runs
