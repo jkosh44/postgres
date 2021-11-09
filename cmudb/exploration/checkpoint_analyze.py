@@ -13,16 +13,16 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/pause/test_result_1636047716.0916283.json_42G"
-IO_FILE_NAME = "results/zfs/checkpoint/pause/iostats_1636047716.0916283"
-SSD_FILE_NAME = "results/zfs/checkpoint/pause/ssdstats_1636047716.0916283"
-DSTAT_FILE_NAME = "results/zfs/checkpoint/benchbase_pause/short/dstat_1636400373.6008236"
+TEST_FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/test_result_1636426087.3657014.json_42G"
+IO_FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/iostats_1636426087.3657014"
+SSD_FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/ssdstats_1636426087.3657014"
+DSTAT_FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/dstat_1636426087.3657014"
 
 
 def main():
     analyze_postgres_stats_time(CHECKPOINT_TIME_NS, CHECKPOINT_TIME)
-    # analyze_postgres_stats(PRECHECKPOINT_DIRTY_PAGE)
-    # analyze_postgres_stats(POSTCHECKPOINT_DIRTY_PAGE)
+    analyze_postgres_stats(PRECHECKPOINT_DIRTY_PAGE)
+    analyze_postgres_stats(POSTCHECKPOINT_DIRTY_PAGE)
     analyze_io_stats("wkB/s")
     analyze_io_stats("rkB/s")
     # analyze_io_stats("r_await")
