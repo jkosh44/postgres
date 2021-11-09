@@ -117,7 +117,8 @@ def collect_results(result_file: str):
         f.write("[\n")
         first_obj = True
 
-        for benchbase_iteration in range(2):
+        benchbase_iterations = 3
+        for benchbase_iteration in range(benchbase_iterations):
             benchbase_proc = run_benchbase(create=False, load=False, execute=True,
                                            block=False,
                                            output_strategy=OutputStrategy.Capture)
@@ -161,7 +162,9 @@ def collect_results(result_file: str):
                 first_obj = False
 
             print_thread.join()
-            time.sleep(60 * 15)
+            # Sleep for an hour after bencbhase iterations, except for the last iteration
+            if benchbase_iteration < benchbase_iterations - 1:
+                time.sleep(60 * 60)
 
         f.write("\n")
         f.write("]\n")

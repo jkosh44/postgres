@@ -110,6 +110,14 @@ def start_exploration_docker() -> subprocess.Popen:
         print(line, sep="")
         docker_not_started = "Exploring" not in line and compose.poll() is None
         time.sleep(10)
+
+    # Print all remaining output if failed
+    if compose.returncode is not None:
+        for line in compose.stdout.readlines():
+            if line is not None:
+                line = line.decode(UTF_8)
+                print(line, sep="")
+
     return compose
 
 

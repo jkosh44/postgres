@@ -13,21 +13,25 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/benchbase_pause/test_result_1636313019.2045498.json_44G"
-IO_FILE_NAME = "results/zfs/checkpoint/benchbase_pause/iostats_1636313019.2045498"
-SSD_FILE_NAME = "results/zfs/checkpoint/benchbase_pause/ssdstats_1636313019.2045498"
+TEST_FILE_NAME = "results/zfs/checkpoint/pause/test_result_1636047716.0916283.json_42G"
+IO_FILE_NAME = "results/zfs/checkpoint/pause/iostats_1636047716.0916283"
+SSD_FILE_NAME = "results/zfs/checkpoint/pause/ssdstats_1636047716.0916283"
+DSTAT_FILE_NAME = "results/zfs/checkpoint/benchbase_pause/short/dstat_1636400373.6008236"
 
 
 def main():
     analyze_postgres_stats_time(CHECKPOINT_TIME_NS, CHECKPOINT_TIME)
-    analyze_postgres_stats(PRECHECKPOINT_DIRTY_PAGE)
-    analyze_postgres_stats(POSTCHECKPOINT_DIRTY_PAGE)
+    # analyze_postgres_stats(PRECHECKPOINT_DIRTY_PAGE)
+    # analyze_postgres_stats(POSTCHECKPOINT_DIRTY_PAGE)
     analyze_io_stats("wkB/s")
     analyze_io_stats("rkB/s")
-    analyze_io_stats("r_await")
-    analyze_io_stats("w_await")
-    analyze_io_stats("%util")
-    analyze_ssd_stats("temperature")
+    # analyze_io_stats("r_await")
+    # analyze_io_stats("w_await")
+    # analyze_io_stats("%util")
+    # analyze_ssd_stats("temperature")
+    # analyze_dstats("memory-usage", "free")
+    # analyze_dstats("swap", "used")
+    # analyze_dstats("total-cpu-usage", "idl")
 
 
 def analyze_postgres_stats_time(metric_name_ns: str, metric_name_sec: str):
@@ -130,6 +134,65 @@ def analyze_ssd_stats(metric_name: str):
 
     df = pd.DataFrame(stats, columns=["Time", metric_name])
     df.plot(x="Time", y=metric_name, kind="line", title=metric_name)
+    plt.show()
+
+
+def analyze_dstats(category_name: str, metric_name: str):
+    stats = []
+    # TODO UPDATE
+    segment_length = 6
+    with open(DSTAT_FILE_NAME, "r") as f:
+        lines = f.readlines()
+        while len(lines) > 0:
+            cur_lines = lines[:segment_length]
+
+            time_line = cur_lines[0]
+            time_search = re.search("Time: (\\d+)", time_line)
+            time = int(time_search.group(1)) / NS_PER_SEC
+            cur_lines = cur_lines[1:]
+
+            category_offset = 0
+            category_line = cur_lines[0]
+            categories = category_line.split(" ")
+            for category in categories:
+                if category_name in category:
+                    break
+                category_offset += 1
+            cur_lines = cur_lines[1:]
+
+            metric_offset = 0
+            metric_name_line = cur_lines[0]
+            metric_name_categories = metric_name_line.split("|")
+            metric_names_all = metric_name_categories[category_offset]
+            metric_names = metric_names_all.strip().split()
+            for cur_metric_name in metric_names:
+                if metric_name in cur_metric_name:
+                    break
+                metric_offset += 1
+            cur_lines = cur_lines[1:]
+
+            metric_line = cur_lines[0]
+            metric_categories = metric_line.split("|")
+            metric_category = metric_categories[category_offset]
+            metrics = metric_category.strip().split()
+            metric = metrics[metric_offset]
+
+            stats.append((time, metric))
+            lines = lines[segment_length:]
+
+    clean_stats = []
+    for time, metric in stats:
+        clean_metric = metric
+        if clean_metric.endswith("G"):
+            clean_metric = float(clean_metric[:-1])
+        elif clean_metric.endswith("M"):
+            clean_metric = float(clean_metric[:-1]) * 1000
+        else:
+            clean_metric = float(clean_metric)
+        clean_stats.append((time, clean_metric))
+
+    df = pd.DataFrame(clean_stats, columns=["Time", f"{category_name} {metric_name}"])
+    df.plot(x="Time", y=f"{category_name} {metric_name}", kind="line", title=f"{category_name} {metric_name}")
     plt.show()
 
 
