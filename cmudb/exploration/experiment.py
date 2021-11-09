@@ -162,9 +162,6 @@ def collect_results(result_file: str):
                 first_obj = False
 
             print_thread.join()
-            # Sleep for an hour after bencbhase iterations, except for the last iteration
-            if benchbase_iteration < benchbase_iterations - 1:
-                time.sleep(60 * 60)
 
         f.write("\n")
         f.write("]\n")
@@ -282,6 +279,4 @@ done = False
 if __name__ == "__main__":
     main()
 
-
-# TODO get benchbase throughput bucketed (-b)
 # TODO check when the vaccuum runs
