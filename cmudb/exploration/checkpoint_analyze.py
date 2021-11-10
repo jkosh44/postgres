@@ -14,12 +14,13 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/test_result_1636514835.5736291.json_39G"
-IO_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/iostats_1636514835.5736291"
-SSD_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/ssdstats_1636514835.5736291"
-DSTAT_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/dstat_1636514835.5736291"
-THROUGHPUT_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/throughput_1636514835.5736291"
-PG_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/pg_io_1636514835.5736291"
+TEST_FILE_NAME = "results/zfs/checkpoint/no_vacuum/even_more_stats/test_result_1636562947.2125547.json_39G"
+IO_FILE_NAME = "results/zfs/checkpoint/no_vacuum/even_more_stats/iostats_1636562947.2125547"
+SSD_FILE_NAME = "results/zfs/checkpoint/no_vacuum/even_more_stats/ssdstats_1636562947.2125547"
+DSTAT_FILE_NAME = "results/zfs/checkpoint/no_vacuum/even_more_stats/dstat_1636562947.2125547"
+THROUGHPUT_FILE_NAME = "results/zfs/checkpoint/no_vacuum/even_more_stats/throughput_1636562947.2125547"
+PG_REPLICA_FILE_NAME = "results/zfs/checkpoint/no_vacuum/even_more_stats/pg_io_replica_1636562947.2125547"
+PG_PRIMARY_FILE_NAME = "results/zfs/checkpoint/no_vacuum/even_more_stats/pg_io_primary_1636562947.2125547"
 
 
 def main():
@@ -35,8 +36,9 @@ def main():
     # analyze_dstats("memory-usage", "free")
     # analyze_dstats("swap", "used")
     # analyze_dstats("total-cpu-usage", "idl")
-    # analyze_postgres_process_stats()
-    analyze_benchbase_throughput()
+    # analyze_postgres_process_stats(PG_REPLICA_FILE_NAME)
+    analyze_postgres_process_stats(PG_PRIMARY_FILE_NAME)
+    # analyze_benchbase_throughput()
 
 
 def analyze_postgres_stats_time(metric_name_ns: str, metric_name_sec: str):
@@ -49,9 +51,7 @@ def analyze_postgres_stats_time(metric_name_ns: str, metric_name_sec: str):
     for ns_measurement, sec_measurement in measurements:
         df[sec_measurement] = df[ns_measurement] / NS_PER_SEC
 
-    valid_measurements = df[df[VALID]]
-
-    valid_measurements.plot(x=START_TIME, y=metric_name_sec, kind="line", title=f"{metric_name_sec} (sec)")
+    df.plot(x=START_TIME, y=metric_name_sec, kind="line", title=f"{metric_name_sec} (sec)")
     plt.show()
 
 
@@ -199,14 +199,33 @@ def analyze_dstats(category_name: str, metric_name: str):
     plt.show()
 
 
-def analyze_postgres_process_stats():
-    df = pd.read_json(PG_FILE_NAME)
+def analyze_postgres_process_stats(file: str):
+    df = pd.read_json(file)
     df[START_TIME] = df[START_TIME_NS] / NS_PER_SEC
-
+    trim_columns = ["startup recovering", "walreceiver streaming"]
     for column in df.columns:
+        new_column = " ".join(column.split()[1:])
+        if any([trim_column in new_column for trim_column in trim_columns]):
+            words = new_column.split()
+            trim_word = words[-1]
+            trim_words = trim_word.split("_")
+            new_column_words = words[:-1] + trim_words[1:]
+            new_column = " ".join(new_column_words)
+
         if column != START_TIME and column != START_TIME_NS:
-            df.plot(x=START_TIME, y=column, kind="line", title=f"{column}")
-            plt.show()
+            df = df.rename(columns={column: new_column})
+
+    columns = [column for column in df.columns]
+    columns.remove(START_TIME)
+    columns.remove(START_TIME_NS)
+
+    # df.plot(x=START_TIME, y=columns, kind="line", title=f"Postgres Process I/O")
+    # plt.legend(loc="center left", bbox_to_anchor=(1.0, 0.5))
+    # plt.subplots_adjust(right=0.59)
+    # plt.show()
+    for column in columns:
+        df.plot(x=START_TIME, y=column, kind="line", title=column)
+        plt.show()
 
 
 def analyze_benchbase_throughput():
