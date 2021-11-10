@@ -72,10 +72,12 @@ def execute_in_container(container_name: str, cmd: str, block: bool = True,
 
 def setup_docker_env():
     cleanup_docker_env()
-    build_image(IMAGE_TAG)
+    # TODO uncomment
+    # build_image(IMAGE_TAG)
 
 
 def cleanup_docker_env():
+    # TODO uncomment
     # execute_sys_command("sudo docker system prune -af")
     # execute_sys_command("sudo docker container prune -af")
     # execute_sys_command("sudo docker volume prune -af")

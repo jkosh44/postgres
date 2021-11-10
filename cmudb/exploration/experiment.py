@@ -285,8 +285,9 @@ def collect_process_io_stats(test_time: float):
                                              output_strategy=OutputStrategy.Capture)
     replica_pid = -1
     for line in receiver_out.split('\n'):
+        print(f"ppid line: {line}")
         if "postgres: walreceiver" in line:
-            print(f"ppid line: {line}")
+            print(f"ppid replica line: {line}")
             metrics = line.split()
             replica_pid = metrics[0]
             break
