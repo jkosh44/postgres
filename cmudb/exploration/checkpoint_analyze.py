@@ -1,3 +1,4 @@
+import datetime
 import re
 
 import pandas as pd
@@ -13,25 +14,29 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/no_vacuum/test_result_1636479729.5027022.json_40G"
-IO_FILE_NAME = "results/zfs/checkpoint/no_vacuum/iostats_1636479729.5027022"
-SSD_FILE_NAME = "results/zfs/checkpoint/no_vacuum/ssdstats_1636479729.5027022"
-DSTAT_FILE_NAME = "results/zfs/checkpoint/no_vacuum/dstat_1636479729.5027022"
+TEST_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/test_result_1636514835.5736291.json_39G"
+IO_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/iostats_1636514835.5736291"
+SSD_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/ssdstats_1636514835.5736291"
+DSTAT_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/dstat_1636514835.5736291"
+THROUGHPUT_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/throughput_1636514835.5736291"
+PG_FILE_NAME = "results/zfs/checkpoint/no_vacuum/more_stats/pg_io_1636514835.5736291"
 
 
 def main():
-    analyze_postgres_stats_time(CHECKPOINT_TIME_NS, CHECKPOINT_TIME)
-    analyze_postgres_stats(PRECHECKPOINT_DIRTY_PAGE)
-    analyze_postgres_stats(POSTCHECKPOINT_DIRTY_PAGE)
-    analyze_io_stats("wkB/s")
-    analyze_io_stats("rkB/s")
+    # analyze_postgres_stats_time(CHECKPOINT_TIME_NS, CHECKPOINT_TIME)
+    # analyze_exploratory_stats(PRECHECKPOINT_DIRTY_PAGE)
+    # analyze_exploratory_stats(POSTCHECKPOINT_DIRTY_PAGE)
+    # analyze_io_stats("wkB/s")
+    # analyze_io_stats("rkB/s")
     # analyze_io_stats("r_await")
     # analyze_io_stats("w_await")
     # analyze_io_stats("%util")
     # analyze_ssd_stats("temperature")
-    analyze_dstats("memory-usage", "free")
-    analyze_dstats("swap", "used")
-    analyze_dstats("total-cpu-usage", "idl")
+    # analyze_dstats("memory-usage", "free")
+    # analyze_dstats("swap", "used")
+    # analyze_dstats("total-cpu-usage", "idl")
+    # analyze_postgres_process_stats()
+    analyze_benchbase_throughput()
 
 
 def analyze_postgres_stats_time(metric_name_ns: str, metric_name_sec: str):
@@ -50,13 +55,11 @@ def analyze_postgres_stats_time(metric_name_ns: str, metric_name_sec: str):
     plt.show()
 
 
-def analyze_postgres_stats(metric_name: str):
+def analyze_exploratory_stats(metric_name: str):
     df = pd.read_json(TEST_FILE_NAME)
     df[START_TIME] = df[START_TIME_NS] / NS_PER_SEC
 
-    valid_measurements = df[df[VALID]]
-
-    valid_measurements.plot(x=START_TIME, y=metric_name, kind="line", title=f"{metric_name}")
+    df.plot(x=START_TIME, y=metric_name, kind="line", title=f"{metric_name}")
     plt.show()
 
 
@@ -193,6 +196,35 @@ def analyze_dstats(category_name: str, metric_name: str):
 
     df = pd.DataFrame(clean_stats, columns=["Time", f"{category_name} {metric_name}"])
     df.plot(x="Time", y=f"{category_name} {metric_name}", kind="line", title=f"{category_name} {metric_name}")
+    plt.show()
+
+
+def analyze_postgres_process_stats():
+    df = pd.read_json(PG_FILE_NAME)
+    df[START_TIME] = df[START_TIME_NS] / NS_PER_SEC
+
+    for column in df.columns:
+        if column != START_TIME and column != START_TIME_NS:
+            df.plot(x=START_TIME, y=column, kind="line", title=f"{column}")
+            plt.show()
+
+
+def analyze_benchbase_throughput():
+    stats = []
+    with open(THROUGHPUT_FILE_NAME, "r") as f:
+        for line in f.readlines():
+            if "Throughput" in line:
+                time_search = re.search("\\[INFO ] (\\d+-\\d+-\\d+ \\d+:\\d+:\\d+,\\d+) \\[Thread", line)
+                date_time_str = time_search.group(1)
+                date_time = datetime.datetime.strptime(date_time_str, "%Y-%m-%d %H:%M:%S,%f")
+                epoch = date_time.timestamp()
+
+                throughput_search = re.search("Throughput: (\\d+.\\d+) txn/sec", line)
+                throughput = float(throughput_search.group(1))
+                stats.append((epoch, throughput))
+
+    df = pd.DataFrame(stats, columns=["Time", "Throughput"])
+    df.plot(x="Time", y="Throughput", kind="line", title=f"Throughput txn/sec")
     plt.show()
 
 

@@ -188,13 +188,15 @@ def main():
     ssd_thread = Thread(target=collect_ssd_stats, args=(test_time,))
     dstat_thread = Thread(target=collect_dstat, args=(test_time,))
     benchbase_thread = Thread(target=process_benchbase_output, args=(benchbase_proc, test_time))
-    pg_stat_thread = Thread(target=collect_process_io_stats, args=(test_time,))
+    pg_stat_replica_thread = Thread(target=collect_process_io_stats, args=(test_time, True))
+    pg_stat_primary_thread = Thread(target=collect_process_io_stats, args=(test_time, False))
 
     io_thread.start()
     ssd_thread.start()
     dstat_thread.start()
     benchbase_thread.start()
-    pg_stat_thread.start()
+    pg_stat_replica_thread.start()
+    pg_stat_primary_thread.start()
 
     # Block until warmup is done
     for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
@@ -213,7 +215,8 @@ def main():
     ssd_thread.join()
     dstat_thread.join()
     benchbase_thread.join()
-    pg_stat_thread.join()
+    pg_stat_replica_thread.join()
+    pg_stat_primary_thread.join()
     print("Threads joined")
 
     cleanup_benchbase()
@@ -252,7 +255,7 @@ def process_benchbase_output(benchbase_proc: subprocess.Popen, test_time: float)
                 if isinstance(line, bytes):
                     line = line.decode(UTF_8)
                 if "Throughput" in line:
-                    f.write(f"{line}\n")
+                    f.write(f"{line}")
                 f.flush()
                 print(line, end="")
 
@@ -260,7 +263,7 @@ def process_benchbase_output(benchbase_proc: subprocess.Popen, test_time: float)
             if isinstance(line, bytes):
                 line = line.decode(UTF_8)
             if "Throughput" in line:
-                f.write(f"{line}\n")
+                f.write(f"{line}")
             print(line, end="")
 
 
@@ -276,33 +279,35 @@ def collect_dstat(test_time: float):
             time.sleep(10)
 
 
-def collect_process_io_stats(test_time: float):
+def collect_process_io_stats(test_time: float, replica: bool):
     # ps -A j columns
     # PPID index 0
     # PID index 1
     # COMMAND index 9
-    # Get replica postgres PID
+    # Get postgres PID
     _, receiver_out, _ = execute_sys_command("ps -A j", block=True,
                                              output_strategy=OutputStrategy.Capture)
-    replica_pid = -1
+    root_pid = -1
     for line in receiver_out.split('\n'):
-        if "postgres: walreceiver" in line:
+        command = "postgres: walreceiver" if replica else "postgres: walsender"
+        if command in line:
             metrics = line.split()
-            replica_pid = metrics[0]
+            root_pid = metrics[0]
             break
 
-    # Get replica child pids
+    # Get child pids
     child_pids = []
-    _, child_out, _ = execute_sys_command(f"ps --ppid {replica_pid} j", block=True,
+    _, child_out, _ = execute_sys_command(f"ps --ppid {root_pid} j", block=True,
                                           output_strategy=OutputStrategy.Capture)
     for line in child_out.split('\n'):
         metrics = line.split()
-        if len(metrics) > 0 and metrics[0] == replica_pid:
+        if len(metrics) > 0 and metrics[0] == root_pid:
             pid = metrics[1]
             command = " ".join(metrics[9:])
             child_pids.append((pid, command))
 
-    with open(f"pg_io_{test_time}", "w") as f:
+    file_marker = "replica" if replica else "primary"
+    with open(f"pg_io_{file_marker}_{test_time}", "w") as f:
         f.write("[\n")
         first_obj = True
         while not done:

@@ -1,0 +1,604 @@
+[INFO ] 2021-11-09 22:29:39,657 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 5411.95 txn/sec
+
+[INFO ] 2021-11-09 22:30:39,659 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 9303.133333333333 txn/sec
+
+[INFO ] 2021-11-09 22:31:39,661 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2988.016666666667 txn/sec
+
+[INFO ] 2021-11-09 22:32:39,662 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3012.1833333333334 txn/sec
+
+[INFO ] 2021-11-09 22:33:39,662 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3229.6666666666665 txn/sec
+
+[INFO ] 2021-11-09 22:34:39,663 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3989.133333333333 txn/sec
+
+[INFO ] 2021-11-09 22:35:39,664 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 6373.583333333333 txn/sec
+
+[INFO ] 2021-11-09 22:36:39,665 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4676.566666666667 txn/sec
+
+[INFO ] 2021-11-09 22:37:39,666 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2775.5 txn/sec
+
+[INFO ] 2021-11-09 22:38:39,669 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4603.966666666666 txn/sec
+
+[INFO ] 2021-11-09 22:39:39,670 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 5288.433333333333 txn/sec
+
+[INFO ] 2021-11-09 22:40:39,670 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3883.4166666666665 txn/sec
+
+[INFO ] 2021-11-09 22:41:39,671 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3189.15 txn/sec
+
+[INFO ] 2021-11-09 22:42:39,672 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3910.733333333333 txn/sec
+
+[INFO ] 2021-11-09 22:43:39,673 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4541.15 txn/sec
+
+[INFO ] 2021-11-09 22:44:39,673 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3195.65 txn/sec
+
+[INFO ] 2021-11-09 22:45:39,674 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2979.15 txn/sec
+
+[INFO ] 2021-11-09 22:46:39,674 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4089.016666666667 txn/sec
+
+[INFO ] 2021-11-09 22:47:39,675 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4140.2 txn/sec
+
+[INFO ] 2021-11-09 22:48:39,676 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3240.2166666666667 txn/sec
+
+[INFO ] 2021-11-09 22:49:39,677 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3799.4166666666665 txn/sec
+
+[INFO ] 2021-11-09 22:50:39,677 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4187.95 txn/sec
+
+[INFO ] 2021-11-09 22:51:39,678 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3279.766666666667 txn/sec
+
+[INFO ] 2021-11-09 22:52:39,678 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2249.5666666666666 txn/sec
+
+[INFO ] 2021-11-09 22:53:39,679 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3358.4333333333334 txn/sec
+
+[INFO ] 2021-11-09 22:54:39,679 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4052.4666666666667 txn/sec
+
+[INFO ] 2021-11-09 22:55:39,680 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2764.3166666666666 txn/sec
+
+[INFO ] 2021-11-09 22:56:39,680 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2744.05 txn/sec
+
+[INFO ] 2021-11-09 22:57:39,681 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4215.716666666666 txn/sec
+
+[INFO ] 2021-11-09 22:58:39,681 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4287.983333333334 txn/sec
+
+[INFO ] 2021-11-09 22:59:39,682 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3290.366666666667 txn/sec
+
+[INFO ] 2021-11-09 23:00:39,683 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2873.3333333333335 txn/sec
+
+[INFO ] 2021-11-09 23:01:39,684 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4139.983333333334 txn/sec
+
+[INFO ] 2021-11-09 23:02:39,685 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3231.266666666667 txn/sec
+
+[INFO ] 2021-11-09 23:03:39,685 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1796.1 txn/sec
+
+[INFO ] 2021-11-09 23:04:39,686 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4229.766666666666 txn/sec
+
+[INFO ] 2021-11-09 23:05:39,686 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4782.966666666666 txn/sec
+
+[INFO ] 2021-11-09 23:06:39,687 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3975.883333333333 txn/sec
+
+[INFO ] 2021-11-09 23:07:39,688 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2554.016666666667 txn/sec
+
+[INFO ] 2021-11-09 23:08:39,688 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3785.516666666667 txn/sec
+
+[INFO ] 2021-11-09 23:09:39,689 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4314.283333333334 txn/sec
+
+[INFO ] 2021-11-09 23:10:39,690 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2943.95 txn/sec
+
+[INFO ] 2021-11-09 23:11:39,690 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2273.05 txn/sec
+
+[INFO ] 2021-11-09 23:12:39,691 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4475.116666666667 txn/sec
+
+[INFO ] 2021-11-09 23:13:39,692 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4042.116666666667 txn/sec
+
+[INFO ] 2021-11-09 23:14:39,693 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3521.5333333333333 txn/sec
+
+[INFO ] 2021-11-09 23:15:39,694 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2066.85 txn/sec
+
+[INFO ] 2021-11-09 23:16:39,694 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3263.2 txn/sec
+
+[INFO ] 2021-11-09 23:17:39,695 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 4014.8 txn/sec
+
+[INFO ] 2021-11-09 23:18:39,695 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3820.4333333333334 txn/sec
+
+[INFO ] 2021-11-09 23:19:39,696 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2296.25 txn/sec
+
+[INFO ] 2021-11-09 23:20:39,696 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2020.5333333333333 txn/sec
+
+[INFO ] 2021-11-09 23:21:39,697 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3586.766666666667 txn/sec
+
+[INFO ] 2021-11-09 23:22:39,697 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3601.766666666667 txn/sec
+
+[INFO ] 2021-11-09 23:23:39,698 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3138.9166666666665 txn/sec
+
+[INFO ] 2021-11-09 23:24:39,698 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1762.85 txn/sec
+
+[INFO ] 2021-11-09 23:25:39,699 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3310.4166666666665 txn/sec
+
+[INFO ] 2021-11-09 23:26:39,700 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3651.3333333333335 txn/sec
+
+[INFO ] 2021-11-09 23:27:39,700 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3552.8333333333335 txn/sec
+
+[INFO ] 2021-11-09 23:28:39,701 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2252.2833333333333 txn/sec
+
+[INFO ] 2021-11-09 23:29:39,701 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1640.1166666666666 txn/sec
+
+[INFO ] 2021-11-09 23:30:39,702 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3416.25 txn/sec
+
+[INFO ] 2021-11-09 23:31:39,702 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3760.85 txn/sec
+
+[INFO ] 2021-11-09 23:32:39,703 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2900.633333333333 txn/sec
+
+[INFO ] 2021-11-09 23:33:39,704 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2189.516666666667 txn/sec
+
+[INFO ] 2021-11-09 23:34:39,705 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1945.5 txn/sec
+
+[INFO ] 2021-11-09 23:35:39,706 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3372.016666666667 txn/sec
+
+[INFO ] 2021-11-09 23:36:39,706 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3410.116666666667 txn/sec
+
+[INFO ] 2021-11-09 23:37:39,707 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2799.05 txn/sec
+
+[INFO ] 2021-11-09 23:38:39,707 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1974.3333333333333 txn/sec
+
+[INFO ] 2021-11-09 23:39:39,708 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2497.8 txn/sec
+
+[INFO ] 2021-11-09 23:40:39,709 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3491.633333333333 txn/sec
+
+[INFO ] 2021-11-09 23:41:39,709 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2669.7166666666667 txn/sec
+
+[INFO ] 2021-11-09 23:42:39,710 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2717.0833333333335 txn/sec
+
+[INFO ] 2021-11-09 23:43:39,711 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1825.2 txn/sec
+
+[INFO ] 2021-11-09 23:44:39,711 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2376.5333333333333 txn/sec
+
+[INFO ] 2021-11-09 23:45:39,712 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3465.633333333333 txn/sec
+
+[INFO ] 2021-11-09 23:46:39,713 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2575.55 txn/sec
+
+[INFO ] 2021-11-09 23:47:39,714 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2580.366666666667 txn/sec
+
+[INFO ] 2021-11-09 23:48:39,715 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1831.0 txn/sec
+
+[INFO ] 2021-11-09 23:49:39,715 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2263.4333333333334 txn/sec
+
+[INFO ] 2021-11-09 23:50:39,716 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3353.133333333333 txn/sec
+
+[INFO ] 2021-11-09 23:51:39,717 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2555.3 txn/sec
+
+[INFO ] 2021-11-09 23:52:39,717 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2661.6666666666665 txn/sec
+
+[INFO ] 2021-11-09 23:53:39,718 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1776.4833333333333 txn/sec
+
+[INFO ] 2021-11-09 23:54:39,719 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2126.7166666666667 txn/sec
+
+[INFO ] 2021-11-09 23:55:39,719 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3244.133333333333 txn/sec
+
+[INFO ] 2021-11-09 23:56:39,720 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2569.5333333333333 txn/sec
+
+[INFO ] 2021-11-09 23:57:39,720 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2695.15 txn/sec
+
+[INFO ] 2021-11-09 23:58:39,722 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1725.35 txn/sec
+
+[INFO ] 2021-11-09 23:59:39,723 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2216.5833333333335 txn/sec
+
+[INFO ] 2021-11-10 00:00:39,723 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3057.3 txn/sec
+
+[INFO ] 2021-11-10 00:01:39,724 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2602.95 txn/sec
+
+[INFO ] 2021-11-10 00:02:39,725 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2594.4666666666667 txn/sec
+
+[INFO ] 2021-11-10 00:03:39,726 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1749.35 txn/sec
+
+[INFO ] 2021-11-10 00:04:39,726 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2715.0666666666666 txn/sec
+
+[INFO ] 2021-11-10 00:05:39,727 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2685.05 txn/sec
+
+[INFO ] 2021-11-10 00:06:39,727 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2379.0833333333335 txn/sec
+
+[INFO ] 2021-11-10 00:07:39,728 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2605.133333333333 txn/sec
+
+[INFO ] 2021-11-10 00:08:39,728 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1975.9833333333333 txn/sec
+
+[INFO ] 2021-11-10 00:09:39,729 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2572.8 txn/sec
+
+[INFO ] 2021-11-10 00:10:39,730 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3082.0833333333335 txn/sec
+
+[INFO ] 2021-11-10 00:11:39,730 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2521.45 txn/sec
+
+[INFO ] 2021-11-10 00:12:39,731 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2485.0333333333333 txn/sec
+
+[INFO ] 2021-11-10 00:13:39,732 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1763.7666666666667 txn/sec
+
+[INFO ] 2021-11-10 00:14:39,733 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1934.6833333333334 txn/sec
+
+[INFO ] 2021-11-10 00:15:39,733 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3462.266666666667 txn/sec
+
+[INFO ] 2021-11-10 00:16:39,734 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2676.3333333333335 txn/sec
+
+[INFO ] 2021-11-10 00:17:39,735 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2522.116666666667 txn/sec
+
+[INFO ] 2021-11-10 00:18:39,735 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1671.6 txn/sec
+
+[INFO ] 2021-11-10 00:19:39,736 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1958.3333333333333 txn/sec
+
+[INFO ] 2021-11-10 00:20:39,736 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3396.45 txn/sec
+
+[INFO ] 2021-11-10 00:21:39,737 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2461.4666666666667 txn/sec
+
+[INFO ] 2021-11-10 00:22:39,737 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2504.8166666666666 txn/sec
+
+[INFO ] 2021-11-10 00:23:39,738 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1741.6166666666666 txn/sec
+
+[INFO ] 2021-11-10 00:24:39,739 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1951.05 txn/sec
+
+[INFO ] 2021-11-10 00:25:39,739 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3625.233333333333 txn/sec
+
+[INFO ] 2021-11-10 00:26:39,740 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2696.016666666667 txn/sec
+
+[INFO ] 2021-11-10 00:27:39,741 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2785.733333333333 txn/sec
+
+[INFO ] 2021-11-10 00:28:39,741 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1931.7666666666667 txn/sec
+
+[INFO ] 2021-11-10 00:29:39,742 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2205.0833333333335 txn/sec
+
+[INFO ] 2021-11-10 00:30:39,743 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3698.633333333333 txn/sec
+
+[INFO ] 2021-11-10 00:31:39,743 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2740.4166666666665 txn/sec
+
+[INFO ] 2021-11-10 00:32:39,744 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2677.25 txn/sec
+
+[INFO ] 2021-11-10 00:33:39,745 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1867.5 txn/sec
+
+[INFO ] 2021-11-10 00:34:39,745 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1786.4333333333334 txn/sec
+
+[INFO ] 2021-11-10 00:35:39,746 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3093.85 txn/sec
+
+[INFO ] 2021-11-10 00:36:39,747 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3461.1 txn/sec
+
+[INFO ] 2021-11-10 00:37:39,747 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2655.0333333333333 txn/sec
+
+[INFO ] 2021-11-10 00:38:39,748 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1768.5333333333333 txn/sec
+
+[INFO ] 2021-11-10 00:39:39,748 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1694.1333333333334 txn/sec
+
+[INFO ] 2021-11-10 00:40:39,749 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2521.616666666667 txn/sec
+
+[INFO ] 2021-11-10 00:41:39,750 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3850.85 txn/sec
+
+[INFO ] 2021-11-10 00:42:39,750 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2727.1 txn/sec
+
+[INFO ] 2021-11-10 00:43:39,751 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1596.3166666666666 txn/sec
+
+[INFO ] 2021-11-10 00:44:39,752 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1623.4166666666667 txn/sec
+
+[INFO ] 2021-11-10 00:45:39,752 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2726.483333333333 txn/sec
+
+[INFO ] 2021-11-10 00:46:39,753 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3930.633333333333 txn/sec
+
+[INFO ] 2021-11-10 00:47:39,754 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2914.0 txn/sec
+
+[INFO ] 2021-11-10 00:48:39,755 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1844.2666666666667 txn/sec
+
+[INFO ] 2021-11-10 00:49:39,755 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1866.0666666666666 txn/sec
+
+[INFO ] 2021-11-10 00:50:39,756 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2905.5833333333335 txn/sec
+
+[INFO ] 2021-11-10 00:51:39,756 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3527.4666666666667 txn/sec
+
+[INFO ] 2021-11-10 00:52:39,757 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3070.4166666666665 txn/sec
+
+[INFO ] 2021-11-10 00:53:39,758 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2020.6833333333334 txn/sec
+
+[INFO ] 2021-11-10 00:54:39,758 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1781.0833333333333 txn/sec
+
+[INFO ] 2021-11-10 00:55:39,759 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2222.05 txn/sec
+
+[INFO ] 2021-11-10 00:56:39,759 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3654.1 txn/sec
+
+[INFO ] 2021-11-10 00:57:39,760 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3632.8166666666666 txn/sec
+
+[INFO ] 2021-11-10 00:58:39,760 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2284.366666666667 txn/sec
+
+[INFO ] 2021-11-10 00:59:39,761 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1676.2 txn/sec
+
+[INFO ] 2021-11-10 01:00:39,762 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1843.5833333333333 txn/sec
+
+[INFO ] 2021-11-10 01:01:39,762 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3291.883333333333 txn/sec
+
+[INFO ] 2021-11-10 01:02:39,763 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3496.1666666666665 txn/sec
+
+[INFO ] 2021-11-10 01:03:39,764 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2016.8666666666666 txn/sec
+
+[INFO ] 2021-11-10 01:04:39,765 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1475.6 txn/sec
+
+[INFO ] 2021-11-10 01:05:39,765 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2113.016666666667 txn/sec
+
+[INFO ] 2021-11-10 01:06:39,766 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3742.3 txn/sec
+
+[INFO ] 2021-11-10 01:07:39,766 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3518.25 txn/sec
+
+[INFO ] 2021-11-10 01:08:39,767 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2061.65 txn/sec
+
+[INFO ] 2021-11-10 01:09:39,767 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1579.2333333333333 txn/sec
+
+[INFO ] 2021-11-10 01:10:39,768 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2561.116666666667 txn/sec
+
+[INFO ] 2021-11-10 01:11:39,768 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3794.266666666667 txn/sec
+
+[INFO ] 2021-11-10 01:12:39,769 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3637.55 txn/sec
+
+[INFO ] 2021-11-10 01:13:39,770 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2704.133333333333 txn/sec
+
+[INFO ] 2021-11-10 01:14:39,770 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1797.6166666666666 txn/sec
+
+[INFO ] 2021-11-10 01:15:39,771 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1925.95 txn/sec
+
+[INFO ] 2021-11-10 01:16:39,771 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3127.15 txn/sec
+
+[INFO ] 2021-11-10 01:17:39,772 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3644.8 txn/sec
+
+[INFO ] 2021-11-10 01:18:39,772 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2464.4 txn/sec
+
+[INFO ] 2021-11-10 01:19:39,773 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1773.7666666666667 txn/sec
+
+[INFO ] 2021-11-10 01:20:39,774 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2187.016666666667 txn/sec
+
+[INFO ] 2021-11-10 01:21:39,774 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3724.2166666666667 txn/sec
+
+[INFO ] 2021-11-10 01:22:39,775 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3346.0 txn/sec
+
+[INFO ] 2021-11-10 01:23:39,776 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2404.866666666667 txn/sec
+
+[INFO ] 2021-11-10 01:24:39,777 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1821.7 txn/sec
+
+[INFO ] 2021-11-10 01:25:39,777 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2091.7166666666667 txn/sec
+
+[INFO ] 2021-11-10 01:26:39,777 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3627.95 txn/sec
+
+[INFO ] 2021-11-10 01:27:39,778 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3443.3333333333335 txn/sec
+
+[INFO ] 2021-11-10 01:28:39,779 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1991.2333333333333 txn/sec
+
+[INFO ] 2021-11-10 01:29:39,780 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1659.6666666666667 txn/sec
+
+[INFO ] 2021-11-10 01:30:39,781 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1993.3166666666666 txn/sec
+
+[INFO ] 2021-11-10 01:31:39,782 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3886.383333333333 txn/sec
+
+[INFO ] 2021-11-10 01:32:39,782 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3342.6 txn/sec
+
+[INFO ] 2021-11-10 01:33:39,783 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2019.6333333333334 txn/sec
+
+[INFO ] 2021-11-10 01:34:39,783 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1488.1 txn/sec
+
+[INFO ] 2021-11-10 01:35:39,784 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2590.1666666666665 txn/sec
+
+[INFO ] 2021-11-10 01:36:39,785 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3688.5 txn/sec
+
+[INFO ] 2021-11-10 01:37:39,786 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3333.633333333333 txn/sec
+
+[INFO ] 2021-11-10 01:38:39,786 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2622.766666666667 txn/sec
+
+[INFO ] 2021-11-10 01:39:39,789 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1789.2666666666667 txn/sec
+
+[INFO ] 2021-11-10 01:40:39,804 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1984.5833333333333 txn/sec
+
+[INFO ] 2021-11-10 01:41:39,804 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3473.2833333333333 txn/sec
+
+[INFO ] 2021-11-10 01:42:39,805 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3129.35 txn/sec
+
+[INFO ] 2021-11-10 01:43:39,806 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2011.6166666666666 txn/sec
+
+[INFO ] 2021-11-10 01:44:39,807 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1688.9 txn/sec
+
+[INFO ] 2021-11-10 01:45:39,808 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2709.3333333333335 txn/sec
+
+[INFO ] 2021-11-10 01:46:39,808 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3814.483333333333 txn/sec
+
+[INFO ] 2021-11-10 01:47:39,809 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3340.3 txn/sec
+
+[INFO ] 2021-11-10 01:48:39,809 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2369.4666666666667 txn/sec
+
+[INFO ] 2021-11-10 01:49:39,810 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1634.6166666666666 txn/sec
+
+[INFO ] 2021-11-10 01:50:39,810 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1776.5166666666667 txn/sec
+
+[INFO ] 2021-11-10 01:51:39,811 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3307.5666666666666 txn/sec
+
+[INFO ] 2021-11-10 01:52:39,811 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3194.9666666666667 txn/sec
+
+[INFO ] 2021-11-10 01:53:39,812 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2023.2 txn/sec
+
+[INFO ] 2021-11-10 01:54:39,813 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1605.2 txn/sec
+
+[INFO ] 2021-11-10 01:55:39,813 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1991.8666666666666 txn/sec
+
+[INFO ] 2021-11-10 01:56:39,814 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3607.366666666667 txn/sec
+
+[INFO ] 2021-11-10 01:57:39,814 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3077.4333333333334 txn/sec
+
+[INFO ] 2021-11-10 01:58:39,815 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2258.65 txn/sec
+
+[INFO ] 2021-11-10 01:59:39,816 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1659.2333333333333 txn/sec
+
+[INFO ] 2021-11-10 02:00:39,816 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2003.5333333333333 txn/sec
+
+[INFO ] 2021-11-10 02:01:39,816 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3637.483333333333 txn/sec
+
+[INFO ] 2021-11-10 02:02:39,817 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3080.3 txn/sec
+
+[INFO ] 2021-11-10 02:03:39,817 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2003.2 txn/sec
+
+[INFO ] 2021-11-10 02:04:39,818 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1445.4666666666667 txn/sec
+
+[INFO ] 2021-11-10 02:05:39,818 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2550.7166666666667 txn/sec
+
+[INFO ] 2021-11-10 02:06:39,819 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3724.383333333333 txn/sec
+
+[INFO ] 2021-11-10 02:07:39,819 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3143.7 txn/sec
+
+[INFO ] 2021-11-10 02:08:39,820 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1931.3333333333333 txn/sec
+
+[INFO ] 2021-11-10 02:09:39,821 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1588.8833333333334 txn/sec
+
+[INFO ] 2021-11-10 02:10:39,821 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1894.9166666666667 txn/sec
+
+[INFO ] 2021-11-10 02:11:39,822 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3582.45 txn/sec
+
+[INFO ] 2021-11-10 02:12:39,822 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3102.116666666667 txn/sec
+
+[INFO ] 2021-11-10 02:13:39,822 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1870.9166666666667 txn/sec
+
+[INFO ] 2021-11-10 02:14:39,823 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1584.3333333333333 txn/sec
+
+[INFO ] 2021-11-10 02:15:39,824 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2067.2833333333333 txn/sec
+
+[INFO ] 2021-11-10 02:16:39,825 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3431.0666666666666 txn/sec
+
+[INFO ] 2021-11-10 02:17:39,825 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3017.7 txn/sec
+
+[INFO ] 2021-11-10 02:18:39,826 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1791.95 txn/sec
+
+[INFO ] 2021-11-10 02:19:39,826 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1263.7833333333333 txn/sec
+
+[INFO ] 2021-11-10 02:20:39,827 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2257.8 txn/sec
+
+[INFO ] 2021-11-10 02:21:39,827 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3347.75 txn/sec
+
+[INFO ] 2021-11-10 02:22:39,828 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2913.2 txn/sec
+
+[INFO ] 2021-11-10 02:23:39,828 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2082.8166666666666 txn/sec
+
+[INFO ] 2021-11-10 02:24:39,828 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1518.7833333333333 txn/sec
+
+[INFO ] 2021-11-10 02:25:39,829 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2369.85 txn/sec
+
+[INFO ] 2021-11-10 02:26:39,829 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3271.733333333333 txn/sec
+
+[INFO ] 2021-11-10 02:27:39,830 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2848.233333333333 txn/sec
+
+[INFO ] 2021-11-10 02:28:39,831 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1781.2833333333333 txn/sec
+
+[INFO ] 2021-11-10 02:29:39,832 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1347.5666666666666 txn/sec
+
+[INFO ] 2021-11-10 02:30:39,832 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2414.0333333333333 txn/sec
+
+[INFO ] 2021-11-10 02:31:39,833 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3325.35 txn/sec
+
+[INFO ] 2021-11-10 02:32:39,833 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2883.45 txn/sec
+
+[INFO ] 2021-11-10 02:33:39,834 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1844.5666666666666 txn/sec
+
+[INFO ] 2021-11-10 02:34:39,834 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1603.9666666666667 txn/sec
+
+[INFO ] 2021-11-10 02:35:39,835 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2505.0666666666666 txn/sec
+
+[INFO ] 2021-11-10 02:36:39,835 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3171.85 txn/sec
+
+[INFO ] 2021-11-10 02:37:39,836 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2978.9666666666667 txn/sec
+
+[INFO ] 2021-11-10 02:38:39,836 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1667.0166666666667 txn/sec
+
+[INFO ] 2021-11-10 02:39:39,837 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1440.2333333333333 txn/sec
+
+[INFO ] 2021-11-10 02:40:39,838 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2013.15 txn/sec
+
+[INFO ] 2021-11-10 02:41:39,838 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3203.016666666667 txn/sec
+
+[INFO ] 2021-11-10 02:42:39,839 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2831.116666666667 txn/sec
+
+[INFO ] 2021-11-10 02:43:39,839 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1803.35 txn/sec
+
+[INFO ] 2021-11-10 02:44:39,840 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1434.95 txn/sec
+
+[INFO ] 2021-11-10 02:45:39,840 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2746.4666666666667 txn/sec
+
+[INFO ] 2021-11-10 02:46:39,841 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2921.233333333333 txn/sec
+
+[INFO ] 2021-11-10 02:47:39,842 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2819.8166666666666 txn/sec
+
+[INFO ] 2021-11-10 02:48:39,842 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1912.8 txn/sec
+
+[INFO ] 2021-11-10 02:49:39,843 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1538.4166666666667 txn/sec
+
+[INFO ] 2021-11-10 02:50:39,843 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2202.4 txn/sec
+
+[INFO ] 2021-11-10 02:51:39,844 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2905.0666666666666 txn/sec
+
+[INFO ] 2021-11-10 02:52:39,844 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2669.4333333333334 txn/sec
+
+[INFO ] 2021-11-10 02:53:39,845 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1546.35 txn/sec
+
+[INFO ] 2021-11-10 02:54:39,845 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1272.9 txn/sec
+
+[INFO ] 2021-11-10 02:55:39,846 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2562.75 txn/sec
+
+[INFO ] 2021-11-10 02:56:39,846 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2938.9666666666667 txn/sec
+
+[INFO ] 2021-11-10 02:57:39,848 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2698.633333333333 txn/sec
+
+[INFO ] 2021-11-10 02:58:39,848 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1794.0166666666667 txn/sec
+
+[INFO ] 2021-11-10 02:59:39,848 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1458.0666666666666 txn/sec
+
+[INFO ] 2021-11-10 03:00:39,849 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2474.5833333333335 txn/sec
+
+[INFO ] 2021-11-10 03:01:39,849 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 3021.0666666666666 txn/sec
+
+[INFO ] 2021-11-10 03:02:39,850 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2887.0666666666666 txn/sec
+
+[INFO ] 2021-11-10 03:03:39,850 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1928.35 txn/sec
+
+[INFO ] 2021-11-10 03:04:39,851 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1526.65 txn/sec
+
+[INFO ] 2021-11-10 03:05:39,851 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2352.05 txn/sec
+
+[INFO ] 2021-11-10 03:06:39,852 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2928.0833333333335 txn/sec
+
+[INFO ] 2021-11-10 03:07:39,852 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2800.8166666666666 txn/sec
+
+[INFO ] 2021-11-10 03:08:39,853 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1862.1333333333334 txn/sec
+
+[INFO ] 2021-11-10 03:09:39,853 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1430.4833333333333 txn/sec
+
+[INFO ] 2021-11-10 03:10:39,853 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1976.6 txn/sec
+
+[INFO ] 2021-11-10 03:11:39,854 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2894.016666666667 txn/sec
+
+[INFO ] 2021-11-10 03:12:39,854 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2641.3333333333335 txn/sec
+
+[INFO ] 2021-11-10 03:13:39,855 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1570.8666666666666 txn/sec
+
+[INFO ] 2021-11-10 03:14:39,855 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1357.4833333333333 txn/sec
+
+[INFO ] 2021-11-10 03:15:39,856 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2669.5666666666666 txn/sec
+
+[INFO ] 2021-11-10 03:16:39,856 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2707.8333333333335 txn/sec
+
+[INFO ] 2021-11-10 03:17:39,857 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2542.383333333333 txn/sec
+
+[INFO ] 2021-11-10 03:18:39,857 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1667.5833333333333 txn/sec
+
+[INFO ] 2021-11-10 03:19:39,858 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1386.1 txn/sec
+
+[INFO ] 2021-11-10 03:20:39,858 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2217.016666666667 txn/sec
+
+[INFO ] 2021-11-10 03:21:39,858 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2687.7166666666667 txn/sec
+
+[INFO ] 2021-11-10 03:22:39,859 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2553.55 txn/sec
+
+[INFO ] 2021-11-10 03:23:39,859 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1780.2833333333333 txn/sec
+
+[INFO ] 2021-11-10 03:24:39,859 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1420.25 txn/sec
+
+[INFO ] 2021-11-10 03:25:39,860 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2347.383333333333 txn/sec
+
+[INFO ] 2021-11-10 03:26:39,860 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2509.65 txn/sec
+
+[INFO ] 2021-11-10 03:27:39,860 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 2378.95 txn/sec
+
+[INFO ] 2021-11-10 03:28:39,864 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 1628.7333333333333 txn/sec
+
+[INFO ] 2021-11-10 03:29:39,865 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 0.0 txn/sec
+
+[INFO ] 2021-11-10 03:30:39,865 [Thread-50]  com.oltpbenchmark.ThreadBench run - Throughput: 0.0 txn/sec
+
