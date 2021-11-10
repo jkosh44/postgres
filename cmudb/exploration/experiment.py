@@ -299,7 +299,7 @@ def collect_process_io_stats(test_time: float):
         metrics = line.split()
         if len(metrics) > 0 and metrics[0] == replica_pid:
             pid = metrics[1]
-            command = metrics[9]
+            command = " ".join(metrics[9:])
             child_pids.append((pid, command))
 
     with open(f"pg_io_{test_time}", "w") as f:
