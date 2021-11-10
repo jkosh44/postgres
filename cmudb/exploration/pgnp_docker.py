@@ -76,9 +76,9 @@ def setup_docker_env():
 
 
 def cleanup_docker_env():
-    execute_sys_command("sudo docker system prune -af")
-    execute_sys_command("sudo docker container prune -af")
-    execute_sys_command("sudo docker volume prune -af")
+    # execute_sys_command("sudo docker system prune -af")
+    # execute_sys_command("sudo docker container prune -af")
+    # execute_sys_command("sudo docker volume prune -af")
     destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, [PRIMARY, REPLICA])
     destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, [EXPLORATION])
     remove_primary_data()
