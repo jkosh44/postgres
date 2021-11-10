@@ -72,15 +72,13 @@ def execute_in_container(container_name: str, cmd: str, block: bool = True,
 
 def setup_docker_env():
     cleanup_docker_env()
-    # TODO uncomment
-    # build_image(IMAGE_TAG)
+    build_image(IMAGE_TAG)
 
 
 def cleanup_docker_env():
-    # TODO uncomment
-    # execute_sys_command("sudo docker system prune -af")
-    # execute_sys_command("sudo docker container prune -af")
-    # execute_sys_command("sudo docker volume prune -af")
+    execute_sys_command("sudo docker system prune -af")
+    execute_sys_command("sudo docker container prune -af")
+    execute_sys_command("sudo docker volume prune -af")
     destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, [PRIMARY, REPLICA])
     destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, [EXPLORATION])
     remove_primary_data()

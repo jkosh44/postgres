@@ -144,8 +144,8 @@ def collect_results(benchbase_proc: subprocess.Popen, result_file: str):
             global_iteration += 1
             first_obj = False
 
-    f.write("\n")
-    f.write("]\n")
+        f.write("\n")
+        f.write("]\n")
 
 
 def main():
