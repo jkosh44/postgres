@@ -13,10 +13,10 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/test_result_1636426087.3657014.json_42G"
-IO_FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/iostats_1636426087.3657014"
-SSD_FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/ssdstats_1636426087.3657014"
-DSTAT_FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/dstat_1636426087.3657014"
+TEST_FILE_NAME = "results/zfs/checkpoint/no_vacuum/test_result_1636479729.5027022.json_40G"
+IO_FILE_NAME = "results/zfs/checkpoint/no_vacuum/iostats_1636479729.5027022"
+SSD_FILE_NAME = "results/zfs/checkpoint/no_vacuum/ssdstats_1636479729.5027022"
+DSTAT_FILE_NAME = "results/zfs/checkpoint/no_vacuum/dstat_1636479729.5027022"
 
 
 def main():
@@ -29,9 +29,9 @@ def main():
     # analyze_io_stats("w_await")
     # analyze_io_stats("%util")
     # analyze_ssd_stats("temperature")
-    # analyze_dstats("memory-usage", "free")
-    # analyze_dstats("swap", "used")
-    # analyze_dstats("total-cpu-usage", "idl")
+    analyze_dstats("memory-usage", "free")
+    analyze_dstats("swap", "used")
+    analyze_dstats("total-cpu-usage", "idl")
 
 
 def analyze_postgres_stats_time(metric_name_ns: str, metric_name_sec: str):

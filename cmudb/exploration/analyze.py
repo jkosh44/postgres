@@ -21,7 +21,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/zfs/checkpoint/benchbase_long_pause_inbetween_tests/test_result_1636426087.3657014.json_42G"
+FILE_NAME = "results/zfs/checkpoint/no_vacuum/test_result_1636479729.5027022.json_40G"
 
 
 def main():
@@ -44,7 +44,7 @@ def main():
     # valid_measurements = df[df[VALID]]
     valid_measurements = df
     print(df[TOTAL_TIME])
-    valid_measurements.plot(x=BENCHBASE_ITERATION, y=sec_measurements, kind="bar",
+    valid_measurements.plot(x=GLOBAL_ITERATION, y=sec_measurements, kind="bar",
                             stacked=True, title="COW 43 GB (seconds)")
     plt.show()
 
