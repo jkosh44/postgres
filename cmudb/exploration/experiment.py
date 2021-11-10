@@ -318,9 +318,7 @@ def collect_process_io_stats(test_time: float):
                 # kB_wr/s 5
                 _, out, _ = execute_sys_command(f"pidstat -d -p {pid}", block=True,
                                                 output_strategy=OutputStrategy.Capture)
-                print(f"pidstat out: {out}")
                 metric_line = out.split('\n')[-2]
-                print(f"Metric line: {metric_line}")
                 metrics = metric_line.split()
                 rd = metrics[4]
                 wr = metrics[5]
