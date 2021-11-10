@@ -253,6 +253,7 @@ def process_benchbase_output(benchbase_proc: subprocess.Popen, test_time: float)
                     line = line.decode(UTF_8)
                 if "Throughput" in line:
                     f.write(f"{line}\n")
+                f.flush()
                 print(line, end="")
 
         for line in benchbase_proc.stdout.readlines():
@@ -317,6 +318,7 @@ def collect_process_io_stats(test_time: float):
                 # kB_wr/s 5
                 _, out, _ = execute_sys_command(f"pidstat -d -p {pid}", block=True,
                                                 output_strategy=OutputStrategy.Capture)
+                print(f"pidstat out: {out}")
                 metric_line = out.split('\n')[-1]
                 print(f"Metric line: {metric_line}")
                 metrics = metric_line.split()
@@ -326,6 +328,7 @@ def collect_process_io_stats(test_time: float):
                 f.write(f'\t\t"{command}_kB_wr/s": {wr},\n')
             f.write(f'\t\t"start_time_ns": {start_time}\n')
             f.write("\t}")
+            f.flush()
             time.sleep(10)
 
         f.write("\n")
