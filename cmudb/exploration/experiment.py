@@ -283,17 +283,12 @@ def collect_process_io_stats(test_time: float):
     # Get replica postgres PID
     _, receiver_out, _ = execute_sys_command("ps -A j", block=True,
                                              output_strategy=OutputStrategy.Capture)
-    print(f"receiver out: {receiver_out}")
     replica_pid = -1
     for line in receiver_out.split('\n'):
-        print(f"ppid line: {line}")
         if "postgres: walreceiver" in line:
-            print(f"ppid replica line: {line}")
             metrics = line.split()
             replica_pid = metrics[0]
             break
-
-    print(f"ppid: {replica_pid}")
 
     # Get replica child pids
     child_pids = []
@@ -302,7 +297,7 @@ def collect_process_io_stats(test_time: float):
     for line in child_out.split('\n'):
         metrics = line.split()
         print(f"metrics: {metrics}")
-        if metrics[0] == replica_pid:
+        if len(metrics) > 0 and metrics[0] == replica_pid:
             pid = metrics[1]
             command = metrics[9]
             child_pids.append((pid, command))
