@@ -296,7 +296,6 @@ def collect_process_io_stats(test_time: float):
                                           output_strategy=OutputStrategy.Capture)
     for line in child_out.split('\n'):
         metrics = line.split()
-        print(f"metrics: {metrics}")
         if len(metrics) > 0 and metrics[0] == replica_pid:
             pid = metrics[1]
             command = metrics[9]
@@ -316,8 +315,10 @@ def collect_process_io_stats(test_time: float):
                 # pidstat columns
                 # kB_rd/s 4
                 # kB_wr/s 5
-                _, out, _ = execute_sys_command(f"pidstat -d -p {pid}")
+                _, out, _ = execute_sys_command(f"pidstat -d -p {pid}", block=True,
+                                                output_strategy=OutputStrategy.Capture)
                 metric_line = out.split('\n')[-1]
+                print(f"Metric line: {metric_line}")
                 metrics = metric_line.split()
                 rd = metrics[4]
                 wr = metrics[5]
