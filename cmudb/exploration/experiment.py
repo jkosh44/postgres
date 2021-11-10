@@ -283,6 +283,7 @@ def collect_process_io_stats(test_time: float):
     # Get replica postgres PID
     _, receiver_out, _ = execute_sys_command("ps -A j | grep walreceiver", block=True,
                                              output_strategy=OutputStrategy.Capture)
+    print(f"receiver out: {receiver_out}")
     replica_pid = -1
     for line in receiver_out.split('\n'):
         print(f"ppid line: {line}")
