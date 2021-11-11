@@ -24,9 +24,9 @@ PG_PRIMARY_FILE_NAME = "results/zfs/checkpoint/no_vacuum/even_more_stats/pg_io_p
 
 
 def main():
-    # analyze_postgres_stats_time(CHECKPOINT_TIME_NS, CHECKPOINT_TIME)
-    # analyze_exploratory_stats(PRECHECKPOINT_DIRTY_PAGE)
-    # analyze_exploratory_stats(POSTCHECKPOINT_DIRTY_PAGE)
+    analyze_postgres_stats_time(CHECKPOINT_TIME_NS, CHECKPOINT_TIME)
+    analyze_exploratory_stats(PRECHECKPOINT_DIRTY_PAGE)
+    analyze_exploratory_stats(POSTCHECKPOINT_DIRTY_PAGE)
     # analyze_io_stats("wkB/s")
     # analyze_io_stats("rkB/s")
     # analyze_io_stats("r_await")
@@ -36,9 +36,9 @@ def main():
     # analyze_dstats("memory-usage", "free")
     # analyze_dstats("swap", "used")
     # analyze_dstats("total-cpu-usage", "idl")
-    # analyze_postgres_process_stats(PG_REPLICA_FILE_NAME)
+    analyze_postgres_process_stats(PG_REPLICA_FILE_NAME)
     analyze_postgres_process_stats(PG_PRIMARY_FILE_NAME)
-    # analyze_benchbase_throughput()
+    analyze_benchbase_throughput()
 
 
 def analyze_postgres_stats_time(metric_name_ns: str, metric_name_sec: str):
@@ -219,13 +219,14 @@ def analyze_postgres_process_stats(file: str):
     columns.remove(START_TIME)
     columns.remove(START_TIME_NS)
 
-    # df.plot(x=START_TIME, y=columns, kind="line", title=f"Postgres Process I/O")
-    # plt.legend(loc="center left", bbox_to_anchor=(1.0, 0.5))
-    # plt.subplots_adjust(right=0.59)
-    # plt.show()
-    for column in columns:
-        df.plot(x=START_TIME, y=column, kind="line", title=column)
-        plt.show()
+    df.plot(x=START_TIME, y=columns, kind="line", title=f"Postgres Process I/O")
+    plt.legend(loc="center left", bbox_to_anchor=(1.0, 0.5))
+    plt.subplots_adjust(right=0.59)
+    plt.show()
+
+    # for column in columns:
+    #     df.plot(x=START_TIME, y=column, kind="line", title=column)
+    #     plt.show()
 
 
 def analyze_benchbase_throughput():
