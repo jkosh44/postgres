@@ -199,12 +199,14 @@ def main():
     pg_stat_primary_thread.start()
 
     # Block until warmup is done
+    print("Block until warmup is over")
     for line in iter(lambda: benchbase_proc.stdout.readline(), b''):
         if isinstance(line, bytes):
             line = line.decode(UTF_8)
         print(line, end="")
         if "Warmup complete, starting measurements" in line:
             break
+    print("Blocking done")
 
     collect_results(benchbase_proc, result_file)
 
