@@ -204,7 +204,7 @@ def main():
         if isinstance(line, bytes):
             line = line.decode(UTF_8)
         print(line, end="")
-        if "Warmup complete, starting measurements" in line:
+        if "starting measurements" in line:
             break
     print("Blocking done")
 
