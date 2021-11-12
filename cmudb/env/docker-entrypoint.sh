@@ -160,14 +160,14 @@ _pg_setup_replication() {
     echo "effective_io_concurrency = 200" >> ${AUTO_CONF}
     echo "work_mem = 13689kB" >> ${AUTO_CONF}
     echo "min_wal_size = 2GB" >> ${AUTO_CONF}
-    echo "max_wal_size = 20GB" >> ${AUTO_CONF}
+    echo "max_wal_size = 30GB" >> ${AUTO_CONF}
     echo "max_worker_processes = 80" >> ${AUTO_CONF}
     echo "max_parallel_workers_per_gather = 4" >> ${AUTO_CONF}
     echo "max_parallel_workers = 80" >> ${AUTO_CONF}
     echo "max_parallel_maintenance_workers = 4" >> ${AUTO_CONF}
     echo "max_pred_locks_per_transaction = 1024" >> ${AUTO_CONF}
-    echo "checkpoint_timeout = 10min" >> ${AUTO_CONF}
-#    echo "autovacuum = false" >> ${AUTO_CONF}
+    echo "checkpoint_timeout = 20min" >> ${AUTO_CONF}
+    echo "autovacuum = false" >> ${AUTO_CONF}
 
   if [ "${NP_REPLICATION_TYPE}" = "primary" ]; then
     # ===============================
