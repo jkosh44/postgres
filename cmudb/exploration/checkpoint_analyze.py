@@ -14,13 +14,13 @@ VALID = "valid"
 
 NS_PER_SEC = 1000000000
 
-TEST_FILE_NAME = "results/zfs/checkpoint/no_vacuum_long_checkpoint_gaps/test_result_1636683372.5605218.json_54G"
-IO_FILE_NAME = "results/zfs/checkpoint/no_vacuum_long_checkpoint_gaps/iostats_1636683372.5605218"
-SSD_FILE_NAME = "results/zfs/checkpoint/no_vacuum_long_checkpoint_gaps/ssdstats_1636683372.5605218"
-DSTAT_FILE_NAME = "results/zfs/checkpoint/no_vacuum_long_checkpoint_gaps/dstat_1636683372.5605218"
-THROUGHPUT_FILE_NAME = "results/zfs/checkpoint/no_vacuum_long_checkpoint_gaps/throughput_1636683372.5605218"
-PG_REPLICA_FILE_NAME = "results/zfs/checkpoint/no_vacuum_long_checkpoint_gaps/pg_io_replica_1636683372.5605218.json"
-PG_PRIMARY_FILE_NAME = "results/zfs/checkpoint/no_vacuum_long_checkpoint_gaps/pg_io_primary_1636683372.5605218.json"
+TEST_FILE_NAME = "results/final/zfs/no_vacuum_long_checkpoint_gaps/test_result_1636683372.5605218.json_54G"
+IO_FILE_NAME = "results/final/zfs/no_vacuum_long_checkpoint_gaps/iostats_1636683372.5605218"
+SSD_FILE_NAME = "results/final/zfs/no_vacuum_long_checkpoint_gaps/ssdstats_1636683372.5605218"
+DSTAT_FILE_NAME = "results/final/zfs/no_vacuum_long_checkpoint_gaps/dstat_1636683372.5605218"
+THROUGHPUT_FILE_NAME = "results/final/zfs/no_vacuum_long_checkpoint_gaps/throughput_1636683372.5605218"
+PG_REPLICA_FILE_NAME = "results/final/zfs/no_vacuum_long_checkpoint_gaps/pg_io_replica_1636683372.5605218.json"
+PG_PRIMARY_FILE_NAME = "results/final/zfs/no_vacuum_long_checkpoint_gaps/pg_io_primary_1636683372.5605218.json"
 
 
 def main():
