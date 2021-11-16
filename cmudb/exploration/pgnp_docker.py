@@ -40,7 +40,7 @@ def create_volume(volume_name: str):
 
 def create_container(compose_yml: str, project_name: str, output_strategy: OutputStrategy) -> subprocess.Popen:
     env = os.environ.copy()
-    env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 5)
+    env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 10)
     compose, _, _ = execute_sys_command(
         f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} --env-file {ENV_FOLDER}/.env up",
         env=env, block=False, output_strategy=output_strategy)
@@ -53,7 +53,7 @@ def stop_container(container: subprocess.Popen):
 
 def destroy_container(compose_yml: str, project_name: str, container_names: List[str]):
     env = os.environ.copy()
-    env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 5)
+    env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 10)
     execute_sys_command(f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} "
                         f"--env-file {ENV_FOLDER}/.env down --volumes", env=env)
     for container_name in container_names:
