@@ -39,21 +39,26 @@ def validate_exploration_process() -> bool:
 
 def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
     # Start exploration instance
-    print("Taking checkpoint")
-    precheckpoint_dirty_pages = execute_sql("SELECT COUNT(*) FROM pg_buffercache WHERE isdirty != 'f'", REPLICA_PORT)
-    if len(precheckpoint_dirty_pages) > 0:
-        precheckpoint_dirty_pages = int(precheckpoint_dirty_pages[0])
-    else:
-        precheckpoint_dirty_pages = 0
+    # print("Taking checkpoint")
+    # precheckpoint_dirty_pages = execute_sql("SELECT COUNT(*) FROM pg_buffercache WHERE isdirty != 'f'", REPLICA_PORT)
+    # if len(precheckpoint_dirty_pages) > 0:
+    #     precheckpoint_dirty_pages = int(precheckpoint_dirty_pages[0])
+    # else:
+    #     precheckpoint_dirty_pages = 0
+    #
+    # _, checkpoint_time_ns = timed_execution(checkpoint, REPLICA_PORT)
+    #
+    # postcheckpoint_dirty_pages = execute_sql("SELECT COUNT(*) FROM pg_buffercache WHERE isdirty != 'f'", REPLICA_PORT)
+    # if len(postcheckpoint_dirty_pages) > 0:
+    #     postcheckpoint_dirty_pages = int(postcheckpoint_dirty_pages[0])
+    # else:
+    #     postcheckpoint_dirty_pages = 0
+    # print("Checkpoint complete")
 
-    _, checkpoint_time_ns = timed_execution(checkpoint, REPLICA_PORT)
+    precheckpoint_dirty_pages = 0
+    checkpoint_time_ns = 0
+    postcheckpoint_dirty_pages = 0
 
-    postcheckpoint_dirty_pages = execute_sql("SELECT COUNT(*) FROM pg_buffercache WHERE isdirty != 'f'", REPLICA_PORT)
-    if len(postcheckpoint_dirty_pages) > 0:
-        postcheckpoint_dirty_pages = int(postcheckpoint_dirty_pages[0])
-    else:
-        postcheckpoint_dirty_pages = 0
-    print("Checkpoint complete")
 
     print("Copying replica data")
     _, copy_time_ns = timed_execution(copy_pgdata_cow)
@@ -75,8 +80,8 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
     execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/standby.signal")
     print("Exploration container started")
     print("Starting exploration postgres instance")
-    # _, reset_wal_time = timed_execution(reset_wal, EXPLORATION)
-    reset_wal_time = 0
+    _, reset_wal_time = timed_execution(reset_wal, EXPLORATION)
+    # reset_wal_time = 0
     (exploration_process, valid), postgres_startup_time = timed_execution(
         start_and_wait_for_postgres_instance, EXPLORATION,
         EXPLORATION_PORT)

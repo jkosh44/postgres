@@ -1,0 +1,4 @@
+Scale Factor: 100000
+Time: 21600 sec (6 hr)
+Reset Wal: Configurable
+Manual Checkpoints: Configurable

@@ -1,0 +1,4 @@
+Scale Factor: Configurable
+Time: 7200 sec (2 hr)
+Reset Wal: On
+Manual Checkpoints: Off
