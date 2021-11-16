@@ -25,6 +25,8 @@ ENV BIN_DIR "/home/terrier/repo/build/bin"
 ENV http_proxy "http://proxy.pdl.cmu.edu:3128/"
 ENV https_proxy "http://proxy.pdl.cmu.edu:3128/"
 
+ENV COMPOSE_HTTP_TIMEOUT 300
+
 # Install packages.
 COPY ./cmudb/env/apt_for_pdl.conf /etc/apt/apt.conf
 COPY ./cmudb/env/packages.sh /packages.sh

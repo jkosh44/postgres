@@ -42,7 +42,7 @@ def create_container(compose_yml: str, project_name: str, output_strategy: Outpu
     env = os.environ.copy()
     env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 5)
     compose, _, _ = execute_sys_command(
-        f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} up",
+        f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} --env-file {ENV_FOLDER}/.env up",
         env=env, block=False, output_strategy=output_strategy)
     return compose
 
@@ -54,7 +54,8 @@ def stop_container(container: subprocess.Popen):
 def destroy_container(compose_yml: str, project_name: str, container_names: List[str]):
     env = os.environ.copy()
     env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 5)
-    execute_sys_command(f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} down --volumes", env=env)
+    execute_sys_command(f"COMPOSE_HTTP_TIMEOUT=300 sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} "
+                        f"--env-file {ENV_FOLDER}/.env down --volumes", env=env)
     for container_name in container_names:
         execute_sys_command(f"sudo docker rm {container_name}")
 
@@ -79,6 +80,7 @@ def cleanup_docker_env():
     execute_sys_command("sudo docker system prune -af")
     execute_sys_command("sudo docker container prune -f")
     execute_sys_command("sudo docker volume prune -f")
+    execute_sys_command("sudo docker network prune -f")
     destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, [PRIMARY, REPLICA])
     destroy_container(EXPLORATORY_COMPOSE, EXPLORATORY_PROJECT_NAME, [EXPLORATION])
     remove_primary_data()
