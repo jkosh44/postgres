@@ -54,7 +54,7 @@ def stop_container(container: subprocess.Popen):
 def destroy_container(compose_yml: str, project_name: str, container_names: List[str]):
     env = os.environ.copy()
     env["COMPOSE_HTTP_TIMEOUT"] = str(60 * 5)
-    execute_sys_command(f"COMPOSE_HTTP_TIMEOUT=300 sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} "
+    execute_sys_command(f"sudo docker-compose -p {project_name} -f {ENV_FOLDER}/{compose_yml} "
                         f"--env-file {ENV_FOLDER}/.env down --volumes", env=env)
     for container_name in container_names:
         execute_sys_command(f"sudo docker rm {container_name}")
