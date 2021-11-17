@@ -21,7 +21,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/final/zfs/scale_factors/25gb/test_result_1637101619.639471.json_25G"
+FILE_NAME = "results/final/zfs/scale_factors/35g/test_result_1637110725.7930582.json_35G"
 
 
 def main():
@@ -41,9 +41,8 @@ def main():
         df[sec_measurement] = df[ns_measurement] / NS_PER_SEC
         df[TOTAL_TIME] += df[sec_measurement]
 
-    # valid_measurements = df[df[VALID]]
-    valid_measurements = df
-    print(df[TOTAL_TIME])
+    valid_measurements = df[df[VALID]]
+    # valid_measurements = df
     valid_measurements.plot(x=GLOBAL_ITERATION, y=sec_measurements, kind="bar",
                             stacked=True, title="COW (seconds)")
     plt.show()
