@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<parameters>
+
+    <!-- Connection details -->
+    <type>POSTGRES</type>
+    <driver>org.postgresql.Driver</driver>
+    <url>jdbc:postgresql://localhost:42666/noisepage?sslmode=disable&amp;ApplicationName=ycsb&amp;reWriteBatchedInserts=true</url>
+    <username>noisepage</username>
+    <password>terrier</password>
+    <isolation>READ_COMMITTED</isolation>
+    <batchsize>128</batchsize>
+
+    <!-- Scalefactor in YCSB is *1000 the number of rows in the USERTABLE-->
+<!-- 114G  -->
+ <scalefactor>100000</scalefactor>
+<!--     <scalefactor>40000</scalefactor>-->
+ <!-- 13G -->
+     <scalefactor>10000</scalefactor>
+<!-- 2G -->
+<!-- <scalefactor>1000</scalefactor>-->
+<!--    <scalefactor>1</scalefactor>-->
+
+    <!-- The workload -->
+    <terminals>50</terminals>
+    <works>
+        <work>
+            <time>21600</time>
+<!--            <time>7200</time>-->
+<!--            <time>43200</time>-->
+<!--            <time>14400</time>-->
+<!--            <time>3600</time>-->
+<!--            <time>30</time>-->
+            <rate>10000</rate>
+            <weights>100</weights>
+        </work>
+    </works>
+
+    <!-- YCSB Procedures declaration -->
+    <transactiontypes>
+        <transactiontype>
+            <name>UpdateRecord</name>
+        </transactiontype>
+    </transactiontypes>
+</parameters>

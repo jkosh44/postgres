@@ -27,6 +27,14 @@ def run_benchbase(create: bool, load: bool, execute: bool, block: bool = True,
 
     return benchbase_proc
 
+def run_benchbase_exploratory(create: bool, load: bool, execute: bool, block: bool = True,
+                  output_strategy: OutputStrategy = OutputStrategy.Print) -> subprocess.Popen:
+    benchbase_proc, _, _ = execute_sys_command(
+        f"java -jar benchbase.jar -b ycsb -c ../exploratory_noisepage_ycsb_update_only_config.xml --interval-monitor 60000 "
+        f"--create={create} --load={load} --execute={execute}", cwd=BENCHBASE_DIR, block=block,
+        output_strategy=output_strategy)
+
+    return benchbase_proc
 
 def cleanup_benchbase():
     execute_sys_command(f"rm -rf {BENCHBASE_DIR}")
