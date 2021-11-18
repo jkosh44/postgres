@@ -127,6 +127,7 @@ def collect_replica_lag(test_time: float):
     with open(f"replica_lag_{test_time}.json", "w") as f:
         f.write("[\n")
         first_obj = True
+
         while not done:
             start_time = time.time_ns()
             replica_lag = execute_sql("SELECT replay_lag FROM pg_stat_replication", PRIMARY_PORT)
@@ -141,13 +142,13 @@ def collect_replica_lag(test_time: float):
 
             if not first_obj:
                 f.write(",\n")
-                first_obj = False
             f.write("\t{\n")
             f.write(f'\t\t"time": {start_time},\n')
             f.write(f'\t\t"replica_lag": {replica_lag}\n')
             f.write("\t}")
             f.flush()
-            time.sleep(5)
+            first_obj = False
+            time.sleep(10)
 
         f.write("\n")
         f.write("]\n")
