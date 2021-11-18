@@ -134,9 +134,7 @@ def collect_replica_lag(test_time: float):
                 replica_lag = 0
             else:
                 replica_lag = replica_lag[0]
-                print(f"lag: {replica_lag}")
                 replica_time = datetime.datetime.strptime(replica_lag, "%H:%M:%S.%f")
-                print(f"Time: {replica_time}")
                 replica_lag = (replica_time.hour * SECONDS_PER_HOUR) + (
                         replica_time.minute * SECONDS_PER_MINUTE) + replica_time.second + (
                                       replica_time.microsecond / MICROSECOND_PER_SECOND)
