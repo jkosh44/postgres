@@ -1,3 +1,4 @@
+import datetime
 import subprocess
 import time
 from threading import Thread
@@ -14,6 +15,10 @@ from sql import execute_sql, start_and_wait_for_postgres_instance, stop_postgres
 from util import PGDATA_LOC, EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
     REPLICA, PRIMARY
+
+SECONDS_PER_HOUR = 3600
+SECONDS_PER_MINUTE = 60
+MICROSECOND_PER_SECOND = 1000000
 
 
 def start_exploratory() -> Tuple[bool, Union[subprocess.Popen, None], Union[subprocess.Popen, None]]:
@@ -98,7 +103,7 @@ def main():
         with open(f"exploratory_time_{test_time}", "w") as f:
             f.write(str(time.time_ns()))
         exploratory_benchbase_proc = run_benchbase(create=True, load=True, execute=True, block=False,
-                                                   output_strategy=OutputStrategy.Print)
+                                                   output_strategy=OutputStrategy.Hide)
         time.sleep(sleep_time_sec)
 
     print("Joining threads")
@@ -120,9 +125,19 @@ def collect_replica_lag(test_time: float):
         while not done:
             start_time = time.time_ns()
             replica_lag = execute_sql("SELECT replay_lag FROM pg_stat_replication", PRIMARY_PORT)
+            if len(replica_lag) == 0:
+                replica_lag = 0
+            else:
+                replica_lag = replica_lag[1]
+                print(replica_lag)
+                replica_time = datetime.datetime.strptime(replica_lag, "%H:%M:%S.%f")
+                replica_lag = (replica_time.hour * SECONDS_PER_HOUR) + (
+                        replica_time.minute * SECONDS_PER_MINUTE) + replica_time.second + (
+                                          replica_time.microsecond / MICROSECOND_PER_SECOND)
 
             if not first_obj:
                 f.write(",\n")
+                first_obj = True
             f.write("\t{\n")
             f.write(f'\t\t"time": {start_time},\n')
             f.write(f'\t\t"replica_lag": {replica_lag}\n')
@@ -138,4 +153,3 @@ done = False
 
 if __name__ == "__main__":
     main()
-
