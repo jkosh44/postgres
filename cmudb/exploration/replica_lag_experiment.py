@@ -133,7 +133,7 @@ def collect_replica_lag(test_time: float):
             if len(replica_lag) == 0:
                 replica_lag = 0
             else:
-                replica_lag = replica_lag[1]
+                replica_lag = replica_lag[0]
                 print(f"lag: {replica_lag}")
                 replica_time = datetime.datetime.strptime(replica_lag, "%H:%M:%S.%f")
                 print(f"Time: {replica_time}")
