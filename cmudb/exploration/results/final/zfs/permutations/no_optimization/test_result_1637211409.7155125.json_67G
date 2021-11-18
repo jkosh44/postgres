@@ -1,0 +1,72 @@
+[
+	{
+		"global_iteration": 0,
+		"start_time_ns": 1637211410046578607,
+		"precheckpoint_dirty_pages": 0,
+		"checkpoint_time_ns": 0,
+		"postcheckpoint_dirty_pages": 0,
+		"copy_time_ns": 4695975370,
+		"docker_startup_time_ns": 33166250295,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 1269269477615,
+		"teardown_time_ns": 99114118839,
+		"valid": true,
+		"error": ""
+	},
+	{
+		"global_iteration": 1,
+		"start_time_ns": 1637212818457754923,
+		"precheckpoint_dirty_pages": 0,
+		"checkpoint_time_ns": 0,
+		"postcheckpoint_dirty_pages": 0,
+		"copy_time_ns": 4600441614,
+		"docker_startup_time_ns": 38714498738,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 879762594502,
+		"teardown_time_ns": 97101732376,
+		"valid": true,
+		"error": ""
+	},
+	{
+		"global_iteration": 2,
+		"start_time_ns": 1637213840581581474,
+		"precheckpoint_dirty_pages": 0,
+		"checkpoint_time_ns": 0,
+		"postcheckpoint_dirty_pages": 0,
+		"copy_time_ns": 1565586157,
+		"docker_startup_time_ns": 26341516671,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 2181172736367,
+		"teardown_time_ns": 133703934636,
+		"valid": true,
+		"error": ""
+	},
+	{
+		"global_iteration": 3,
+		"start_time_ns": 1637216185708999364,
+		"precheckpoint_dirty_pages": 0,
+		"checkpoint_time_ns": 0,
+		"postcheckpoint_dirty_pages": 0,
+		"copy_time_ns": 40722983141,
+		"docker_startup_time_ns": 45520734844,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 15236738818222,
+		"teardown_time_ns": 0,
+		"valid": false,
+		"error": "Postgres failed to start, return code 1"
+	},
+	{
+		"global_iteration": 4,
+		"start_time_ns": 1637231875613122879,
+		"precheckpoint_dirty_pages": 0,
+		"checkpoint_time_ns": 0,
+		"postcheckpoint_dirty_pages": 0,
+		"copy_time_ns": 1506731891,
+		"docker_startup_time_ns": 23712852863,
+		"reset_wal_time_ns": 0,
+		"postgres_startup_time_ns": 9621497411011,
+		"teardown_time_ns": 75629476507,
+		"valid": true,
+		"error": ""
+	}
+]
