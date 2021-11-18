@@ -43,5 +43,14 @@
     "postgres_startup_time": 2.880949,
     "teardown_time": 127.898847,
     "valid": 1.0
+  },
+  {
+    "size": 46,
+    "copy_time": 8.615016,
+    "docker_start_up_time": 49.898631,
+    "reset_wal_time": 12.617823,
+    "postgres_startup_time": 2.754864,
+    "teardown_time": 133.003776,
+    "valid": 1.0
   }
 ]
