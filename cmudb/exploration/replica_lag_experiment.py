@@ -14,7 +14,7 @@ from sql import execute_sql, start_and_wait_for_postgres_instance, stop_postgres
     wait_for_pg_ready, reset_wal
 from util import PGDATA_LOC, EXPLORATION_PORT, \
     OutputStrategy, PRIMARY_PORT, EXPLORATION, \
-    REPLICA, PRIMARY
+    REPLICA, PRIMARY, stop_process
 
 SECONDS_PER_HOUR = 3600
 SECONDS_PER_MINUTE = 60
@@ -93,12 +93,13 @@ def main():
     lag_thread.start()
 
     benchbase_proc = run_benchbase(create=False, load=False, execute=True, block=False,
-                                   output_strategy=OutputStrategy.Print)
+                                   output_strategy=OutputStrategy.Hide)
 
     time.sleep(sleep_time_sec)
 
     valid, exploration_process, exploratory_container = start_exploratory()
 
+    exploratory_benchbase_proc = None
     if valid:
         with open(f"exploratory_time_{test_time}", "w") as f:
             f.write(str(time.time_ns()))
@@ -111,6 +112,10 @@ def main():
     done = True
     lag_thread.join()
     print("Threads joined")
+
+    stop_process(benchbase_proc)
+    if exploratory_benchbase_proc is not None:
+        stop_process(exploratory_benchbase_proc)
 
     cleanup_benchbase()
     print("Killing Docker containers")
@@ -129,11 +134,12 @@ def collect_replica_lag(test_time: float):
                 replica_lag = 0
             else:
                 replica_lag = replica_lag[1]
-                print(replica_lag)
+                print(f"lag: {replica_lag}")
                 replica_time = datetime.datetime.strptime(replica_lag, "%H:%M:%S.%f")
+                print(f"Time: {replica_time}")
                 replica_lag = (replica_time.hour * SECONDS_PER_HOUR) + (
                         replica_time.minute * SECONDS_PER_MINUTE) + replica_time.second + (
-                                          replica_time.microsecond / MICROSECOND_PER_SECOND)
+                                      replica_time.microsecond / MICROSECOND_PER_SECOND)
 
             if not first_obj:
                 f.write(",\n")
@@ -143,7 +149,7 @@ def collect_replica_lag(test_time: float):
             f.write(f'\t\t"replica_lag": {replica_lag}\n')
             f.write("\t}")
             f.flush()
-            time.sleep(10)
+            time.sleep(5)
 
         f.write("\n")
         f.write("]\n")
