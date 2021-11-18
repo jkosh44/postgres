@@ -58,7 +58,7 @@ def stop_exploratory(exploration_process: subprocess.Popen, exploratory_containe
 
 
 def main():
-    sleep_time_sec = 60 * 30
+    sleep_time_sec = 60 * 1
 
     print("Set up Docker environment")
     setup_docker_env()
@@ -119,7 +119,7 @@ def collect_replica_lag(test_time: float):
         first_obj = True
         while not done:
             start_time = time.time_ns()
-            replica_lag = execute_sql("SELECT * FROM something", PRIMARY_PORT)
+            replica_lag = execute_sql("SELECT replay_lag FROM pg_stat_replication", PRIMARY_PORT)
 
             if not first_obj:
                 f.write(",\n")
