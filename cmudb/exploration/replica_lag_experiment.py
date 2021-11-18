@@ -143,7 +143,7 @@ def collect_replica_lag(test_time: float):
 
             if not first_obj:
                 f.write(",\n")
-                first_obj = True
+                first_obj = False
             f.write("\t{\n")
             f.write(f'\t\t"time": {start_time},\n')
             f.write(f'\t\t"replica_lag": {replica_lag}\n')
