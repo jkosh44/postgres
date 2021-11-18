@@ -80,8 +80,8 @@ def test_copy() -> Tuple[int, int, int, int, int, int, bool, str, int, int]:
     execute_in_container(EXPLORATION, f"rm {PGDATA_LOC}/standby.signal")
     print("Exploration container started")
     print("Starting exploration postgres instance")
-    _, reset_wal_time = timed_execution(reset_wal, EXPLORATION)
-    # reset_wal_time = 0
+    # _, reset_wal_time = timed_execution(reset_wal, EXPLORATION)
+    reset_wal_time = 0
     (exploration_process, valid), postgres_startup_time = timed_execution(
         start_and_wait_for_postgres_instance, EXPLORATION,
         EXPLORATION_PORT)
