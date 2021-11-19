@@ -1,4 +1,5 @@
-from util import execute_sys_command
+from cmudb.exploration.pgnp_docker import EXPLORATION_VOLUME
+from util import execute_sys_command, DOCKER_VOLUME_DIR
 
 ZFS_POOL_ROOT = "zpool-docker/volumes"
 REPLICA_POOL = "pgdata-replica"
@@ -27,6 +28,14 @@ def copy_pgdata_cow():
     zfs_clone_snapshot(f"{ZFS_POOL_ROOT}/{REPLICA_POOL}@{SNAPSHOT_NAME}", f"{ZFS_POOL_ROOT}/{EXPLORATION_POOL}")
 
 
+def copy_pgdata_cow_ext4():
+    execute_sys_command(f"sudo cp -r {DOCKER_VOLUME_DIR}/{REPLICA_POOL}/ {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}/")
+
+
 def destroy_exploratory_data_cow():
     zfs_destroy_pool(f"{ZFS_POOL_ROOT}/{EXPLORATION_POOL}")
     zfs_destroy_snapshot(f"{ZFS_POOL_ROOT}/{REPLICA_POOL}@{SNAPSHOT_NAME}")
+
+
+def destroy_exploratory_data_cow_ext4():
+    execute_sys_command(f"sudo rm -r {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}/")
