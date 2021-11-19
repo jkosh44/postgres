@@ -63,7 +63,7 @@ def stop_exploratory(exploration_process: subprocess.Popen, exploratory_containe
 
 
 def main():
-    sleep_time_sec = 60 * 1
+    sleep_time_sec = 60 * 30
 
     print("Set up Docker environment")
     setup_docker_env()
