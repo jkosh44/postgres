@@ -1,0 +1,11 @@
+[
+  {
+    "size": ,
+    "copy_time": ,
+    "docker_start_up_time": ,
+    "reset_wal_time": ,
+    "postgres_startup_time": ,
+    "teardown_time": ,
+    "valid":
+  }
+]

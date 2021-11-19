@@ -57,3 +57,12 @@ Get disk usage: `iostat -xd 1`
 Look at: /etc/postgresql/12/main/pg_hba.conf, do we need to copy this?
 
 `sftp jkoshako@dev8.db.pdl.local.cmu.edu:/home/jkoshako/postgres/cmudb/exploration/`
+
+Install ext4
+```
+systemctl stop docker
+systemctl disable docker
+zpool destroy zpool-docker
+mkfs.ext4 /dev/nvme0n1
+mount /dev/nvme0n1 /mnt/nvme0n1
+```

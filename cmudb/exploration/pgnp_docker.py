@@ -4,13 +4,11 @@ import time
 from typing import AnyStr, Tuple, List
 
 from util import execute_sys_command, ENV_FOLDER, stop_process, OutputStrategy, \
-    UTF_8, PROJECT_ROOT, remove_primary_data, create_primary_sym_link, EXPLORATION, REPLICA, PRIMARY
+    UTF_8, PROJECT_ROOT, remove_primary_data, create_primary_sym_link, EXPLORATION, REPLICA, PRIMARY, DOCKER_VOLUME_DIR
 
 PRIMARY_VOLUME = "pgdata-primary"
 REPLICA_VOLUME = "pgdata-replica"
 EXPLORATION_VOLUME = "pgdata-exploration"
-
-DOCKER_VOLUME_DIR = "/mnt/docker/volumes"
 
 REPLICATION_COMPOSE = "docker-compose-replication.yml"
 EXPLORATORY_COMPOSE = "docker-compose-exploration.yml"

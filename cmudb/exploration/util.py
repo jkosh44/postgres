@@ -8,6 +8,8 @@ from typing import Union
 
 # TODO make cmd line args maybe
 
+DOCKER_VOLUME_DIR = "/mnt/nvme0n1/docker/volumes"
+
 PROJECT_ROOT = "../.."
 ENV_FOLDER = "../env"
 CONTAINER_BIN_DIR = "/home/terrier/repo/build/bin"
@@ -74,4 +76,4 @@ def remove_primary_data():
 
 def create_primary_sym_link():
     execute_sys_command(
-        "sudo ln -s /mnt/pgprimary/pgdata /mnt/docker/volumes/pgdata-primary")
+        f"sudo ln -s /mnt/pgprimary/pgdata {DOCKER_VOLUME_DIR}/pgdata-primary")
