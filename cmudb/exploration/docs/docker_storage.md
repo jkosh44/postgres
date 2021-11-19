@@ -78,4 +78,12 @@ volumes:
     - `name`: Sets a custom name for the volume
 
 
-- To change location of docker directory change `--data-root` param in `/lib/systemd/system/docker.service` 
+- To change location of docker directory change `--data-root` param in `/lib/systemd/system/docker.service`
+
+## Set default storage driver
+- Add this to `/etc/docker/daemon.json`:
+```
+{
+  "storage-driver": "zfs"
+}
+```
