@@ -16,11 +16,15 @@ FILE_NAME = "results/final/zfs/scale_factors/agg.json"
 
 
 def main():
-    measurements = [COPY_TIME, RESET_WAL_TIME, POSTGRES_STARTUP_TIME]
+    # measurements = [COPY_TIME, RESET_WAL_TIME, POSTGRES_STARTUP_TIME]
+    # measurements = [COPY_TIME]
+    measurements = [RESET_WAL_TIME, POSTGRES_STARTUP_TIME]
 
     df = pd.read_json(FILE_NAME)
 
-    df.plot(x=SIZE, y=measurements, kind="line", title="ZFS Size")
+    # df.plot(x=SIZE, y=measurements, kind="line", title="ZFS Copies", xlabel="Size (GB)", ylabel="Time (sec)",
+    #         legend=None)
+    df.plot(x=SIZE, y=measurements, kind="line", title="Trimmed WAL", xlabel="Size (GB)", ylabel="Time (sec)")
     plt.show()
 
 

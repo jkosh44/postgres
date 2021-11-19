@@ -27,15 +27,6 @@
     "valid": 1.0
   },
   {
-    "size": 35,
-    "copy_time": 20.660479,
-    "docker_start_up_time": 165.146813,
-    "reset_wal_time": 21.866829,
-    "postgres_startup_time": 2.801899,
-    "teardown_time": 201.646640,
-    "valid": 1.0
-  },
-  {
     "size": 41,
     "copy_time": 7.509946,
     "docker_start_up_time": 49.125444,
@@ -70,5 +61,14 @@
     "postgres_startup_time": 3.187259,
     "teardown_time": 128.087907,
     "valid": 0.9090909090909091
+  },
+  {
+    "size": 128,
+    "copy_time": 3.903469,
+    "docker_start_up_time": 33.075571,
+    "reset_wal_time": 8.228898,
+    "postgres_startup_time": 2.206327,
+    "teardown_time": 105.729924,
+    "valid": 1.0
   }
 ]
