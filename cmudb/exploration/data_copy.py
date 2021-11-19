@@ -1,4 +1,4 @@
-from cmudb.exploration.pgnp_docker import EXPLORATION_VOLUME
+from pgnp_docker import EXPLORATION_VOLUME
 from util import execute_sys_command, DOCKER_VOLUME_DIR
 
 ZFS_POOL_ROOT = "zpool-docker/volumes"
