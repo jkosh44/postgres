@@ -38,4 +38,5 @@ def destroy_exploratory_data_cow():
 
 
 def destroy_exploratory_data_cow_ext4():
+    execute_sys_command(f"sudo du -h {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
     execute_sys_command(f"sudo rm -r {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}/")

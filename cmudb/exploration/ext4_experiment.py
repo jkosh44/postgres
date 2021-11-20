@@ -190,19 +190,19 @@ def main():
     benchbase_proc = run_benchbase(create=False, load=False, execute=True, block=False,
                                    output_strategy=OutputStrategy.Capture)
 
-    io_thread = Thread(target=collect_io_stats, args=(test_time,))
-    ssd_thread = Thread(target=collect_ssd_stats, args=(test_time,))
-    dstat_thread = Thread(target=collect_dstat, args=(test_time,))
-    benchbase_thread = Thread(target=process_benchbase_output, args=(benchbase_proc, test_time))
-    pg_stat_replica_thread = Thread(target=collect_process_io_stats, args=(test_time, True))
-    pg_stat_primary_thread = Thread(target=collect_process_io_stats, args=(test_time, False))
-
-    io_thread.start()
-    ssd_thread.start()
-    dstat_thread.start()
-    benchbase_thread.start()
-    pg_stat_replica_thread.start()
-    pg_stat_primary_thread.start()
+    # io_thread = Thread(target=collect_io_stats, args=(test_time,))
+    # ssd_thread = Thread(target=collect_ssd_stats, args=(test_time,))
+    # dstat_thread = Thread(target=collect_dstat, args=(test_time,))
+    # benchbase_thread = Thread(target=process_benchbase_output, args=(benchbase_proc, test_time))
+    # pg_stat_replica_thread = Thread(target=collect_process_io_stats, args=(test_time, True))
+    # pg_stat_primary_thread = Thread(target=collect_process_io_stats, args=(test_time, False))
+    #
+    # io_thread.start()
+    # ssd_thread.start()
+    # dstat_thread.start()
+    # benchbase_thread.start()
+    # pg_stat_replica_thread.start()
+    # pg_stat_primary_thread.start()
 
     # # Block until warmup is done
     # print("Block until warmup is over")
@@ -215,17 +215,17 @@ def main():
     # print("Blocking done")
 
     collect_results(benchbase_proc, result_file)
-
-    print("Joining threads")
-    global done
-    done = True
-    io_thread.join()
-    ssd_thread.join()
-    dstat_thread.join()
-    benchbase_thread.join()
-    pg_stat_replica_thread.join()
-    pg_stat_primary_thread.join()
-    print("Threads joined")
+    #
+    # print("Joining threads")
+    # global done
+    # done = True
+    # io_thread.join()
+    # ssd_thread.join()
+    # dstat_thread.join()
+    # benchbase_thread.join()
+    # pg_stat_replica_thread.join()
+    # pg_stat_primary_thread.join()
+    # print("Threads joined")
 
     cleanup_benchbase()
     print("Killing Docker containers")

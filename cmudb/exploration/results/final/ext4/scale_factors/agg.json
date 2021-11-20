@@ -1,11 +1,11 @@
 [
   {
-    "size": ,
-    "copy_time": ,
-    "docker_start_up_time": ,
-    "reset_wal_time": ,
-    "postgres_startup_time": ,
-    "teardown_time": ,
-    "valid":
+    "size": 2.3,
+    "copy_time": 11.156867,
+    "docker_start_up_time": 140.300547,
+    "reset_wal_time": 2.084394,
+    "postgres_startup_time": 1.477910,
+    "teardown_time": 71.951491,
+    "valid": 0.8529411764705882
   }
 ]
