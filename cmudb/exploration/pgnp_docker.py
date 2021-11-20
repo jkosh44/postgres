@@ -124,10 +124,9 @@ def start_exploration_docker() -> subprocess.Popen:
 def shutdown_replication_docker(docker_process: subprocess.Popen):
     stop_container(docker_process)
     destroy_container(REPLICATION_COMPOSE, REPLICATION_PROJECT_NAME, [PRIMARY, REPLICA])
-    # TODO uncomment
-    # remove_primary_data()
-    # remove_volume(PRIMARY_VOLUME)
-    # remove_volume(REPLICA_VOLUME)
+    remove_primary_data()
+    remove_volume(PRIMARY_VOLUME)
+    remove_volume(REPLICA_VOLUME)
 
 
 def shutdown_exploratory_docker(exploratory_docker_process: subprocess.Popen):
