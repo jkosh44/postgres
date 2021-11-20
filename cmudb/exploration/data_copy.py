@@ -29,7 +29,11 @@ def copy_pgdata_cow():
 
 
 def copy_pgdata_cow_ext4():
+    print("Before copy")
+    execute_sys_command(f"sudo du -h {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
     execute_sys_command(f"sudo cp -r {DOCKER_VOLUME_DIR}/{REPLICA_POOL}/ {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}/")
+    print("After copy")
+    execute_sys_command(f"sudo du -h {DOCKER_VOLUME_DIR}/{EXPLORATION_VOLUME}")
 
 
 def destroy_exploratory_data_cow():
