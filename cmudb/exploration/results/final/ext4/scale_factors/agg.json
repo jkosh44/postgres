@@ -25,5 +25,23 @@
     "postgres_startup_time": 1.826523,
     "teardown_time": 80.810003,
     "valid": 1.0
+  },
+  {
+    "size": 33,
+    "copy_time": 654.438668,
+    "docker_start_up_time": 284.487145,
+    "reset_wal_time": 1.766692,
+    "postgres_startup_time": 1.909026,
+    "teardown_time": 84.799775,
+    "valid": 0.4444444444444444
+  },
+  {
+    "size": 38,
+    "copy_time": 832.544229,
+    "docker_start_up_time": 373.354794,
+    "reset_wal_time": 1.792951,
+    "postgres_startup_time": 2.96698,
+    "teardown_time": 86.158304,
+    "valid": 0.4444444444444444
   }
 ]

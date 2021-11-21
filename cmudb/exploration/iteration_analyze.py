@@ -21,7 +21,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/final/ext4/scale_factors/22gb/test_result_1637421798.3249772.json_22G"
+FILE_NAME = "results/final/ext4/scale_factors/38gb/test_result_1637440890.533831.json_38G"
 
 
 def main():
