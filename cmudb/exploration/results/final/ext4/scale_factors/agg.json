@@ -28,20 +28,38 @@
   },
   {
     "size": 33,
-    "copy_time": 654.438668,
-    "docker_start_up_time": 284.487145,
-    "reset_wal_time": 1.766692,
-    "postgres_startup_time": 1.909026,
-    "teardown_time": 84.799775,
+    "copy_time": 641.990744,
+    "docker_start_up_time": 146.884173,
+    "reset_wal_time": 0.785197,
+    "postgres_startup_time": 0.848456,
+    "teardown_time": 37.688789,
     "valid": 0.4444444444444444
   },
   {
     "size": 38,
-    "copy_time": 832.544229,
-    "docker_start_up_time": 373.354794,
-    "reset_wal_time": 1.792951,
-    "postgres_startup_time": 2.96698,
-    "teardown_time": 86.158304,
-    "valid": 0.4444444444444444
+    "copy_time": 750.133317,
+    "docker_start_up_time": 169.427211,
+    "reset_wal_time": 0.469739,
+    "postgres_startup_time": 0.844192,
+    "teardown_time": 10.769788,
+    "valid": 0.125
+  },
+  {
+    "size": 40,
+    "copy_time": 730.536531,
+    "docker_start_up_time": 167.804318,
+    "reset_wal_time": 0.611993,
+    "postgres_startup_time": 0.617004,
+    "teardown_time": 11.552560,
+    "valid": 0.125
+  },
+  {
+    "size": 48,
+    "copy_time": 730.536531,
+    "docker_start_up_time": 167.804318,
+    "reset_wal_time": 0.611993,
+    "postgres_startup_time": 0.617004,
+    "teardown_time": 11.552560,
+    "valid": 0.125
   }
 ]

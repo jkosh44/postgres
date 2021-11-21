@@ -21,7 +21,7 @@ VALID = "valid"
 NS_PER_SEC = 1000000000
 
 # TODO turn into command line arg
-FILE_NAME = "results/final/ext4/scale_factors/38gb/test_result_1637440890.533831.json_38G"
+FILE_NAME = "results/final/ext4/scale_factors/22gb/test_result_1637421798.3249772.json_22G"
 
 
 def main():
@@ -42,6 +42,7 @@ def main():
         df[TOTAL_TIME] += df[sec_measurement]
 
     valid_measurements = df[df[VALID]][:15]
+    # valid_measurements = df[df[COPY_TIME_NS] > 0][:15]
     # valid_measurements = df
     valid_measurements.plot(x=GLOBAL_ITERATION, y=sec_measurements, kind="bar",
                             stacked=True, title="COW (seconds)")
