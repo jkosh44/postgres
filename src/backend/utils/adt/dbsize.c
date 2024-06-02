@@ -111,6 +111,9 @@ db_dir_size(const char *path)
 	return dirsize;
 }
 
+
+
+
 /*
  * calculate size of database in all tablespaces
  */
