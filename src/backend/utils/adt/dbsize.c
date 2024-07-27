@@ -21,6 +21,7 @@
 #include "catalog/pg_tablespace.h"
 #include "commands/dbcommands.h"
 #include "commands/tablespace.h"
+#include "common/int.h"
 #include "miscadmin.h"
 #include "storage/fd.h"
 #include "utils/acl.h"
@@ -577,7 +578,7 @@ pg_size_pretty(PG_FUNCTION_ARGS)
 		uint8		bits;
 
 		/* use this unit if there are no more units or we're below the limit */
-		if (unit[1].name == NULL || i64abs(size) < unit->limit)
+		if (unit[1].name == NULL || pg_abs_s64(size) < unit->limit)
 		{
 			if (unit->round)
 				size = half_rounded(size);

@@ -258,6 +258,19 @@ pg_mul_s64_overflow(int64 a, int64 b, int64 *result)
 #endif
 }
 
+static inline uint64
+pg_abs_s64(int64 a)
+{
+	if (unlikely(a == PG_INT64_MIN))
+	{
+		return ((uint64) PG_INT64_MAX) + 1;
+	}
+	else
+	{
+		return (uint64) i64abs(a);
+	}
+}
+
 /*------------------------------------------------------------------------
  * Overflow routines for unsigned integers
  *------------------------------------------------------------------------
