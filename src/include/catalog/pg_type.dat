@@ -317,6 +317,12 @@
   typreceive => 'interval_recv', typsend => 'interval_send',
   typmodin => 'intervaltypmodin', typmodout => 'intervaltypmodout',
   typalign => 'd' },
+{ oid => '5101', array_type_oid => '5102',
+  descr => 'duration, format \'number units ...\'',
+  typname => 'duration', typlen => '8', typbyval => 'f', typcategory => 'T',
+  typispreferred => 't', typinput => 'duration_in', typoutput => 'duration_out',
+  typreceive => 'duration_recv', typsend => 'duration_send',
+  typalign => 'd' },
 
 # OIDS 1200 - 1299
 

@@ -42,6 +42,12 @@ DatumGetIntervalP(Datum X)
 	return (Interval *) DatumGetPointer(X);
 }
 
+static inline Duration
+DatumGetDuration(Datum X)
+{
+	return (Duration) DatumGetInt64(X);
+}
+
 static inline Datum
 TimestampGetDatum(Timestamp X)
 {
@@ -60,13 +66,21 @@ IntervalPGetDatum(const Interval *X)
 	return PointerGetDatum(X);
 }
 
+static inline Datum
+DurationGetDatum(const Duration X)
+{
+	return Int64GetDatum(X);
+}
+
 #define PG_GETARG_TIMESTAMP(n) DatumGetTimestamp(PG_GETARG_DATUM(n))
 #define PG_GETARG_TIMESTAMPTZ(n) DatumGetTimestampTz(PG_GETARG_DATUM(n))
 #define PG_GETARG_INTERVAL_P(n) DatumGetIntervalP(PG_GETARG_DATUM(n))
+#define PG_GETARG_DURATION(n) DatumGetDuration(PG_GETARG_DATUM(n))
 
 #define PG_RETURN_TIMESTAMP(x) return TimestampGetDatum(x)
 #define PG_RETURN_TIMESTAMPTZ(x) return TimestampTzGetDatum(x)
 #define PG_RETURN_INTERVAL_P(x) return IntervalPGetDatum(x)
+#define PG_RETURN_DURATION(x) return DurationGetDatum(x)
 
 
 #define TIMESTAMP_MASK(b) (1 << (b))
@@ -121,6 +135,9 @@ extern void dt2time(Timestamp jd, int *hour, int *min, int *sec, fsec_t *fsec);
 extern void interval2itm(Interval span, struct pg_itm *itm);
 extern int	itm2interval(struct pg_itm *itm, Interval *span);
 extern int	itmin2interval(struct pg_itm_in *itm_in, Interval *span);
+
+extern void duration2itm(Duration span, struct pg_itm *itm);
+extern int	itmin2duration(struct pg_itm_in *itm_in, Duration *span);
 
 extern Timestamp SetEpochTimestamp(void);
 extern void GetEpochTime(struct pg_tm *tm);

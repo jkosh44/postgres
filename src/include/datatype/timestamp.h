@@ -39,6 +39,7 @@ typedef int64 Timestamp;
 typedef int64 TimestampTz;
 typedef int64 TimeOffset;
 typedef int32 fsec_t;			/* fractional seconds (in microseconds) */
+typedef TimeOffset Duration;
 
 
 /*
